@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GAMI — Filiales</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+/* ── Filiales strip section ── */
+.fil-strip-section{background:var(--light);padding:56px 80px;border-top:1px solid var(--border)}
+.fil-strip-header{text-align:center;margin-bottom:36px}
+.fil-strip-header .tag{display:block;margin-bottom:10px}
+.fil-strip-header h2{font-size:clamp(1.6rem,2.5vw,2.2rem);color:var(--dark);margin-bottom:8px}
+.fil-strip-header p{font-size:14px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300}
+.fil-hero-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fhs{position:relative;height:360px;cursor:pointer;overflow:hidden;border-radius:18px}
+.fhs img{width:100%;height:100%;object-fit:cover;transition:.55s ease}
+.fhs:hover img{transform:scale(1.07)}
+.fhs-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(11,25,41,.9) 30%,rgba(11,25,41,.25) 75%);transition:.3s}
+.fhs:hover .fhs-ov{background:linear-gradient(to top,rgba(232,134,26,.88) 25%,rgba(11,25,41,.45) 80%)}
+.fhs-content{position:absolute;bottom:0;left:0;right:0;padding:28px 26px;color:#fff}
+.fhs-abbr{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:800;display:block;margin-bottom:4px;line-height:1}
+.fhs-name{font-size:13px;opacity:.8;font-weight:300;font-family:'Outfit',sans-serif;margin-bottom:14px;line-height:1.4}
+.fhs-tags{display:flex;gap:6px;flex-wrap:wrap}
+.fhs-tag{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:10px;font-weight:600;padding:4px 10px;border-radius:50px;font-family:'Outfit',sans-serif}
+.fhs-arrow{position:absolute;top:18px;right:18px;width:34px;height:34px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;transition:.2s;font-size:14px}
+.fhs:hover .fhs-arrow{background:var(--orange);border-color:var(--orange)}
+.fhs-num{position:absolute;top:18px;left:22px;font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:800;color:rgba(255,255,255,.07);line-height:1;pointer-events:none}
+@media(max-width:900px){.fil-hero-strip{grid-template-columns:1fr}.fhs{height:280px}.fil-strip-section{padding:40px 24px}}
+
+.fil-detail{padding:90px 80px}
+.fd-block{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:100px;padding-bottom:80px;border-bottom:1px solid var(--border)}
+.fd-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.fd-block.reverse{direction:rtl}
+.fd-block.reverse>*{direction:ltr}
+.fd-img{border-radius:24px;overflow:hidden;height:420px;position:relative}
+.fd-img img{width:100%;height:100%}
+.fd-img-badge{position:absolute;top:20px;left:20px;background:var(--blue);color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:50px;letter-spacing:.5px}
+.fd-img-badge.orange{background:var(--orange)}
+.fd-img-badge.teal{background:#1ABC9C}
+.fd-content .tag{display:block;margin-bottom:12px}
+.fd-content h2{font-size:2rem;color:var(--dark);margin-bottom:16px;line-height:1.2}
+.fd-content p{color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:28px;font-size:15px}
+.fd-services{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
+.fd-srv{background:var(--light);border-radius:12px;padding:16px;display:flex;align-items:center;gap:10px}
+.fd-srv-icon{font-size:18px}
+.fd-srv-text{font-size:13px;font-weight:600;color:var(--text);font-family:'Outfit',sans-serif}
+.fd-stat-row{display:flex;gap:24px;padding-top:24px;border-top:1px solid var(--border);margin-top:8px}
+.fd-stat strong{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--blue);display:block}
+.fd-stat span{font-size:11px;color:var(--muted);letter-spacing:.5px;font-family:'Outfit',sans-serif}
+
+.zones-band{background:var(--dark);padding:72px 80px;color:#fff}
+.zones-band h2{color:#fff;text-align:center;margin-bottom:12px}
+.zones-band .section-sub{color:rgba(255,255,255,.55);text-align:center;margin:0 auto 48px}
+.zones-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.zone-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;text-align:center;cursor:pointer;transition:.2s}
+.zone-card:hover{border-color:var(--orange);background:rgba(232,134,26,.1)}
+.zone-flag{font-size:28px;margin-bottom:10px}
+.zone-name{font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;font-family:'Outfit',sans-serif}
+.zone-cities{font-size:11px;color:rgba(255,255,255,.45)}
+
+/* ── FILIALES PAGE RESPONSIVE ── */
+@media(max-width:900px){
+  .fil-strip-section{padding:40px 24px}
+  .fil-hero-strip{grid-template-columns:1fr}
+  .fhs{height:260px}
+  .fil-detail{padding:56px 24px}
+  .fd-block{grid-template-columns:1fr !important;gap:28px;margin-bottom:56px;padding-bottom:48px}
+  .fd-block.reverse{direction:ltr !important}
+  .fd-block.reverse > *{direction:ltr !important}
+  .fd-img{height:280px}
+  .zones-band{padding:56px 24px}
+  .zones-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:640px){
+  .fil-hero-strip{grid-template-columns:1fr}
+  .fhs{height:240px}
+  .fil-detail{padding:40px 18px}
+  .fd-img{height:220px}
+  .fd-services{grid-template-columns:1fr 1fr}
+  .fd-stat-row{flex-wrap:wrap;gap:12px}
+  .zones-grid{grid-template-columns:1fr 1fr}
+  .zones-band{padding:44px 18px}
+}
+@media(max-width:400px){
+  .fd-services{grid-template-columns:1fr}
+  .zones-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<nav id="nav">
+  <div class="nav-logo"><div class="logo-sq">G</div><div><div class="logo-name">Groupe AMI</div><div class="logo-sub">GMM · SEMM · SEMS</div></div></div>
+  <div class="nav-links">
+    <a class="nl" href="index.html">Accueil</a><a class="nl" href="groupe.html">Le Groupe</a><a class="nl active" href="filiales.html">Filiales</a><a class="nl" href="actualites.html">Actualités</a><a class="nl" href="recrutement.html">Recrutement</a><a class="nl" href="transporteurs.html">Transporteurs</a><a class="nl" href="contact.html">Contact</a>
+  </div>
+  <a class="nav-cta" href="backoffice.html">Espace DSI</a>
+</nav>
+
+<div class="page-hero">
+  <div class="ph-bg" style="background-image:url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1800&q=85&fit=crop')"></div>
+  <div class="ph-ov"></div><div class="ph-ov2"></div><div class="ph-grid"></div><div class="ph-geo"></div>
+  <div class="ph-inner">
+    <div class="ph-breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>Filiales</span></div>
+    <div class="ph-tag"><span class="ph-tag-dot"></span>Écosystème industriel GAMI</div>
+    <h1>Nos trois <em>filiales</em> spécialisées</h1>
+    <p>GMM, SEMM et SEMS forment un écosystème industriel complet, couvrant la maintenance, les équipements miniers et les services spécialisés en Afrique de l'Ouest.</p>
+    <div class="ph-stats">
+      <div class="ph-stat"><div class="ph-stat-v">3</div><div class="ph-stat-l">Filiales actives</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">5</div><div class="ph-stat-l">Pays couverts</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">200+</div><div class="ph-stat-l">Collaborateurs</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FILIALES STRIP -->
+<section class="fil-strip-section">
+  <div class="fil-strip-header">
+    <span class="tag">NOS FILIALES</span>
+    <h2>Trois entités, <em style="color:var(--orange);font-style:normal">une vision commune</em></h2>
+    <p>Cliquez sur une filiale pour découvrir ses services et son périmètre d'intervention en Afrique de l'Ouest.</p>
+  </div>
+  <div class="fil-hero-strip">
+    <div class="fhs" id="gmm-card" onclick="document.getElementById('gmm').scrollIntoView({behavior:'smooth'})">
+      <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80&fit=crop" alt="GMM"/>
+      <div class="fhs-ov"></div>
+      <div class="fhs-num">01</div>
+      <div class="fhs-arrow">→</div>
+      <div class="fhs-content">
+        <span class="fhs-abbr">GMM</span>
+        <div class="fhs-name">Gestion & Maintenance Minière</div>
+        <div class="fhs-tags"><span class="fhs-tag">Maintenance</span><span class="fhs-tag">Sites miniers</span><span class="fhs-tag">BTP</span></div>
+      </div>
+    </div>
+    <div class="fhs" id="semm-card" onclick="document.getElementById('semm').scrollIntoView({behavior:'smooth'})">
+      <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=800&q=80&fit=crop" alt="SEMM"/>
+      <div class="fhs-ov"></div>
+      <div class="fhs-num">02</div>
+      <div class="fhs-arrow">→</div>
+      <div class="fhs-content">
+        <span class="fhs-abbr">SEMM</span>
+        <div class="fhs-name">Société d'Équipements Miniers</div>
+        <div class="fhs-tags"><span class="fhs-tag">Équipements</span><span class="fhs-tag">Fourniture</span><span class="fhs-tag">Install.</span></div>
+      </div>
+    </div>
+    <div class="fhs" id="sems-card" onclick="document.getElementById('sems').scrollIntoView({behavior:'smooth'})">
+      <img src="https://images.unsplash.com/photo-1590965474613-7fff9b87e5e5?w=800&q=80&fit=crop" alt="SEMS"/>
+      <div class="fhs-ov"></div>
+      <div class="fhs-num">03</div>
+      <div class="fhs-arrow">→</div>
+      <div class="fhs-content">
+        <span class="fhs-abbr">SEMS</span>
+        <div class="fhs-name">Expertises & Services Spécialisés</div>
+        <div class="fhs-tags"><span class="fhs-tag">Expertise</span><span class="fhs-tag">Conseil</span><span class="fhs-tag">Services</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAILS -->
+<div class="fil-detail">
+  <div class="fd-block" id="gmm">
+    <div class="fd-img">
+      <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=900&q=80&fit=crop" alt="GMM"/>
+      <div class="fd-img-badge">FILIALE GMM</div>
+    </div>
+    <div class="fd-content">
+      <span class="tag">GMM</span>
+      <h2>Gestion &<br>Maintenance Minière</h2>
+      <p>Spécialisée dans la maintenance préventive et corrective des équipements industriels lourds sur sites miniers. GMM dispose d'une expertise reconnue sur plus de 15 sites actifs en Afrique de l'Ouest, avec des techniciens certifiés et des délais d'intervention garantis.</p>
+      <div class="fd-services">
+        <div class="fd-srv"><div class="fd-srv-icon">⚙️</div><div class="fd-srv-text">Maintenance préventive</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🔧</div><div class="fd-srv-text">Maintenance corrective</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🏗️</div><div class="fd-srv-text">Travaux génie civil</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">👷</div><div class="fd-srv-text">Formation techniciens</div></div>
+      </div>
+      <div class="fd-stat-row">
+        <div class="fd-stat"><strong>15+</strong><span>SITES ACTIFS</span></div>
+        <div class="fd-stat"><strong>200+</strong><span>TECHNICIENS</span></div>
+        <div class="fd-stat"><strong>98%</strong><span>TAUX SATISFACTION</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fd-block reverse" id="semm">
+    <div class="fd-img">
+      <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=900&q=80&fit=crop" alt="SEMM"/>
+      <div class="fd-img-badge orange">FILIALE SEMM</div>
+    </div>
+    <div class="fd-content">
+      <span class="tag">SEMM</span>
+      <h2>Société d'Équipements<br>Miniers & Mécaniques</h2>
+      <p>SEMM assure la fourniture, l'installation et le support d'équipements spécialisés pour le secteur minier et industriel. Partenaire de confiance des opérateurs miniers de la région, SEMM garantit des équipements de dernière génération avec un service après-vente réactif.</p>
+      <div class="fd-services">
+        <div class="fd-srv"><div class="fd-srv-icon">📦</div><div class="fd-srv-text">Fourniture équipements</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🔩</div><div class="fd-srv-text">Installation & mise en service</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🛠️</div><div class="fd-srv-text">Support & SAV</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">📊</div><div class="fd-srv-text">Audit équipements</div></div>
+      </div>
+      <div class="fd-stat-row">
+        <div class="fd-stat"><strong>300+</strong><span>ÉQUIPEMENTS INSTALLÉS</span></div>
+        <div class="fd-stat"><strong>8</strong><span>PAYS LIVRÉS</span></div>
+        <div class="fd-stat"><strong>24h</strong><span>DÉLAI SAV</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fd-block" id="sems">
+    <div class="fd-img">
+      <img src="https://images.unsplash.com/photo-1590247813693-5541d1c609fd?w=900&q=80&fit=crop" alt="SEMS"/>
+      <div class="fd-img-badge teal">FILIALE SEMS</div>
+    </div>
+    <div class="fd-content">
+      <span class="tag">SEMS</span>
+      <h2>Expertises & Services<br>Spécialisés</h2>
+      <p>SEMS offre des services d'expertise technique, de conseil stratégique et d'accompagnement aux groupes industriels opérant en Afrique de l'Ouest. De l'audit à l'optimisation des processus, SEMS est le partenaire des décideurs industriels.</p>
+      <div class="fd-services">
+        <div class="fd-srv"><div class="fd-srv-icon">📋</div><div class="fd-srv-text">Audit technique</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">💼</div><div class="fd-srv-text">Conseil stratégique</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">📈</div><div class="fd-srv-text">Optimisation procédés</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🎓</div><div class="fd-srv-text">Formations spécialisées</div></div>
+      </div>
+      <div class="fd-stat-row">
+        <div class="fd-stat"><strong>50+</strong><span>MISSIONS RÉALISÉES</span></div>
+        <div class="fd-stat"><strong>30+</strong><span>EXPERTS</span></div>
+        <div class="fd-stat"><strong>5</strong><span>PAYS D'INTERVENTION</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ZONES -->
+<div class="zones-band">
+  <span class="tag" style="color:var(--orange2);display:block;text-align:center;margin-bottom:10px">COUVERTURE GÉOGRAPHIQUE</span>
+  <h2 class="section-title">Nos zones d'opération</h2>
+  <p class="section-sub">GAMI et ses filiales interviennent dans 5 pays d'Afrique de l'Ouest avec des équipes locales et des partenaires établis.</p>
+  <div class="zones-grid">
+    <div class="zone-card"><div class="zone-flag">🇸🇳</div><div class="zone-name">Sénégal</div><div class="zone-cities">Dakar · Thiès · Ziguinchor</div></div>
+    <div class="zone-card"><div class="zone-flag">🇲🇱</div><div class="zone-name">Mali</div><div class="zone-cities">Bamako · Sikasso · Kayes</div></div>
+    <div class="zone-card"><div class="zone-flag">🇬🇳</div><div class="zone-name">Guinée</div><div class="zone-cities">Conakry · Labé · Kankan</div></div>
+    <div class="zone-card"><div class="zone-flag">🇨🇮</div><div class="zone-name">Côte d'Ivoire</div><div class="zone-cities">Abidjan · Bouaké</div></div>
+    <div class="zone-card"><div class="zone-flag">🇲🇷</div><div class="zone-name">Mauritanie</div><div class="zone-cities">Nouakchott · Zouerate</div></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="f-brand"><div class="f-logo"><div class="logo-sq">G</div><span style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#fff">Groupe AMI — GAMI</span></div><p>L'industrie au service du développement.</p><div class="f-socials"><div class="f-soc">f</div><div class="f-soc">𝕏</div><div class="f-soc">in</div></div></div>
+    <div class="f-col"><h4>À propos</h4><ul><li><a href="groupe.html">Notre histoire</a></li><li><a href="groupe.html">Vision & Mission</a></li><li><a href="actualites.html">Blog</a></li></ul></div>
+    <div class="f-col"><h4>Entités</h4><ul><li><a href="filiales.html">GMM</a></li><li><a href="filiales.html">SEMM</a></li><li><a href="filiales.html">SEMS</a></li></ul></div>
+    <div class="f-col"><h4>Contact</h4><ul><li><a href="contact.html">contact@groupeami.sn</a></li><li><a href="#">+221 33 000 00 00</a></li><li><a href="recrutement.html">Recrutement</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>©2025 Groupe AMI — GAMI.</span><span>Python8080</span></div>
+</footer>
+<script src="shared.js"></script>
+<script>
+document.getElementById('gmm-card').onclick=()=>document.getElementById('gmm').scrollIntoView({behavior:'smooth'});
+document.getElementById('semm-card').onclick=()=>document.getElementById('semm').scrollIntoView({behavior:'smooth'});
+document.getElementById('sems-card').onclick=()=>document.getElementById('sems').scrollIntoView({behavior:'smooth'});
+</script>
+</body>
+</html>

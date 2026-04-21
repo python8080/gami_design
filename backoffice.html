@@ -1,0 +1,2104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GAMI Admin — Back-office DSI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Caveat:wght@700&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════════════
+   RESET & ROOT
+══════════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#1a1a1f;
+  --bg2:#222228;
+  --bg3:#2a2a32;
+  --bg4:#32323c;
+  --sidebar:#1c1c24;
+  --border:rgba(255,255,255,.07);
+  --border2:rgba(255,255,255,.12);
+  --text:#e8e8f0;
+  --text2:#9090a8;
+  --text3:#606078;
+  --blue:#4f8ef7;
+  --blue-dim:rgba(79,142,247,.15);
+  --green:#2ecc71;
+  --green-dim:rgba(46,204,113,.15);
+  --orange:#f39c12;
+  --orange-dim:rgba(243,156,18,.15);
+  --red:#e74c3c;
+  --red-dim:rgba(231,76,60,.15);
+  --purple:#9b59b6;
+  --gami-blue:#1B4F8A;
+  --gami-orange:#E8861A;
+  --radius:10px;
+  --radius-sm:6px;
+  --radius-lg:14px;
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text)}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer}
+input,select,textarea{font-family:'Inter',sans-serif}
+
+/* ══════════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════════ */
+.app{display:flex;height:100%;min-height:100vh}
+
+/* ══════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════ */
+.sidebar{
+  width:248px;min-width:248px;
+  background:var(--sidebar);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  height:100vh;overflow:hidden;
+  transition:width .25s ease, transform .28s cubic-bezier(.4,0,.2,1);
+  position:relative;flex-shrink:0;
+}
+.sidebar.collapsed{width:56px;min-width:56px}
+
+/* Brand */
+.sb-brand{
+  padding:20px 18px 16px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;overflow:hidden;
+}
+.sb-brand-logo{
+  font-family:'Caveat',cursive;
+  font-size:22px;font-weight:700;
+  color:#fff;white-space:nowrap;
+  letter-spacing:-.5px;
+}
+.sb-brand-logo span{color:var(--gami-orange)}
+
+/* Collapse toggle */
+.sb-toggle{
+  position:absolute;right:-12px;top:50%;transform:translateY(-50%);
+  width:22px;height:22px;background:var(--bg3);
+  border:1px solid var(--border2);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:10px;color:var(--text2);
+  z-index:10;transition:.2s;
+}
+.sb-toggle:hover{background:var(--bg4);color:var(--text)}
+.sidebar.collapsed .sb-toggle-icon{transform:rotate(180deg)}
+.sb-toggle-icon{transition:transform .25s;display:inline-block}
+
+/* Nav */
+.sb-nav{flex:1;overflow-y:auto;overflow-x:hidden;padding:8px 10px}
+.sb-nav::-webkit-scrollbar{width:3px}
+.sb-nav::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+
+/* Section label */
+.sb-section-label{
+  font-size:10px;font-weight:600;letter-spacing:.8px;
+  color:var(--text3);text-transform:uppercase;
+  padding:14px 8px 6px;white-space:nowrap;
+  overflow:hidden;
+}
+.sidebar.collapsed .sb-section-label{opacity:0}
+
+/* Nav item */
+.sbi{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;border-radius:var(--radius-sm);
+  cursor:pointer;transition:.15s;
+  font-size:13.5px;font-weight:400;color:var(--text2);
+  white-space:nowrap;overflow:hidden;
+  position:relative;
+}
+.sbi:hover{background:var(--bg3);color:var(--text)}
+.sbi.active{background:var(--bg3);color:var(--text);font-weight:500}
+.sbi-icon{
+  width:18px;min-width:18px;height:18px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:15px;
+}
+.sbi-txt{flex:1;overflow:hidden;text-overflow:ellipsis}
+.sbi-badge{
+  background:var(--gami-orange);color:#fff;
+  font-size:10px;font-weight:700;
+  padding:1px 7px;border-radius:10px;flex-shrink:0;
+}
+.sbi-badge.blue{background:var(--blue)}
+.sbi-badge.green{background:var(--green)}
+.sbi-chevron{color:var(--text3);font-size:11px;flex-shrink:0;transition:.2s}
+.sbi.open .sbi-chevron{transform:rotate(90deg)}
+.sidebar.collapsed .sbi-txt,.sidebar.collapsed .sbi-badge,
+.sidebar.collapsed .sbi-chevron{display:none}
+
+/* Submenu */
+.sbi-sub{
+  max-height:0;overflow:hidden;
+  transition:max-height .25s ease;
+  padding-left:28px;
+}
+.sbi-sub.open{max-height:300px}
+.sidebar.collapsed .sbi-sub{display:none}
+.sbi-sub-item{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 8px;border-radius:var(--radius-sm);
+  font-size:13px;color:var(--text2);cursor:pointer;transition:.15s;
+}
+.sbi-sub-item:hover{background:var(--bg3);color:var(--text)}
+.sbi-sub-item.active{color:var(--text);font-weight:500}
+.sbi-sub-item::before{
+  content:'';width:4px;height:4px;border-radius:50%;
+  background:var(--text3);flex-shrink:0;
+}
+.sbi-sub-item.active::before{background:var(--blue)}
+
+/* Tooltip on collapsed */
+.sbi-tip{
+  position:absolute;left:58px;top:50%;transform:translateY(-50%);
+  background:#111;color:#fff;font-size:12px;font-weight:500;
+  padding:5px 10px;border-radius:6px;white-space:nowrap;
+  pointer-events:none;opacity:0;transition:.15s;z-index:200;
+  border:1px solid var(--border2);
+}
+.sidebar.collapsed .sbi:hover .sbi-tip{opacity:1}
+
+/* User */
+.sb-user{
+  padding:12px 14px;border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+  cursor:pointer;transition:.15s;overflow:hidden;
+}
+.sb-user:hover{background:var(--bg3)}
+.sb-av{
+  width:34px;height:34px;min-width:34px;border-radius:50%;
+  overflow:hidden;flex-shrink:0;border:2px solid var(--border2);
+}
+.sb-av img{width:100%;height:100%;object-fit:cover}
+.sb-av-fallback{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gami-blue),var(--gami-orange));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:12px;color:#fff;flex-shrink:0;
+}
+.sb-uname{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap}
+.sb-urole{font-size:11px;color:var(--text3);white-space:nowrap}
+.sidebar.collapsed .sb-uname,.sidebar.collapsed .sb-urole{display:none}
+
+/* ══════════════════════════════════════════════
+   MAIN AREA
+══════════════════════════════════════════════ */
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+
+/* TOPBAR */
+.topbar{
+  height:54px;background:var(--sidebar);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;flex-shrink:0;gap:16px;
+}
+.tb-left{display:flex;align-items:center;gap:16px;flex:1;min-width:0}
+.tb-title{font-size:18px;font-weight:700;color:var(--text);white-space:nowrap}
+.tb-sub{font-size:13px;color:var(--text2);white-space:nowrap}
+.tb-divider{width:1px;height:20px;background:var(--border2);flex-shrink:0}
+.tb-search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:6px 12px;flex:1;max-width:280px;transition:.2s;
+}
+.tb-search:focus-within{border-color:var(--blue);background:var(--bg2)}
+.tb-search input{
+  background:none;border:none;outline:none;font-size:13px;
+  color:var(--text);width:100%;
+}
+.tb-search input::placeholder{color:var(--text3)}
+.tb-search-icon{color:var(--text3);font-size:13px;flex-shrink:0}
+.tb-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tb-btn{
+  width:34px;height:34px;border-radius:var(--radius-sm);
+  background:transparent;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;color:var(--text2);cursor:pointer;
+  transition:.15s;position:relative;
+}
+.tb-btn:hover{background:var(--bg3);color:var(--text)}
+.tb-btn-dot{
+  position:absolute;top:4px;right:4px;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--gami-orange);border:1px solid var(--sidebar);
+}
+.tb-new-btn{
+  display:flex;align-items:center;gap:6px;
+  background:var(--blue);color:#fff;border:none;
+  padding:7px 14px;border-radius:var(--radius-sm);
+  font-size:13px;font-weight:500;cursor:pointer;
+  transition:.15s;
+}
+.tb-new-btn:hover{background:#3d7ae5;transform:translateY(-1px)}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+.content::-webkit-scrollbar{width:5px}
+.content::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+
+/* ── VIEWS ── */
+.view{display:none;animation:fadeIn .2s ease}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── PAGE HEADER ── */
+.page-header{margin-bottom:20px}
+.page-header h1{font-size:22px;font-weight:700;color:var(--text);margin-bottom:4px}
+.page-header p{font-size:13px;color:var(--text2)}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;width:fit-content}
+.tab{
+  padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;
+  color:var(--text2);cursor:pointer;transition:.15s;
+  display:flex;align-items:center;gap:6px;border:none;background:none;
+}
+.tab:hover{color:var(--text)}
+.tab.active{background:var(--bg4);color:var(--text)}
+.tab-count{
+  font-size:10px;font-weight:700;padding:1px 6px;
+  border-radius:10px;background:var(--blue);color:#fff;
+}
+
+/* ── METRICS ── */
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.metric-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:18px 20px;
+  transition:.2s;cursor:default;position:relative;overflow:hidden;
+}
+.metric-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.mc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mc-label{font-size:12px;color:var(--text2);font-weight:500}
+.mc-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.mc-dot.green{background:var(--green);box-shadow:0 0 8px rgba(46,204,113,.5)}
+.mc-dot.blue{background:var(--blue);box-shadow:0 0 8px rgba(79,142,247,.5)}
+.mc-dot.orange{background:var(--gami-orange);box-shadow:0 0 8px rgba(232,134,26,.5)}
+.mc-dot.purple{background:var(--purple);box-shadow:0 0 8px rgba(155,89,182,.5)}
+.mc-val{font-size:28px;font-weight:700;color:var(--text);line-height:1;margin-bottom:8px}
+.mc-change{font-size:12px;font-weight:500;display:flex;align-items:center;gap:4px}
+.mc-change.up{color:var(--green)}
+.mc-change.down{color:var(--red)}
+.mc-change.neutral{color:var(--text2)}
+
+/* ── HEATMAP ── */
+.heatmap-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:20px;margin-bottom:16px;
+}
+.hc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.hc-title{font-size:16px;font-weight:600;color:var(--text)}
+.hc-legend{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.hc-leg-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2)}
+.hc-leg-dot{width:10px;height:10px;border-radius:50%}
+.heatmap-scroll{overflow-x:auto;padding-bottom:4px}
+.heatmap-scroll::-webkit-scrollbar{height:4px}
+.heatmap-scroll::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+.heatmap{display:flex;flex-direction:column;gap:6px;min-width:600px}
+.hm-dates{display:flex;gap:6px;padding:0 0 4px}
+.hm-date{flex:1;text-align:center;font-size:11px;color:var(--text2);font-weight:500;min-width:56px}
+.hm-cells{display:flex;gap:6px}
+.hm-cell{
+  flex:1;height:52px;border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:#fff;
+  cursor:pointer;transition:.15s;min-width:56px;
+  position:relative;
+}
+.hm-cell:hover{transform:scale(1.06);z-index:2}
+.hm-cell.low{background:#1a4d2e;color:#2ecc71}
+.hm-cell.low:hover{background:#1e5c35}
+.hm-cell.optimal{background:#7d5a1a;color:#f39c12}
+.hm-cell.optimal:hover{background:#8a641e}
+.hm-cell.overload{background:#6b1a1a;color:#e74c3c}
+.hm-cell.overload:hover{background:#7a1f1f}
+.hm-cell.critical{background:#8b0000;color:#ff6b6b;animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.7}}
+.hm-tooltip{
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:#111;color:#fff;font-size:11px;padding:6px 10px;
+  border-radius:6px;white-space:nowrap;pointer-events:none;
+  opacity:0;transition:.15s;z-index:100;border:1px solid var(--border2);
+}
+.hm-cell:hover .hm-tooltip{opacity:1}
+
+/* ── CHARTS ROW ── */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:16px}
+.chart-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:20px;
+}
+.cc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.cc-title{font-size:14px;font-weight:600;color:var(--text)}
+.cc-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:90px}
+.bc-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px}
+.bc-bar{
+  width:100%;border-radius:4px 4px 0 0;
+  transition:height .5s cubic-bezier(.4,0,.2,1);cursor:pointer;
+  position:relative;min-height:4px;
+}
+.bc-bar:hover::after{
+  content:attr(data-val);position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+  font-size:11px;font-weight:600;color:var(--text);background:var(--bg3);
+  padding:2px 6px;border-radius:4px;white-space:nowrap;
+}
+.bc-label{font-size:10px;color:var(--text3);text-align:center}
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.donut-svg{width:100px;height:100px}
+.donut-legend{width:100%;display:flex;flex-direction:column;gap:8px}
+.dl-row{display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.dl-left{display:flex;align-items:center;gap:7px;color:var(--text2)}
+.dl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dl-val{font-weight:600;color:var(--text)}
+
+/* ── TABLE PANEL ── */
+.table-panel{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px;
+}
+.tp-header{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.tp-title{font-size:14px;font-weight:600;color:var(--text)}
+.tp-actions{display:flex;gap:8px;align-items:center}
+.tp-search{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:5px 10px;font-size:12px;color:var(--text2);transition:.2s;
+}
+.tp-search:focus-within{border-color:var(--blue)}
+.tp-search input{background:none;border:none;outline:none;font-size:12px;color:var(--text);width:140px}
+.tp-search input::placeholder{color:var(--text3)}
+.small-btn{
+  display:flex;align-items:center;gap:5px;
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--text2);padding:5px 11px;border-radius:var(--radius-sm);
+  font-size:12px;cursor:pointer;transition:.15s;
+}
+.small-btn:hover{border-color:var(--border2);color:var(--text)}
+.small-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.small-btn.primary:hover{background:#3d7ae5}
+
+/* Filters bar */
+.filters-bar{
+  padding:10px 20px;border-bottom:1px solid var(--border);
+  display:flex;gap:6px;align-items:center;flex-wrap:wrap;
+}
+.filter-chip{
+  padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500;
+  cursor:pointer;transition:.15s;border:1px solid var(--border2);color:var(--text2);
+  background:transparent;
+}
+.filter-chip:hover{border-color:var(--blue);color:var(--blue)}
+.filter-chip.active{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);font-weight:600}
+.filter-chip.orange.active{background:var(--orange-dim);border-color:var(--orange);color:var(--orange)}
+.filter-chip.green.active{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+.filter-chip.red.active{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+
+/* Data table */
+.dt{width:100%;border-collapse:collapse}
+.dt th{
+  padding:10px 16px;text-align:left;font-size:11px;font-weight:600;
+  letter-spacing:.5px;color:var(--text3);text-transform:uppercase;
+  background:var(--bg3);border-bottom:1px solid var(--border);
+}
+.dt td{padding:12px 16px;font-size:13px;color:var(--text2);border-bottom:1px solid var(--border)}
+.dt tbody tr{transition:.12s;cursor:pointer}
+.dt tbody tr:hover{background:var(--bg3)}
+.dt tbody tr:hover td{color:var(--text)}
+.dt tbody tr:last-child td{border-bottom:none}
+.dt tbody tr.selected{background:var(--blue-dim)}
+.dt-strong{font-weight:600;color:var(--text)}
+
+/* Badges / Pills */
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.pill::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+.pill.green{background:var(--green-dim);color:var(--green)}
+.pill.blue{background:var(--blue-dim);color:var(--blue)}
+.pill.orange{background:var(--orange-dim);color:var(--orange)}
+.pill.red{background:var(--red-dim);color:var(--red)}
+.pill.gray{background:var(--bg3);color:var(--text2)}
+.badge-verified{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;background:var(--green-dim);color:var(--green)}
+.stars{color:var(--orange);font-size:12px}
+
+/* Action buttons */
+.act-btn{
+  background:transparent;border:1px solid var(--border2);
+  color:var(--text2);padding:4px 10px;border-radius:5px;
+  font-size:11px;font-weight:500;cursor:pointer;transition:.15s;margin-right:4px;
+}
+.act-btn:hover{background:var(--bg3);color:var(--text)}
+.act-btn.success{border-color:rgba(46,204,113,.3);color:var(--green)}
+.act-btn.success:hover{background:var(--green-dim)}
+.act-btn.danger{border-color:rgba(231,76,60,.3);color:var(--red)}
+.act-btn.danger:hover{background:var(--red-dim)}
+.act-btn.primary{border-color:rgba(79,142,247,.3);color:var(--blue)}
+.act-btn.primary:hover{background:var(--blue-dim)}
+
+/* ── ACTIVITY FEED ── */
+.activity-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:0;overflow:hidden;
+}
+.af-item{
+  display:flex;align-items:flex-start;gap:12px;padding:14px 18px;
+  border-bottom:1px solid var(--border);transition:.12s;cursor:pointer;
+}
+.af-item:last-child{border-bottom:none}
+.af-item:hover{background:var(--bg3)}
+.af-icon{
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.af-icon.blue{background:var(--blue-dim)}
+.af-icon.green{background:var(--green-dim)}
+.af-icon.orange{background:var(--orange-dim)}
+.af-icon.red{background:var(--red-dim)}
+.af-body{flex:1}
+.af-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.af-sub{font-size:11px;color:var(--text3)}
+.af-time{font-size:11px;color:var(--text3);flex-shrink:0;margin-top:2px}
+
+/* ── PROGRESS ── */
+.progress-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width .6s ease}
+
+/* ── CONTENT CARDS ── */
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.content-item{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 16px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:.15s;
+}
+.content-item:hover{border-color:var(--border2);transform:translateX(3px)}
+.ci-icon{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.ci-icon.blue{background:var(--blue-dim)}
+.ci-icon.orange{background:var(--orange-dim)}
+.ci-title{font-size:13px;font-weight:500;color:var(--text)}
+.ci-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.ci-badge{margin-left:auto;flex-shrink:0}
+
+/* ── QUICK ACTIONS ── */
+.quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.qa-btn{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 14px;text-align:left;cursor:pointer;transition:.15s;
+  font-size:12px;color:var(--text2);
+}
+.qa-btn:hover{border-color:var(--border2);color:var(--text);background:var(--bg4)}
+.qa-btn-icon{font-size:18px;margin-bottom:6px;display:block}
+.qa-btn-label{font-weight:500}
+
+/* ══════════════════════════════════════════════
+   OVERLAY / MODAL
+══════════════════════════════════════════════ */
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);
+  z-index:400;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:.2s;
+}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:var(--radius-lg);padding:28px;
+  width:92%;max-width:520px;max-height:85vh;overflow-y:auto;
+  position:relative;transform:scale(.96);transition:.2s;
+}
+.overlay.open .modal{transform:scale(1)}
+.modal h2{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px}
+.modal-sub{font-size:12px;color:var(--text2);margin-bottom:20px}
+.modal-close{
+  position:absolute;top:14px;right:14px;
+  width:28px;height:28px;border-radius:6px;
+  background:var(--bg3);border:none;
+  color:var(--text2);cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;transition:.15s;
+}
+.modal-close:hover{background:var(--bg4);color:var(--text)}
+
+/* FORM */
+.form-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{margin-bottom:14px}
+.fg.full{grid-column:1/-1}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase}
+.fg input,.fg select,.fg textarea{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);
+  border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;
+  color:var(--text);transition:.15s;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  outline:none;border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(79,142,247,.1);
+}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--text3)}
+.fg select option{background:var(--bg2)}
+.fg textarea{min-height:80px;resize:vertical}
+.submit-btn{
+  width:100%;background:var(--blue);color:#fff;border:none;
+  padding:10px;border-radius:var(--radius-sm);
+  font-size:14px;font-weight:600;cursor:pointer;
+  margin-top:6px;transition:.15s;
+}
+.submit-btn:hover{background:#3d7ae5;transform:translateY(-1px)}
+.submit-btn.orange{background:var(--gami-orange)}
+.submit-btn.orange:hover{background:#d4780f}
+
+/* ── DETAIL PANEL ── */
+.detail-panel{
+  position:fixed;top:0;right:0;bottom:0;width:380px;
+  background:var(--bg2);border-left:1px solid var(--border);
+  z-index:300;transform:translateX(100%);
+  transition:.3s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.detail-panel.open{transform:translateX(0)}
+.dp-header{
+  padding:18px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.dp-title{font-size:15px;font-weight:600;color:var(--text)}
+.dp-close{
+  width:28px;height:28px;border-radius:6px;background:var(--bg3);
+  border:none;color:var(--text2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:13px;transition:.15s;
+}
+.dp-close:hover{background:var(--bg4);color:var(--text)}
+.dp-body{flex:1;overflow-y:auto;padding:18px 20px}
+.dp-body::-webkit-scrollbar{width:3px}
+.dp-body::-webkit-scrollbar-thumb{background:var(--bg4)}
+.dp-section{margin-bottom:20px}
+.dp-section-title{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+.dp-field{margin-bottom:12px}
+.dp-field label{font-size:10px;font-weight:600;color:var(--text3);display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.3px}
+.dp-field .dpv{font-size:13px;color:var(--text);font-weight:500}
+.dp-field .dpv.hl{color:var(--blue)}
+.dp-field .dpv.org{color:var(--gami-orange)}
+.dp-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dp-actions{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+
+/* ── NOTIF PANEL ── */
+.notif-panel{
+  position:fixed;top:54px;right:12px;width:320px;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:var(--radius-lg);z-index:200;
+  opacity:0;pointer-events:none;transform:translateY(-8px);
+  transition:.2s;box-shadow:0 16px 48px rgba(0,0,0,.4);
+}
+.notif-panel.open{opacity:1;pointer-events:all;transform:translateY(0)}
+.np-header{
+  padding:12px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.np-header h4{font-size:13px;font-weight:600;color:var(--text)}
+.np-clear{font-size:11px;color:var(--blue);cursor:pointer}
+.np-clear:hover{color:var(--text)}
+.np-item{
+  padding:11px 16px;border-bottom:1px solid var(--border);
+  display:flex;gap:10px;cursor:pointer;transition:.12s;
+}
+.np-item:last-child{border-bottom:none}
+.np-item:hover{background:var(--bg3)}
+.np-item.unread{background:rgba(79,142,247,.04)}
+.np-icon{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;flex-shrink:0;
+}
+.np-title{font-size:12px;font-weight:500;color:var(--text);margin-bottom:2px}
+.np-sub{font-size:11px;color:var(--text3)}
+.np-time{font-size:10px;color:var(--text3);margin-top:3px}
+.np-unread-dot{width:7px;height:7px;background:var(--blue);border-radius:50%;flex-shrink:0;margin-top:4px}
+
+/* ── TOAST ── */
+.toast-container{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px}
+.toast{
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:var(--radius);padding:12px 18px;
+  font-size:13px;font-weight:500;color:var(--text);
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  animation:toastIn .3s ease;
+  display:flex;align-items:center;gap:8px;min-width:240px;max-width:340px;
+  border-left:3px solid var(--blue);
+}
+.toast.success{border-left-color:var(--green)}
+.toast.error{border-left-color:var(--red)}
+.toast.warning{border-left-color:var(--orange)}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── SETTINGS ── */
+.settings-section{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-lg);margin-bottom:12px;overflow:hidden;
+}
+.settings-row{
+  padding:14px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;transition:.12s;
+}
+.settings-row:last-child{border-bottom:none}
+.settings-row:hover{background:var(--bg3)}
+.sr-left{display:flex;align-items:center;gap:10px}
+.sr-icon{font-size:16px}
+.sr-title{font-size:13px;font-weight:500;color:var(--text)}
+.sr-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.sr-right{display:flex;align-items:center;gap:8px}
+.toggle{
+  width:36px;height:20px;border-radius:10px;background:var(--bg4);
+  position:relative;cursor:pointer;transition:.2s;flex-shrink:0;
+}
+.toggle.on{background:var(--blue)}
+.toggle::after{
+  content:'';position:absolute;width:14px;height:14px;
+  border-radius:50%;background:#fff;top:3px;left:3px;
+  transition:.2s;
+}
+.toggle.on::after{left:19px}
+
+/* ── USERS GRID ── */
+.users-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:16px}
+.user-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.15s;
+}
+.user-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.uc-av{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gami-blue),var(--gami-orange));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:14px;color:#fff;flex-shrink:0;
+}
+.uc-name{font-size:13px;font-weight:600;color:var(--text)}
+.uc-role{font-size:11px;color:var(--text3)}
+.uc-status{margin-left:auto;flex-shrink:0}
+
+/* ── DOCS ── */
+.doc-item{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:13px 16px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:.15s;margin-bottom:8px;
+}
+.doc-item:hover{border-color:var(--border2);transform:translateX(3px)}
+.doc-icon{font-size:22px;flex-shrink:0}
+.doc-name{font-size:13px;font-weight:500;color:var(--text)}
+.doc-meta{font-size:11px;color:var(--text3);margin-top:2px}
+.doc-dl{margin-left:auto;font-size:11px;color:var(--text3)}
+
+/* ── MEDIA GRID ── */
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:16px}
+.media-item{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+  aspect-ratio:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:6px;cursor:pointer;transition:.15s;
+}
+.media-item:hover{border-color:var(--border2);transform:scale(1.02)}
+.media-icon{font-size:28px}
+.media-name{font-size:10px;color:var(--text2);text-align:center;padding:0 6px}
+.media-ext{font-size:9px;color:var(--text3)}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE COMPLET — Tablette & PC
+   ══════════════════════════════════════════════ */
+
+/* ══ PC / TABLETTE LARGE — lock viewport ══ */
+@media(min-width:901px){
+  html,body{overflow:hidden;height:100%}
+  .app{height:100vh;overflow:hidden}
+  .main{overflow:hidden}
+  .content{overflow-y:auto}
+}
+
+/* ── SIDEBAR OVERLAY (mobile) ── */
+.sidebar-overlay{
+  display:none;
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(2px);
+  z-index:99;
+  animation:fadeIn .2s ease;
+}
+.sidebar-overlay.open{display:block}
+
+/* ── MOBILE HAMBURGER IN TOPBAR ── */
+.tb-burger{
+  width:36px;height:36px;
+  border-radius:var(--radius-sm);
+  background:transparent;
+  border:1px solid var(--border);
+  display:none;
+  align-items:center;justify-content:center;
+  font-size:16px;color:var(--text2);
+  cursor:pointer;transition:.15s;
+  flex-shrink:0;
+}
+.tb-burger:hover{background:var(--bg3);color:var(--text)}
+
+/* ══ TABLETTE LARGE (≤1280px) ══ */
+@media(max-width:1280px){
+  .sidebar{width:220px;min-width:220px}
+  .sidebar.collapsed{width:56px;min-width:56px}
+  .content{padding:20px}
+}
+
+/* ══ TABLETTE (≤1024px) ══ */
+@media(max-width:1024px){
+  .sidebar{width:200px;min-width:200px}
+  .metrics-row{grid-template-columns:repeat(2,1fr)}
+  .charts-row{grid-template-columns:1fr}
+  .content{padding:18px}
+  .users-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  /* Topbar search compress */
+  .tb-search{max-width:200px}
+  .tb-new-btn span{display:none}
+}
+
+/* ══ TABLETTE PORTRAIT (≤900px) ══ */
+@media(max-width:900px){
+  /* Layout devient scrollable — pas d'overflow:hidden global */
+  html,body{height:auto;overflow-x:hidden}
+  .app{height:auto;min-height:100vh;flex-direction:column;overflow:visible}
+
+  /* Sidebar = drawer fixe */
+  .sidebar{
+    position:fixed;top:0;bottom:0;left:0;height:100vh;
+    z-index:200;
+    transform:translateX(-260px);
+    width:260px !important;min-width:260px !important;
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:none;
+  }
+  .sidebar.mobile-open{
+    transform:translateX(0);
+    box-shadow:12px 0 48px rgba(0,0,0,.6);
+  }
+  /* Collapse toggle caché en mobile */
+  .sb-toggle{display:none}
+  /* Texte toujours visible dans le drawer mobile */
+  .sidebar .sbi-txt,
+  .sidebar .sbi-badge,
+  .sidebar .sbi-chevron,
+  .sidebar .sb-section-label,
+  .sidebar .sb-uname,
+  .sidebar .sb-urole{display:block !important;opacity:1 !important}
+  .sbi-sub{padding-left:28px}
+
+  /* Main = toute la largeur, scroll normal */
+  .main{margin-left:0;width:100%;flex:none;min-height:100vh;overflow:visible}
+  .content{flex:none;overflow:visible;height:auto}
+
+  /* Hamburger visible */
+  .tb-burger{display:flex}
+
+  /* Topbar sticky */
+  .topbar{position:sticky;top:0;z-index:100;padding:0 14px;gap:10px}
+  .tb-divider{display:none}
+  .tb-search{max-width:none;flex:1}
+  .tb-sub{display:none}
+  .tb-new-btn{font-size:12px;padding:6px 10px}
+
+  /* Content */
+  .content{padding:16px}
+
+  /* Grilles */
+  .metrics-row{grid-template-columns:repeat(2,1fr);gap:10px}
+  .charts-row{grid-template-columns:1fr;gap:10px}
+  .content-grid{grid-template-columns:1fr}
+  .quick-grid{grid-template-columns:repeat(2,1fr)}
+  .users-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+  .form-grid2{grid-template-columns:1fr 1fr}
+
+  /* Tabs scroll */
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{white-space:nowrap;padding:7px 12px;font-size:12px}
+
+  /* Table scroll horizontal */
+  .table-panel{overflow-x:auto}
+  .dt{min-width:600px}
+
+  /* Detail panel full width on tablet */
+  .detail-panel{width:340px}
+
+  /* Heatmap */
+  .heatmap-card{overflow-x:auto}
+
+  /* Page header */
+  .page-header{margin-bottom:14px}
+  .page-header h1{font-size:18px}
+
+  /* Table header wrap */
+  .tp-header{flex-wrap:wrap;gap:8px}
+  .tp-actions{flex-wrap:wrap}
+}
+
+/* ══ MOBILE (≤640px) ══ */
+@media(max-width:640px){
+  /* Topbar */
+  .topbar{height:50px;padding:0 12px}
+  .tb-title{font-size:15px}
+  .tb-search{display:none}
+  .tb-new-btn{display:none}
+  .tb-btn:nth-child(1){display:none}/* hide help btn */
+
+  /* Content */
+  .content{padding:12px}
+
+  /* Grilles → 1 colonne */
+  .metrics-row{grid-template-columns:1fr 1fr !important;gap:8px}
+  .charts-row{grid-template-columns:1fr}
+  .content-grid{grid-template-columns:1fr}
+  .quick-grid{grid-template-columns:1fr 1fr}
+  .form-grid2{grid-template-columns:1fr !important}
+  .users-grid{grid-template-columns:1fr}
+
+  /* Sidebar width mobile */
+  .sidebar{width:240px !important;min-width:240px !important}
+
+  /* Table */
+  .tp-search input{width:100px}
+  .dt th,.dt td{padding:10px 12px;font-size:12px}
+
+  /* Tabs filter chips */
+  .filters-bar{gap:5px;padding:8px 12px}
+  .filter-chip{font-size:11px;padding:3px 10px}
+
+  /* Detail panel */
+  .detail-panel{
+    width:100% !important;
+    bottom:0;top:50px;
+    border-left:none;
+    border-top:1px solid var(--border2);
+  }
+
+  /* Modal */
+  .modal{padding:20px 16px;width:95vw}
+
+  /* Metric card */
+  .metric-card{padding:14px 16px}
+  .mc-val{font-size:22px}
+
+  /* Page header */
+  .page-header h1{font-size:16px}
+
+  /* Tabs */
+  .tab{padding:6px 10px;font-size:11px}
+
+  /* Toast */
+  .toast-container{bottom:12px;right:12px;left:12px}
+  .toast{min-width:unset;max-width:none}
+
+  /* Bar chart */
+  .bar-chart{height:70px}
+}
+
+/* ══ PETIT MOBILE (≤400px) ══ */
+@media(max-width:400px){
+  .metrics-row{grid-template-columns:1fr !important}
+  .quick-grid{grid-template-columns:1fr}
+  .tb-title{font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- NOTIF PANEL -->
+<div class="notif-panel" id="notif-panel">
+  <div class="np-header">
+    <h4>Notifications <span style="background:var(--blue-dim);color:var(--blue);padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700" id="np-count">5</span></h4>
+    <span class="np-clear" onclick="clearNotifs()">Tout lire</span>
+  </div>
+  <div id="np-list"></div>
+</div>
+
+<!-- OVERLAYS -->
+<div class="overlay" id="ov-offer" onclick="if(event.target===this)closeOverlay('ov-offer')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeOverlay('ov-offer')">✕</button>
+    <h2>Nouvelle offre de transport</h2>
+    <div class="modal-sub">Publication visible aux transporteurs vérifiés GAMI</div>
+    <div class="form-grid2">
+      <div class="fg"><label>Ville départ *</label><input id="of-from" placeholder="Ex : Dakar"/></div>
+      <div class="fg"><label>Ville arrivée *</label><input id="of-to" placeholder="Ex : Bamako"/></div>
+      <div class="fg full"><label>Type de marchandise</label>
+        <select id="of-merch"><option>Citerne carburant</option><option>Matériaux BTP</option><option>Pièces industrielles</option><option>Minerai</option><option>Produits alimentaires</option></select>
+      </div>
+      <div class="fg"><label>Tonnage (t) *</label><input type="number" id="of-tonnage" placeholder="32" min="1"/></div>
+      <div class="fg"><label>Budget (FCFA) *</label><input type="number" id="of-budget" placeholder="2500000"/></div>
+      <div class="fg"><label>Date de départ</label><input type="date" id="of-date"/></div>
+      <div class="fg"><label>Type</label><select id="of-type"><option>International</option><option>National Mali</option></select></div>
+      <div class="fg full"><label>Contact WhatsApp</label><input id="of-wa" placeholder="+221 77 000 00 00"/></div>
+    </div>
+    <button class="submit-btn orange" onclick="publishOffer()">📢 Publier l'offre</button>
+  </div>
+</div>
+
+<div class="overlay" id="ov-candidate" onclick="if(event.target===this)closeOverlay('ov-candidate')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeOverlay('ov-candidate')">✕</button>
+    <h2 id="cand-title">Dossier candidat</h2>
+    <div class="modal-sub" id="cand-sub"></div>
+    <div id="cand-body"></div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-confirm" onclick="if(event.target===this)closeOverlay('ov-confirm')">
+  <div class="modal" style="max-width:380px;text-align:center">
+    <button class="modal-close" onclick="closeOverlay('ov-confirm')">✕</button>
+    <div id="conf-icon" style="font-size:36px;margin-bottom:12px">⚠️</div>
+    <h2 id="conf-title"></h2>
+    <div class="modal-sub" id="conf-sub"></div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="submit-btn" style="background:var(--bg4);color:var(--text2)" onclick="closeOverlay('ov-confirm')">Annuler</button>
+      <button class="submit-btn" id="conf-btn">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div class="detail-panel" id="detail-panel">
+  <div class="dp-header">
+    <div class="dp-title" id="dp-title">Détails</div>
+    <button class="dp-close" onclick="closeDetailPanel()">✕</button>
+  </div>
+  <div class="dp-body" id="dp-body"></div>
+  <div class="dp-actions" id="dp-actions"></div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeMobileSidebar()"></div>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <span class="sb-brand-logo">GAM<span>I</span></span>
+    </div>
+
+    <!-- Collapse toggle -->
+    <div class="sb-toggle" onclick="toggleSidebar()" title="Réduire">
+      <span class="sb-toggle-icon" id="sb-toggle-icon">‹</span>
+    </div>
+
+    <!-- NAV -->
+    <nav class="sb-nav">
+
+      <!-- Dashboard -->
+      <div class="sbi active" data-view="overview" onclick="navClick(this,'overview')">
+        <span class="sbi-icon">⬛</span>
+        <span class="sbi-txt">Tableau de bord</span>
+        <div class="sbi-tip">Tableau de bord</div>
+      </div>
+
+      <!-- TABLEAU DE BORD group -->
+      <div class="sb-section-label">Tableau de bord</div>
+
+      <div class="sbi" data-view="transporters" onclick="navClick(this,'transporters')">
+        <span class="sbi-icon">🚛</span>
+        <span class="sbi-txt">Transporteurs</span>
+        <span class="sbi-badge" id="badge-trans">3</span>
+        <div class="sbi-tip">Transporteurs</div>
+      </div>
+      <div class="sbi" data-view="offers" onclick="navClick(this,'offers')">
+        <span class="sbi-icon">📋</span>
+        <span class="sbi-txt">Offres transport</span>
+        <div class="sbi-tip">Offres transport</div>
+      </div>
+      <div class="sbi" data-view="candidates" onclick="navClick(this,'candidates')">
+        <span class="sbi-icon">👤</span>
+        <span class="sbi-txt">Candidatures</span>
+        <span class="sbi-badge" id="badge-cand">4</span>
+        <div class="sbi-tip">Candidatures</div>
+      </div>
+
+      <!-- Collapsible: Work Management style -->
+      <div class="sbi" onclick="toggleGroup('grp-admin')">
+        <span class="sbi-icon">⚙️</span>
+        <span class="sbi-txt">Administration</span>
+        <span class="sbi-chevron" id="grp-admin-chevron">›</span>
+        <div class="sbi-tip">Administration</div>
+      </div>
+      <div class="sbi-sub" id="grp-admin">
+        <div class="sbi-sub-item active" onclick="navClick(null,'content')">Contenu site</div>
+        <div class="sbi-sub-item" onclick="navClick(null,'media')">Médias & galerie</div>
+        <div class="sbi-sub-item" onclick="navClick(null,'users')">Utilisateurs</div>
+        <div class="sbi-sub-item" onclick="navClick(null,'docs')">Documents</div>
+        <div class="sbi-sub-item" onclick="navClick(null,'settings')">Paramètres</div>
+      </div>
+
+      <!-- Site public group -->
+      <div class="sbi" onclick="toggleGroup('grp-site')">
+        <span class="sbi-icon">🌐</span>
+        <span class="sbi-txt">Site public</span>
+        <span class="sbi-chevron" id="grp-site-chevron">›</span>
+        <div class="sbi-tip">Site public</div>
+      </div>
+      <div class="sbi-sub" id="grp-site">
+        <div class="sbi-sub-item" onclick="window.location='index.html'">Accueil</div>
+        <div class="sbi-sub-item" onclick="window.location='groupe.html'">Le Groupe</div>
+        <div class="sbi-sub-item" onclick="window.location='filiales.html'">Filiales</div>
+        <div class="sbi-sub-item" onclick="window.location='actualites.html'">Actualités</div>
+        <div class="sbi-sub-item" onclick="window.location='recrutement.html'">Recrutement</div>
+        <div class="sbi-sub-item" onclick="window.location='transporteurs.html'">Transporteurs</div>
+        <div class="sbi-sub-item" onclick="window.location='contact.html'">Contact</div>
+      </div>
+
+      <!-- Others -->
+      <div class="sb-section-label">Outils</div>
+      <div class="sbi" onclick="toast('Analytics GAMI — bientôt disponible','warning')">
+        <span class="sbi-icon">📈</span>
+        <span class="sbi-txt">Analytics</span>
+        <div class="sbi-tip">Analytics</div>
+      </div>
+      <div class="sbi" onclick="toast('Intégrations — bientôt disponible','warning')">
+        <span class="sbi-icon">🔗</span>
+        <span class="sbi-txt">Intégrations</span>
+        <div class="sbi-tip">Intégrations</div>
+      </div>
+      <div class="sbi" data-view="settings" onclick="navClick(this,'settings')">
+        <span class="sbi-icon">⚙️</span>
+        <span class="sbi-txt">Admin</span>
+        <span class="sbi-chevron">›</span>
+        <div class="sbi-tip">Admin</div>
+      </div>
+
+    </nav>
+
+    <!-- USER -->
+    <div class="sb-user" onclick="toast('Paramètres du compte')">
+      <div class="sb-av-fallback">AD</div>
+      <div>
+        <div class="sb-uname">Administrateur</div>
+        <div class="sb-urole">admin@groupeami.sn</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="tb-left">
+        <button onclick="toggleMobileSidebar()" class="tb-burger" id="tb-burger" aria-label="Menu">☰</button>
+        <div>
+          <div class="tb-title" id="tb-title">Tableau de bord</div>
+          <div class="tb-sub" id="tb-sub">Vue d'ensemble GAMI · Mis à jour maintenant</div>
+        </div>
+        <div class="tb-divider"></div>
+        <div class="tb-search">
+          <span class="tb-search-icon">⌕</span>
+          <input placeholder="Rechercher..." oninput="globalSearch(this.value)" id="global-search"/>
+        </div>
+      </div>
+      <div class="tb-right">
+        <div class="tb-btn" onclick="toast('Aide & documentation','blue')" title="Aide">?</div>
+        <div class="tb-btn" onclick="toggleNotifPanel()" title="Notifications">
+          🔔<div class="tb-btn-dot" id="tb-notif-dot"></div>
+        </div>
+        <button class="tb-new-btn" onclick="openOverlay('ov-offer')">+ Nouvelle offre</button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ═══════ OVERVIEW ═══════ -->
+      <div class="view active" id="view-overview">
+        <div class="page-header">
+          <h1 id="ov-title">Vue d'ensemble · GAMI</h1>
+          <p>Supervision du groupe — GMM · SEMM · SEMS</p>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab(this,'ov-workload')">
+            <span>📊</span> Activité
+          </button>
+          <button class="tab" onclick="switchTab(this,'ov-ooo')">
+            <span>📅</span> Recrutement <span class="tab-count" id="tab-cand-count">4</span>
+          </button>
+          <button class="tab" onclick="switchTab(this,'ov-capacity')">
+            <span>⚡</span> Capacité transport
+          </button>
+        </div>
+
+        <!-- TAB: Activité -->
+        <div id="ov-workload">
+          <!-- METRICS -->
+          <div class="metrics-row">
+            <div class="metric-card">
+              <div class="mc-header"><span class="mc-label">Offres actives</span><span class="mc-dot green"></span></div>
+              <div class="mc-val" id="ov-m1">12</div>
+              <div class="mc-change up">↑ +3 depuis la semaine dernière</div>
+              <div style="margin-top:12px"><div class="progress-bar"><div class="progress-fill" style="width:72%;background:var(--green)"></div></div></div>
+            </div>
+            <div class="metric-card">
+              <div class="mc-header"><span class="mc-label">Transporteurs vérifiés</span><span class="mc-dot blue"></span></div>
+              <div class="mc-val" id="ov-m2">45</div>
+              <div class="mc-change up">↑ +7 ce mois</div>
+              <div style="margin-top:12px"><div class="progress-bar"><div class="progress-fill" style="width:85%;background:var(--blue)"></div></div></div>
+            </div>
+            <div class="metric-card">
+              <div class="mc-header"><span class="mc-label">Livraisons / mois</span><span class="mc-dot orange"></span></div>
+              <div class="mc-val" id="ov-m3">23</div>
+              <div class="mc-change up">↑ +5 vs mois dernier</div>
+              <div style="margin-top:12px"><div class="progress-bar"><div class="progress-fill" style="width:58%;background:var(--gami-orange)"></div></div></div>
+            </div>
+            <div class="metric-card">
+              <div class="mc-header"><span class="mc-label">En attente validation</span><span class="mc-dot purple"></span></div>
+              <div class="mc-val" id="ov-m4">3</div>
+              <div class="mc-change neutral">— Transporteurs à valider</div>
+              <div style="margin-top:12px"><div class="progress-bar"><div class="progress-fill" style="width:25%;background:var(--purple)"></div></div></div>
+            </div>
+          </div>
+
+          <!-- HEATMAP — Transport Utilization -->
+          <div class="heatmap-card">
+            <div class="hc-header">
+              <div class="hc-title">Utilisation du réseau transport</div>
+              <div class="hc-legend">
+                <div class="hc-leg-item"><div class="hc-leg-dot" style="background:var(--green)"></div>Faible</div>
+                <div class="hc-leg-item"><div class="hc-leg-dot" style="background:var(--orange)"></div>Optimal</div>
+                <div class="hc-leg-item"><div class="hc-leg-dot" style="background:var(--red)"></div>Saturé</div>
+              </div>
+            </div>
+            <div class="heatmap-scroll">
+              <div class="heatmap" id="heatmap"></div>
+            </div>
+          </div>
+
+          <!-- CHARTS -->
+          <div class="charts-row">
+            <div class="chart-card">
+              <div class="cc-header">
+                <div><div class="cc-title">Activité 6 derniers mois</div><div class="cc-sub">Offres publiées vs Livraisons</div></div>
+                <button class="small-btn" onclick="toast('Export graphique PDF')">↓ Export</button>
+              </div>
+              <div class="bar-chart" id="bar-chart"></div>
+            </div>
+            <div class="chart-card">
+              <div class="cc-header"><div><div class="cc-title">Statut des offres</div><div class="cc-sub">Répartition actuelle</div></div></div>
+              <div class="donut-wrap">
+                <svg class="donut-svg" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="#2a2a32" stroke-width="14"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--green)" stroke-width="14" stroke-dasharray="100 139" stroke-dashoffset="34" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--orange)" stroke-width="14" stroke-dasharray="53 186" stroke-dashoffset="174" transform="rotate(-90 50 50)"/>
+                  <circle cx="50" cy="50" r="38" fill="none" stroke="var(--red)" stroke-width="14" stroke-dasharray="86 153" stroke-dashoffset="121" transform="rotate(-90 50 50)"/>
+                  <text x="50" y="55" text-anchor="middle" font-size="14" font-weight="700" fill="#e8e8f0">12</text>
+                </svg>
+                <div class="donut-legend">
+                  <div class="dl-row"><div class="dl-left"><div class="dl-dot" style="background:var(--green)"></div>Ouvertes</div><div class="dl-val">7</div></div>
+                  <div class="dl-row"><div class="dl-left"><div class="dl-dot" style="background:var(--orange)"></div>En transit</div><div class="dl-val">3</div></div>
+                  <div class="dl-row"><div class="dl-left"><div class="dl-dot" style="background:var(--red)"></div>Livrées</div><div class="dl-val">2</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2-col bottom -->
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px">
+            <div class="activity-card">
+              <div class="tp-header"><span class="tp-title">Activités récentes</span></div>
+              <div id="activity-feed"></div>
+            </div>
+            <div class="chart-card">
+              <div class="cc-header"><div class="cc-title">Actions rapides</div></div>
+              <div class="quick-grid">
+                <div class="qa-btn" onclick="openOverlay('ov-offer')"><span class="qa-btn-icon">📢</span><div class="qa-btn-label">Nouvelle offre</div></div>
+                <div class="qa-btn" onclick="navClick(document.querySelector('[data-view=transporters]'),'transporters')"><span class="qa-btn-icon">✅</span><div class="qa-btn-label">Valider trans.</div></div>
+                <div class="qa-btn" onclick="navClick(document.querySelector('[data-view=candidates]'),'candidates')"><span class="qa-btn-icon">📋</span><div class="qa-btn-label">Candidatures</div></div>
+                <div class="qa-btn" onclick="exportReport('PDF')"><span class="qa-btn-icon">📄</span><div class="qa-btn-label">Rapport PDF</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: Recrutement -->
+        <div id="ov-ooo" style="display:none">
+          <div class="table-panel">
+            <div class="tp-header"><span class="tp-title">Candidatures récentes à traiter</span></div>
+            <table class="dt"><thead><tr><th>Candidat</th><th>Poste</th><th>Filiale</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="cand-table-ov"></tbody></table>
+          </div>
+        </div>
+
+        <!-- TAB: Capacité -->
+        <div id="ov-capacity" style="display:none">
+          <div class="metrics-row">
+            <div class="metric-card"><div class="mc-header"><span class="mc-label">Capacité totale réseau</span><span class="mc-dot green"></span></div><div class="mc-val">78%</div><div class="mc-change up">↑ +5% depuis la semaine dernière</div></div>
+            <div class="metric-card"><div class="mc-header"><span class="mc-label">Hors service</span><span class="mc-dot blue"></span></div><div class="mc-val">2</div><div class="mc-change neutral">Transporteurs indisponibles</div></div>
+            <div class="metric-card"><div class="mc-header"><span class="mc-label">Routes actives</span><span class="mc-dot orange"></span></div><div class="mc-val">7</div><div class="mc-change up">↑ +2 nouvelles routes</div></div>
+            <div class="metric-card"><div class="mc-header"><span class="mc-label">Tonnage total</span><span class="mc-dot green"></span></div><div class="mc-val">147t</div><div class="mc-change up">↑ Ce mois</div></div>
+          </div>
+          <div class="heatmap-card">
+            <div class="hc-header"><div class="hc-title">Capacité par route</div></div>
+            <div id="capacity-table"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════ TRANSPORTEURS ═══════ -->
+      <div class="view" id="view-transporters">
+        <div class="page-header"><h1>Gestion des transporteurs</h1><p>Validation, suivi et notation des transporteurs GAMI</p></div>
+        <div class="table-panel">
+          <div class="tp-header">
+            <span class="tp-title">Transporteurs inscrits (<span id="t-count">5</span>)</span>
+            <div class="tp-actions">
+              <div class="tp-search"><span>⌕</span><input placeholder="Rechercher..." oninput="searchT(this.value)"/></div>
+              <button class="small-btn" onclick="exportReport('Excel')">↓ Excel</button>
+            </div>
+          </div>
+          <div class="filters-bar">
+            <button class="filter-chip active" onclick="filterT('all',this)">Tous</button>
+            <button class="filter-chip green" onclick="filterT('verified',this)">✓ Vérifiés</button>
+            <button class="filter-chip orange" onclick="filterT('pending',this)">⏳ En attente</button>
+            <button class="filter-chip red" onclick="filterT('suspended',this)">🚫 Suspendus</button>
+          </div>
+          <table class="dt"><thead><tr><th>Société</th><th>Pays</th><th>Routes</th><th>Flotte</th><th>Note</th><th>Trajets</th><th>Statut</th><th>Actions</th></tr></thead>
+          <tbody id="t-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ═══════ OFFRES ═══════ -->
+      <div class="view" id="view-offers">
+        <div class="page-header"><h1>Offres de transport</h1><p>Gestion des offres publiées et suivi des livraisons</p></div>
+        <div class="table-panel">
+          <div class="tp-header">
+            <span class="tp-title">Toutes les offres (<span id="o-count">6</span>)</span>
+            <div class="tp-actions">
+              <div class="tp-search"><span>⌕</span><input placeholder="Rechercher trajet..." oninput="searchO(this.value)"/></div>
+              <button class="small-btn" onclick="exportReport('Excel')">↓ Excel</button>
+              <button class="small-btn primary" onclick="openOverlay('ov-offer')">+ Nouvelle offre</button>
+            </div>
+          </div>
+          <div class="filters-bar">
+            <button class="filter-chip active" onclick="filterO('all',this)">Toutes</button>
+            <button class="filter-chip green" onclick="filterO('open',this)">🟢 Ouvertes</button>
+            <button class="filter-chip orange" onclick="filterO('transit',this)">🚛 En transit</button>
+            <button class="filter-chip blue" onclick="filterO('delivered',this)">✅ Livrées</button>
+            <button class="filter-chip" onclick="filterO('int',this)">🌍 International</button>
+            <button class="filter-chip" onclick="filterO('nat',this)">🇲🇱 National</button>
+          </div>
+          <table class="dt"><thead><tr><th>Trajet</th><th>Marchandise</th><th>Tonnage</th><th>Budget</th><th>Type</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead>
+          <tbody id="o-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ═══════ CANDIDATURES ═══════ -->
+      <div class="view" id="view-candidates">
+        <div class="page-header"><h1>Candidatures reçues</h1><p>Gestion des dossiers candidats — GMM · SEMM · SEMS</p></div>
+        <div class="table-panel">
+          <div class="tp-header">
+            <span class="tp-title">Candidatures (<span id="c-count">5</span>)</span>
+            <div class="tp-actions">
+              <div class="tp-search"><span>⌕</span><input placeholder="Rechercher candidat..." oninput="searchC(this.value)"/></div>
+              <button class="small-btn" onclick="exportReport('Excel')">↓ Excel</button>
+            </div>
+          </div>
+          <div class="filters-bar">
+            <button class="filter-chip active" onclick="filterC('all',this)">Toutes</button>
+            <button class="filter-chip orange" onclick="filterC('pending',this)">⏳ À traiter</button>
+            <button class="filter-chip green" onclick="filterC('invited',this)">📅 Convoqués</button>
+            <button class="filter-chip red" onclick="filterC('refused',this)">✕ Refusés</button>
+            <button class="filter-chip" onclick="filterC('gmm',this)">GMM</button>
+            <button class="filter-chip" onclick="filterC('semm',this)">SEMM</button>
+            <button class="filter-chip" onclick="filterC('sems',this)">SEMS</button>
+          </div>
+          <table class="dt"><thead><tr><th>Candidat</th><th>Poste</th><th>Filiale</th><th>Date</th><th>CV</th><th>Statut</th><th>Actions</th></tr></thead>
+          <tbody id="c-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- ═══════ CONTENT ═══════ -->
+      <div class="view" id="view-content">
+        <div class="page-header"><h1>Contenu du site</h1><p>Gestion des pages institutionnelles GAMI</p></div>
+        <div class="content-grid" id="content-grid"></div>
+      </div>
+
+      <!-- ═══════ MEDIA ═══════ -->
+      <div class="view" id="view-media">
+        <div class="page-header"><h1>Médias & Galerie</h1><p>Bibliothèque de fichiers du site GAMI</p></div>
+        <div class="tp-header" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:14px 18px;margin-bottom:0">
+          <span class="tp-title">Bibliothèque</span>
+          <div class="tp-actions">
+            <button class="small-btn" onclick="toast('Upload de fichiers...','blue')">📎 Importer</button>
+            <button class="small-btn primary" onclick="toast('Nouveau dossier créé ✓','success')">+ Dossier</button>
+          </div>
+        </div>
+        <div class="media-grid" id="media-grid" style="background:var(--bg2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:16px"></div>
+      </div>
+
+      <!-- ═══════ USERS ═══════ -->
+      <div class="view" id="view-users">
+        <div class="page-header"><h1>Utilisateurs DSI</h1><p>Gestion des accès et rôles back-office</p></div>
+        <div class="tp-header" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:12px">
+          <span class="tp-title">Comptes actifs</span>
+          <button class="small-btn primary" onclick="toast('Inviter un utilisateur','blue')">+ Inviter</button>
+        </div>
+        <div class="users-grid" id="users-grid"></div>
+      </div>
+
+      <!-- ═══════ DOCS ═══════ -->
+      <div class="view" id="view-docs">
+        <div class="page-header"><h1>Documents</h1><p>Fichiers téléchargeables sur le site public</p></div>
+        <div class="tp-header" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:12px">
+          <span class="tp-title">Bibliothèque</span>
+          <button class="small-btn primary" onclick="toast('Upload document...','blue')">+ Ajouter</button>
+        </div>
+        <div id="docs-list"></div>
+      </div>
+
+      <!-- ═══════ SETTINGS ═══════ -->
+      <div class="view" id="view-settings">
+        <div class="page-header"><h1>Paramètres</h1><p>Configuration générale du back-office GAMI</p></div>
+        <div id="settings-body"></div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ═══════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════
+const DB = {
+  transporters:[
+    {id:1,name:'Transport Konaté SARL',country:'Mali',routes:'Bamako → Dakar',fleet:8,rating:4.9,trips:42,status:'verified',phone:'+223 76 11 22 33',email:'konate@mail.ml',since:'Jan 2024'},
+    {id:2,name:'Logis Express Dakar',country:'Sénégal',routes:'Dakar → Abidjan',fleet:5,rating:4.2,trips:28,status:'verified',phone:'+221 77 55 66 77',email:'logis@mail.sn',since:'Mar 2024'},
+    {id:3,name:'Sahel Cargo Guinée',country:'Guinée',routes:'Conakry → Bamako',fleet:3,rating:3.5,trips:0,status:'pending',phone:'+224 62 44 55 66',email:'sahel@mail.gn',since:'Avr 2025'},
+    {id:4,name:'Trans-Sahel SARL',country:'Mali',routes:'Bamako → Mopti',fleet:6,rating:4.0,trips:0,status:'pending',phone:'+223 79 88 99 00',email:'trans@mail.ml',since:'Avr 2025'},
+    {id:5,name:'West Africa Transport',country:"Côte d'Ivoire",routes:'Abidjan → Bamako',fleet:4,rating:4.5,trips:19,status:'verified',phone:'+225 07 12 34 56',email:'wat@mail.ci',since:'Fév 2024'},
+  ],
+  offers:[
+    {id:1,from:'Dakar',to:'Bamako',merch:'Citerne carburant',tonnage:32,budget:'2 500 000',date:'10 Avr',kind:'int',status:'open',trans:null},
+    {id:2,from:'Bamako',to:'Sikasso',merch:'Matériaux BTP',tonnage:18,budget:'800 000',date:'08 Avr',kind:'nat',status:'transit',trans:'Transport Konaté SARL'},
+    {id:3,from:'Abidjan',to:'Bamako',merch:'Pièces industrielles',tonnage:12,budget:'1 800 000',date:'15 Avr',kind:'int',status:'open',trans:null},
+    {id:4,from:'Bamako',to:'Mopti',merch:'Équipements mining',tonnage:25,budget:'1 200 000',date:'18 Avr',kind:'nat',status:'open',trans:null},
+    {id:5,from:'Conakry',to:'Bamako',merch:'Minerai',tonnage:40,budget:'3 200 000',date:'22 Avr',kind:'int',status:'open',trans:null},
+    {id:6,from:'Dakar',to:'Conakry',merch:'Produits alimentaires',tonnage:15,budget:'1 500 000',date:'05 Avr',kind:'int',status:'delivered',trans:'Logis Express Dakar'},
+  ],
+  candidates:[
+    {id:1,name:'Aliou Bah',post:'Ingénieur Maintenance Senior',filiale:'GMM',date:'01 Avr',status:'pending',email:'aliou.bah@email.com',phone:'+224 62 11 22 33',cover:"8 ans d'expérience en maintenance industrielle sur sites miniers au Mali et en Guinée."},
+    {id:2,name:'Fatoumata Coulibaly',post:'Consultant Technique',filiale:'SEMS',date:'29 Mar',status:'invited',email:'fatoumata.c@email.com',phone:'+223 76 44 55 66',cover:"Consultante, 5 ans d'expérience, maîtrise des outils de diagnostic industriel."},
+    {id:3,name:'Moussa Traoré',post:'Chef de Chantier',filiale:'GMM',date:'25 Mar',status:'refused',email:'moussa.t@email.com',phone:'+223 79 77 88 99',cover:"Chef de chantier BTP, 12 ans d'expérience en Afrique subsaharienne."},
+    {id:4,name:'Ibrahima Diallo',post:'Technicien Équipements',filiale:'SEMM',date:'02 Avr',status:'pending',email:'ibrahima.d@email.com',phone:'+221 77 33 44 55',cover:"Technicien certifié SEMM, formation à Bamako, disponible immédiatement."},
+    {id:5,name:'Aissatou Baldé',post:'Ingénieur Maintenance Senior',filiale:'GMM',date:'03 Avr',status:'pending',email:'aissatou.b@email.com',phone:'+224 66 22 33 44',cover:"Ingénieure diplômée, expérience sur 3 sites miniers en Guinée, bilingue FR/EN."},
+  ],
+  activity:[
+    {icon:'🚛',color:'blue',title:'Dakar → Bamako en transit',sub:'Transport Konaté · Citerne carburant · 32t',time:'Il y a 2h'},
+    {icon:'👤',color:'orange',title:'Nouvelle candidature : Aissatou Baldé',sub:'Ingénieur Maintenance Senior · GMM',time:'Il y a 3h'},
+    {icon:'✅',color:'green',title:'Sahel Cargo — dossier soumis',sub:'Documents en attente de vérification',time:'Hier 16h30'},
+    {icon:'🚛',color:'green',title:'Livraison confirmée : Dakar → Conakry',sub:'Logis Express Dakar · 15t · 5/5 ⭐',time:'Hier 14h00'},
+    {icon:'📢',color:'blue',title:'Offre publiée : Conakry → Bamako',sub:'40t · Minerai · 3 200 000 FCFA',time:'Hier 10h15'},
+    {icon:'👤',color:'orange',title:'Ibrahima Diallo — candidature reçue',sub:'Technicien Équipements · SEMM',time:'02 Avr 09h00'},
+  ],
+  notifications:[
+    {id:1,icon:'⏳',color:'orange',title:'3 transporteurs en attente',sub:'Sahel Cargo, Trans-Sahel...',time:'2h',read:false},
+    {id:2,icon:'👤',color:'blue',title:'4 candidatures à traiter',sub:'GMM · SEMM · SEMS',time:'3h',read:false},
+    {id:3,icon:'✅',color:'green',title:'Livraison confirmée',sub:'Dakar → Conakry · Logis Express',time:'Hier',read:false},
+    {id:4,icon:'📋',color:'blue',title:'Offre expirée bientôt',sub:'Conakry → Bamako · 22 Avr',time:'Hier',read:false},
+    {id:5,icon:'⭐',color:'orange',title:'Avis reçu : Transport Konaté 4.9★',sub:'Trajet Dakar → Bamako',time:'02 Avr',read:true},
+  ],
+  heatmap:{
+    dates:['Jun 26','Jul 3','Jul 10','Jul 17','Jul 24','Jul 31','Août 7','Août 14','Août 21','Août 28','Sep 4','Sep 11'],
+    values:[20,20,23,58,88,95,86,55,21,20,20,31]
+  },
+  barChart:{
+    months:['Nov','Déc','Jan','Fév','Mar','Avr'],
+    offers:[8,10,9,11,12,12],
+    deliveries:[5,7,8,10,18,23]
+  },
+  contentPages:[
+    {icon:'🏠',color:'blue',title:'Page Accueil',sub:'Hero, services, stats, témoignages',status:'Publié'},
+    {icon:'🏭',color:'orange',title:'Le Groupe',sub:'Vision, Mission, Valeurs, Histoire',status:'Publié'},
+    {icon:'🔧',color:'blue',title:'Filiales',sub:'GMM · SEMM · SEMS — détails',status:'Publié'},
+    {icon:'📰',color:'orange',title:'Actualités',sub:'6 articles publiés',status:'Publié'},
+    {icon:'💼',color:'blue',title:'Recrutement',sub:'4 offres actives',status:'Publié'},
+    {icon:'🚛',color:'orange',title:'Transporteurs',sub:'Module offres + inscription',status:'Publié'},
+    {icon:'📞',color:'blue',title:'Contact',sub:'Formulaire + carte + filiales',status:'Publié'},
+  ],
+  mediaItems:[
+    {icon:'🖼️',name:'Logo GAMI',ext:'PNG'},
+    {icon:'📸',name:'Siège Dakar',ext:'JPG'},
+    {icon:'🖼️',name:'Site GMM Mali',ext:'JPG'},
+    {icon:'📸',name:'Équipe SEMM',ext:'JPG'},
+    {icon:'🎥',name:'Vidéo promo',ext:'MP4'},
+    {icon:'🖼️',name:'Bannière web',ext:'PNG'},
+    {icon:'📸',name:'Photo SEMS',ext:'JPG'},
+    {icon:'🖼️',name:'Logo GMM',ext:'SVG'},
+  ],
+  users:[
+    {name:'Admin Principal',email:'admin@groupeami.sn',role:'Super Admin',last:'Maintenant',status:'active'},
+    {name:'Responsable DSI',email:'dsi@groupeami.sn',role:'Admin DSI',last:'Hier 17h30',status:'active'},
+    {name:'Chef Marketing',email:'marketing@groupeami.sn',role:'Éditeur',last:'02 Avr',status:'active'},
+    {name:'DRH Assistant',email:'drh@groupeami.sn',role:'RH Manager',last:'01 Avr',status:'inactive'},
+  ],
+  docs:[
+    {name:'Rapport annuel GAMI 2024.pdf',size:'4.2 MB',date:'15 Jan 2025',downloads:87,type:'pdf'},
+    {name:'Présentation groupe GAMI.pptx',size:'8.7 MB',date:'10 Mar 2025',downloads:43,type:'pptx'},
+    {name:'Conditions transporteurs.pdf',size:'1.1 MB',date:'01 Avr 2025',downloads:156,type:'pdf'},
+    {name:'Formulaire inscription.docx',size:'0.5 MB',date:'01 Avr 2025',downloads:234,type:'docx'},
+  ],
+};
+
+// ═══════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  renderAll();
+  updateCounts();
+  renderNotifications();
+  setDate();
+});
+
+function renderAll(){
+  renderHeatmap();
+  renderBarChart();
+  renderActivity();
+  renderTransporters();
+  renderOffers();
+  renderCandidates();
+  renderCandidatesOv();
+  renderContent();
+  renderMedia();
+  renderUsers();
+  renderDocs();
+  renderSettings();
+  renderCapacity();
+}
+
+function setDate(){
+  const now=new Date();
+  document.querySelector('#view-overview .page-header p').textContent=
+    'Supervision du groupe GAMI · Mis à jour '+now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function updateCounts(){
+  const pending=DB.transporters.filter(t=>t.status==='pending').length;
+  const candPending=DB.candidates.filter(c=>c.status==='pending').length;
+  const unread=DB.notifications.filter(n=>!n.read).length;
+  document.getElementById('badge-trans').textContent=pending;
+  document.getElementById('badge-cand').textContent=candPending;
+  document.getElementById('tab-cand-count').textContent=candPending;
+  document.getElementById('np-count').textContent=unread;
+  document.getElementById('tb-notif-dot').style.display=unread>0?'block':'none';
+  el('t-count',DB.transporters.length);
+  el('o-count',DB.offers.length);
+  el('c-count',DB.candidates.length);
+  el('ov-m1',DB.offers.filter(o=>o.status==='open').length);
+  el('ov-m2',DB.transporters.filter(t=>t.status==='verified').length);
+  el('ov-m4',pending);
+}
+function el(id,val){const e=document.getElementById(id);if(e)e.textContent=val}
+
+// ═══════════════════════════════════════════════════
+//  HEATMAP
+// ═══════════════════════════════════════════════════
+function heatClass(v){
+  if(v<40) return 'low';
+  if(v<75) return 'optimal';
+  if(v<90) return 'overload';
+  return 'critical';
+}
+function heatLabel(v){
+  if(v<40) return 'Faible';
+  if(v<75) return 'Optimal';
+  if(v<90) return 'Saturé';
+  return 'Critique';
+}
+function renderHeatmap(){
+  const {dates,values}=DB.heatmap;
+  const container=document.getElementById('heatmap');
+  container.innerHTML=`
+    <div class="hm-dates">${dates.map(d=>`<div class="hm-date">${d}</div>`).join('')}</div>
+    <div class="hm-cells">${values.map((v,i)=>`
+      <div class="hm-cell ${heatClass(v)}" onclick="showHeatCell('${dates[i]}',${v})">
+        ${v}%
+        <div class="hm-tooltip">${dates[i]} — ${v}% (${heatLabel(v)})</div>
+      </div>`).join('')}
+    </div>`;
+}
+function showHeatCell(date,val){
+  toast(`${date} : ${val}% utilisation — ${heatLabel(val)}`,'blue');
+}
+
+// ═══════════════════════════════════════════════════
+//  BAR CHART
+// ═══════════════════════════════════════════════════
+function renderBarChart(){
+  const {months,offers,deliveries}=DB.barChart;
+  const max=Math.max(...offers,...deliveries);
+  const c=document.getElementById('bar-chart');
+  c.innerHTML=months.map((m,i)=>`
+    <div class="bc-bar-wrap">
+      <div style="display:flex;gap:4px;align-items:flex-end;height:80px">
+        <div class="bc-bar" style="height:${(offers[i]/max*80).toFixed(0)}px;background:rgba(79,142,247,.25);width:14px" data-val="${offers[i]} offres" title=""></div>
+        <div class="bc-bar" style="height:${(deliveries[i]/max*80).toFixed(0)}px;background:var(--blue);width:14px" data-val="${deliveries[i]} livr." title=""></div>
+      </div>
+      <div class="bc-label">${m}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  ACTIVITY
+// ═══════════════════════════════════════════════════
+function renderActivity(){
+  document.getElementById('activity-feed').innerHTML=DB.activity.map(a=>`
+    <div class="af-item">
+      <div class="af-icon ${a.color}">${a.icon}</div>
+      <div class="af-body">
+        <div class="af-title">${a.title}</div>
+        <div class="af-sub">${a.sub}</div>
+      </div>
+      <div class="af-time">${a.time}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  NOTIFICATIONS
+// ═══════════════════════════════════════════════════
+const colorBg={blue:'var(--blue-dim)',orange:'var(--orange-dim)',green:'var(--green-dim)',red:'var(--red-dim)'};
+function renderNotifications(){
+  document.getElementById('np-list').innerHTML=DB.notifications.map(n=>`
+    <div class="np-item ${n.read?'':'unread'}" onclick="readNotif(${n.id})">
+      <div class="np-icon" style="background:${colorBg[n.color]}">${n.icon}</div>
+      <div style="flex:1">
+        <div class="np-title">${n.title}</div>
+        <div class="np-sub">${n.sub}</div>
+        <div class="np-time">${n.time}</div>
+      </div>
+      ${!n.read?'<div class="np-unread-dot"></div>':''}
+    </div>`).join('');
+  updateCounts();
+}
+function readNotif(id){DB.notifications.find(n=>n.id===id).read=true;renderNotifications()}
+function clearNotifs(){DB.notifications.forEach(n=>n.read=true);renderNotifications();toast('Toutes les notifications lues','success')}
+function toggleNotifPanel(){document.getElementById('notif-panel').classList.toggle('open')}
+
+// ═══════════════════════════════════════════════════
+//  TRANSPORTERS
+// ═══════════════════════════════════════════════════
+function sPill(status){
+  const m={verified:'<span class="badge-verified">✓ Vérifié</span>',pending:'<span class="pill orange">En attente</span>',suspended:'<span class="pill red">Suspendu</span>'};
+  return m[status]||status;
+}
+function renderTransporters(list){
+  list=list||DB.transporters;
+  document.getElementById('t-tbody').innerHTML=list.map(t=>`
+    <tr onclick="openTransDetail(${t.id})">
+      <td class="dt-strong">${t.name}</td>
+      <td>${t.country}</td>
+      <td>${t.routes}</td>
+      <td>${t.fleet} camions</td>
+      <td><span class="stars">${'★'.repeat(Math.round(t.rating))}</span> <strong>${t.rating}</strong></td>
+      <td>${t.trips}</td>
+      <td>${sPill(t.status)}</td>
+      <td onclick="event.stopPropagation()" style="display:flex;gap:4px;flex-wrap:wrap">
+        ${t.status==='pending'?`<button class="act-btn success" onclick="verifyT(${t.id})">✓ Valider</button>`:''}
+        ${t.status==='verified'?`<button class="act-btn danger" onclick="confirmAction('Suspendre ${t.name}','Cela désactivera le profil.',()=>suspendT(${t.id}),'error')">Suspendre</button>`:''}
+        ${t.status==='suspended'?`<button class="act-btn success" onclick="reinstateT(${t.id})">Réactiver</button>`:''}
+        <button class="act-btn primary" onclick="openTransDetail(${t.id})">Voir</button>
+      </td>
+    </tr>`).join('');
+}
+function filterT(f,btn){
+  document.querySelectorAll('#view-transporters .filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTransporters(f==='all'?DB.transporters:DB.transporters.filter(t=>t.status===f));
+}
+function searchT(q){renderTransporters(DB.transporters.filter(t=>t.name.toLowerCase().includes(q.toLowerCase())))}
+
+function verifyT(id){
+  const t=DB.transporters.find(x=>x.id===id);
+  t.status='verified';renderTransporters();updateCounts();
+  addActivity('✅','green',`${t.name} — Badge Vérifié attribué`,'Validation DSI');
+  openTransDetail(id);
+  toast(`✅ Badge Vérifié attribué à ${t.name}`,'success');
+}
+function suspendT(id){
+  const t=DB.transporters.find(x=>x.id===id);
+  t.status='suspended';closeDetailPanel();renderTransporters();updateCounts();
+  toast(`⚠️ ${t.name} suspendu`,'warning');
+}
+function reinstateT(id){
+  const t=DB.transporters.find(x=>x.id===id);
+  t.status='verified';renderTransporters();updateCounts();
+  toast(`✅ ${t.name} réactivé`,'success');
+}
+
+function openTransDetail(id){
+  const t=DB.transporters.find(x=>x.id===id);
+  document.getElementById('dp-title').textContent=t.name;
+  document.getElementById('dp-body').innerHTML=`
+    <div class="dp-section">
+      <div class="dp-section-title">Statut</div>
+      ${sPill(t.status)}
+    </div>
+    <div class="dp-section">
+      <div class="dp-section-title">Informations</div>
+      <div class="dp-2">
+        <div class="dp-field"><label>Pays</label><div class="dpv">${t.country}</div></div>
+        <div class="dp-field"><label>Flotte</label><div class="dpv hl">${t.fleet} camions</div></div>
+        <div class="dp-field"><label>Note</label><div class="dpv org">${'★'.repeat(Math.round(t.rating))} ${t.rating}</div></div>
+        <div class="dp-field"><label>Trajets</label><div class="dpv hl">${t.trips}</div></div>
+      </div>
+      <div class="dp-field"><label>Routes</label><div class="dpv">${t.routes}</div></div>
+      <div class="dp-field"><label>WhatsApp</label><div class="dpv hl">${t.phone}</div></div>
+      <div class="dp-field"><label>Email</label><div class="dpv">${t.email}</div></div>
+      <div class="dp-field"><label>Membre depuis</label><div class="dpv">${t.since}</div></div>
+    </div>
+    <div class="dp-section">
+      <div class="dp-section-title">Documents</div>
+      ${['Carte grise','Assurance','Registre RCCM'].map(d=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border-radius:6px;margin-bottom:6px">
+          <span style="font-size:12px">📄 ${d}</span>
+          <button class="act-btn success" onclick="toast('${d} vérifié ✓','success')" style="font-size:10px;padding:3px 8px">✓</button>
+        </div>`).join('')}
+    </div>`;
+  document.getElementById('dp-actions').innerHTML=`
+    ${t.status==='pending'?`<button class="small-btn primary" style="flex:1;justify-content:center" onclick="verifyT(${t.id})">✓ Valider & Badge</button>`:''}
+    ${t.status==='verified'?`<button class="small-btn" style="flex:1;justify-content:center;border-color:rgba(231,76,60,.3);color:var(--red)" onclick="confirmAction('Suspendre ${t.name}','',()=>suspendT(${t.id}),'error')">Suspendre</button>`:''}
+    ${t.status==='suspended'?`<button class="small-btn primary" style="flex:1;justify-content:center" onclick="reinstateT(${t.id})">Réactiver</button>`:''}
+    <button class="small-btn" style="flex:1;justify-content:center;background:rgba(37,211,102,.15);border-color:rgba(37,211,102,.3);color:#25D366" onclick="toast('WhatsApp ouvert : ${t.phone}')">💬 WhatsApp</button>`;
+  openDetailPanel();
+}
+
+// ═══════════════════════════════════════════════════
+//  OFFERS
+// ═══════════════════════════════════════════════════
+function oPill(status){
+  const m={open:'<span class="pill green">Ouvert</span>',transit:'<span class="pill orange">En transit</span>',delivered:'<span class="pill blue">Livré</span>'};
+  return m[status]||status;
+}
+function renderOffers(list){
+  list=list||DB.offers;
+  document.getElementById('o-tbody').innerHTML=list.map(o=>`
+    <tr onclick="openOfferDetail(${o.id})">
+      <td class="dt-strong">${o.from} → ${o.to}</td>
+      <td>${o.merch}</td>
+      <td>${o.tonnage}t</td>
+      <td style="color:var(--gami-orange);font-weight:600">${o.budget} F</td>
+      <td><span style="font-size:10px;padding:2px 7px;border-radius:3px;font-weight:600;${o.kind==='int'?'background:var(--blue-dim);color:var(--blue)':'background:var(--green-dim);color:var(--green)'}">${o.kind==='int'?'Intl':'National'}</span></td>
+      <td>${o.date}</td>
+      <td>${oPill(o.status)}</td>
+      <td onclick="event.stopPropagation()" style="display:flex;gap:4px;flex-wrap:wrap">
+        ${o.status==='open'?`<button class="act-btn danger" onclick="confirmAction('Fermer cette offre','',()=>closeOffer(${o.id}),'warning')">Fermer</button>`:''}
+        ${o.status==='transit'?`<button class="act-btn success" onclick="markDelivered(${o.id})">✅ Livré</button>`:''}
+        ${o.status==='delivered'?`<button class="act-btn" onclick="rateOffer(${o.id})">⭐ Noter</button>`:''}
+        <button class="act-btn primary" onclick="openOfferDetail(${o.id})">Voir</button>
+      </td>
+    </tr>`).join('');
+}
+function filterO(f,btn){
+  document.querySelectorAll('#view-offers .filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  let list=f==='all'?DB.offers:f==='int'||f==='nat'?DB.offers.filter(o=>o.kind===f):DB.offers.filter(o=>o.status===f);
+  renderOffers(list);
+}
+function searchO(q){renderOffers(DB.offers.filter(o=>`${o.from}${o.to}${o.merch}`.toLowerCase().includes(q.toLowerCase())))}
+
+function closeOffer(id){
+  const o=DB.offers.find(x=>x.id===id);o.status='delivered';
+  closeOverlay('ov-confirm');renderOffers();updateCounts();
+  toast(`Offre ${o.from}→${o.to} fermée`,'warning');
+}
+function markDelivered(id){
+  const o=DB.offers.find(x=>x.id===id);o.status='delivered';
+  renderOffers();updateCounts();
+  addActivity('✅','green',`Livraison confirmée : ${o.from} → ${o.to}`,`${o.merch} · ${o.tonnage}t`);
+  toast(`✅ Livraison ${o.from}→${o.to} confirmée`,'success');
+}
+function rateOffer(id){
+  const o=DB.offers.find(x=>x.id===id);
+  toast(`⭐ Note envoyée pour ${o.trans||'le transporteur'}`,'success');
+}
+function openOfferDetail(id){
+  const o=DB.offers.find(x=>x.id===id);
+  document.getElementById('dp-title').textContent=`${o.from} → ${o.to}`;
+  document.getElementById('dp-body').innerHTML=`
+    <div class="dp-section">
+      <div class="dp-section-title">Statut</div>
+      ${oPill(o.status)}
+    </div>
+    <div class="dp-section">
+      <div class="dp-section-title">Détails</div>
+      <div class="dp-2">
+        <div class="dp-field"><label>Budget</label><div class="dpv org">${o.budget} FCFA</div></div>
+        <div class="dp-field"><label>Tonnage</label><div class="dpv hl">${o.tonnage}t</div></div>
+        <div class="dp-field"><label>Marchandise</label><div class="dpv">${o.merch}</div></div>
+        <div class="dp-field"><label>Type</label><div class="dpv">${o.kind==='int'?'International':'National Mali'}</div></div>
+        <div class="dp-field"><label>Date départ</label><div class="dpv">${o.date}</div></div>
+        <div class="dp-field"><label>Transporteur</label><div class="dpv">${o.trans||'<em style="color:var(--text3)">Non assigné</em>'}</div></div>
+      </div>
+    </div>
+    <div class="dp-section">
+      <div class="dp-section-title">Historique</div>
+      <div style="background:var(--bg3);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);line-height:1.8">
+        📋 Offre publiée le ${o.date}<br>
+        ${o.trans?`🚛 Assignée à ${o.trans}<br>`:''}
+        ${o.status==='delivered'?'✅ Livraison confirmée':''}
+      </div>
+    </div>`;
+  document.getElementById('dp-actions').innerHTML=`
+    ${o.status==='open'?`<button class="small-btn primary" style="flex:1;justify-content:center" onclick="markDelivered(${o.id});closeDetailPanel()">Marquer livré ✅</button><button class="small-btn" style="flex:1;justify-content:center;border-color:rgba(231,76,60,.3);color:var(--red)" onclick="confirmAction('Fermer cette offre','',()=>closeOffer(${o.id}),'warning')">Fermer</button>`:''}
+    ${o.status==='transit'?`<button class="small-btn primary" style="flex:1;justify-content:center" onclick="markDelivered(${o.id});closeDetailPanel()">Confirmer livraison ✅</button>`:''}`;
+  openDetailPanel();
+}
+
+// ═══════════════════════════════════════════════════
+//  CANDIDATES
+// ═══════════════════════════════════════════════════
+function cPill(status){
+  const m={pending:'<span class="pill orange">À traiter</span>',invited:'<span class="pill green">Convoqué(e)</span>',refused:'<span class="pill red">Refusé(e)</span>'};
+  return m[status]||status;
+}
+function renderCandidates(list){
+  list=list||DB.candidates;
+  document.getElementById('c-tbody').innerHTML=list.map(c=>`
+    <tr onclick="openCandDetail(${c.id})">
+      <td class="dt-strong">${c.name}</td>
+      <td>${c.post}</td>
+      <td><span style="font-size:10px;background:var(--blue-dim);color:var(--blue);padding:2px 7px;border-radius:3px;font-weight:700">${c.filiale}</span></td>
+      <td>${c.date}</td>
+      <td><span class="pill blue">📎 CV</span></td>
+      <td>${cPill(c.status)}</td>
+      <td onclick="event.stopPropagation()" style="display:flex;gap:4px;flex-wrap:wrap">
+        ${c.status==='pending'?`<button class="act-btn success" onclick="inviteC(${c.id})">📅 Convoquer</button><button class="act-btn danger" onclick="refuseC(${c.id})">✕ Refuser</button>`:''}
+        <button class="act-btn primary" onclick="openCandDetail(${c.id})">Voir</button>
+      </td>
+    </tr>`).join('');
+}
+function renderCandidatesOv(){
+  const pending=DB.candidates.filter(c=>c.status==='pending');
+  document.getElementById('cand-table-ov').innerHTML=pending.map(c=>`
+    <tr onclick="openCandDetail(${c.id})">
+      <td class="dt-strong">${c.name}</td>
+      <td>${c.post}</td>
+      <td><span style="font-size:10px;background:var(--blue-dim);color:var(--blue);padding:2px 7px;border-radius:3px;font-weight:700">${c.filiale}</span></td>
+      <td>${c.date}</td>
+      <td>${cPill(c.status)}</td>
+      <td onclick="event.stopPropagation()" style="display:flex;gap:4px">
+        <button class="act-btn success" onclick="inviteC(${c.id})">📅 Convoquer</button>
+        <button class="act-btn danger" onclick="refuseC(${c.id})">✕</button>
+      </td>
+    </tr>`).join('');
+}
+function filterC(f,btn){
+  document.querySelectorAll('#view-candidates .filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  let list=f==='all'?DB.candidates:['gmm','semm','sems'].includes(f)?DB.candidates.filter(c=>c.filiale.toLowerCase()===f):DB.candidates.filter(c=>c.status===f);
+  renderCandidates(list);
+}
+function searchC(q){renderCandidates(DB.candidates.filter(c=>`${c.name}${c.post}`.toLowerCase().includes(q.toLowerCase())))}
+
+function inviteC(id){
+  const c=DB.candidates.find(x=>x.id===id);
+  c.status='invited';renderCandidates();renderCandidatesOv();updateCounts();closeDetailPanel();
+  addActivity('📅','orange',`${c.name} — Convoqué(e)`,`${c.post} · ${c.filiale}`);
+  toast(`✅ ${c.name} convoqué(e) — email envoyé`,'success');
+}
+function refuseC(id){
+  const c=DB.candidates.find(x=>x.id===id);
+  c.status='refused';renderCandidates();renderCandidatesOv();updateCounts();closeDetailPanel();
+  toast(`${c.name} — candidature refusée`,'warning');
+}
+function openCandDetail(id){
+  const c=DB.candidates.find(x=>x.id===id);
+  document.getElementById('cand-title').textContent=c.name;
+  document.getElementById('cand-sub').textContent=`${c.post} — ${c.filiale} · Reçue le ${c.date}`;
+  document.getElementById('cand-body').innerHTML=`
+    <div class="form-grid2">
+      <div><div style="font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;margin-bottom:4px">Statut</div>${cPill(c.status)}</div>
+      <div><div style="font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;margin-bottom:4px">Filiale</div><strong>${c.filiale}</strong></div>
+      <div><div style="font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;margin-bottom:4px">Email</div><a href="mailto:${c.email}" style="color:var(--blue);font-size:13px">${c.email}</a></div>
+      <div><div style="font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;margin-bottom:4px">Téléphone</div><span style="font-size:13px">${c.phone}</span></div>
+    </div>
+    <div style="margin:14px 0">
+      <div style="font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;margin-bottom:6px">CV joint</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border-radius:6px;padding:8px 12px">
+        <span style="font-size:13px">📎 CV_${c.name.replace(' ','_')}.pdf</span>
+        <button class="act-btn primary" onclick="toast('Téléchargement...','blue')">↓ Télécharger</button>
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:10px;font-weight:600;color:var(--text2);text-transform:uppercase;margin-bottom:6px">Lettre de motivation</div>
+      <div style="background:var(--bg3);border-radius:6px;padding:12px;font-size:13px;color:var(--text2);line-height:1.65">${c.cover}</div>
+    </div>
+    ${c.status==='pending'?`
+      <div style="display:flex;gap:10px">
+        <button class="submit-btn" onclick="inviteC(${c.id});closeOverlay('ov-candidate')">📅 Convoquer à l'entretien</button>
+        <button class="submit-btn orange" onclick="refuseC(${c.id});closeOverlay('ov-candidate')">✕ Refuser</button>
+      </div>`:'<button class="submit-btn" onclick="closeOverlay(\'ov-candidate\')">Fermer</button>'}`;
+  openOverlay('ov-candidate');
+}
+
+// ═══════════════════════════════════════════════════
+//  PUBLISH OFFER
+// ═══════════════════════════════════════════════════
+function publishOffer(){
+  const from=document.getElementById('of-from').value.trim();
+  const to=document.getElementById('of-to').value.trim();
+  const tonnage=document.getElementById('of-tonnage').value;
+  const budget=document.getElementById('of-budget').value;
+  const date=document.getElementById('of-date').value;
+  if(!from||!to||!tonnage||!budget||!date){toast('Veuillez remplir tous les champs *','warning');return}
+  const merch=document.getElementById('of-merch').value;
+  const kind=document.getElementById('of-type').value.includes('Int')?'int':'nat';
+  DB.offers.push({
+    id:DB.offers.length+1,from,to,merch,
+    tonnage:Number(tonnage),
+    budget:Number(budget).toLocaleString('fr-FR'),
+    date,kind,status:'open',trans:null
+  });
+  closeOverlay('ov-offer');renderOffers();updateCounts();
+  addActivity('📢','blue',`Nouvelle offre : ${from} → ${to}`,`${tonnage}t · ${merch}`);
+  toast(`✅ Offre ${from}→${to} publiée — transporteurs notifiés !`,'success');
+  ['of-from','of-to','of-tonnage','of-budget','of-date'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ═══════════════════════════════════════════════════
+//  CONTENT / MEDIA / USERS / DOCS / SETTINGS
+// ═══════════════════════════════════════════════════
+function renderContent(){
+  document.getElementById('content-grid').innerHTML=DB.contentPages.map(p=>`
+    <div class="content-item" onclick="toast('Éditer : ${p.title}','blue')">
+      <div class="ci-icon ${p.color}">${p.icon}</div>
+      <div><div class="ci-title">${p.title}</div><div class="ci-sub">${p.sub}</div></div>
+      <div class="ci-badge"><span class="pill green">${p.status}</span></div>
+    </div>`).join('');
+}
+function renderMedia(){
+  document.getElementById('media-grid').innerHTML=DB.mediaItems.map(m=>`
+    <div class="media-item" onclick="toast('Prévisualiser : ${m.name}')">
+      <div class="media-icon">${m.icon}</div>
+      <div class="media-name">${m.name}</div>
+      <div class="media-ext">${m.ext}</div>
+    </div>`).join('');
+}
+function renderUsers(){
+  document.getElementById('users-grid').innerHTML=DB.users.map(u=>`
+    <div class="user-card" onclick="toast('Modifier : ${u.name}')">
+      <div class="uc-av">${u.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+      <div>
+        <div class="uc-name">${u.name}</div>
+        <div class="uc-role">${u.role} · ${u.last}</div>
+      </div>
+      <div class="uc-status"><span class="pill ${u.status==='active'?'green':'gray'}">${u.status==='active'?'Actif':'Inactif'}</span></div>
+    </div>`).join('');
+}
+function renderDocs(){
+  const icons={pdf:'📕',pptx:'📊',docx:'📝'};
+  document.getElementById('docs-list').innerHTML=DB.docs.map(d=>`
+    <div class="doc-item" onclick="toast('Télécharger : ${d.name}','blue')">
+      <div class="doc-icon">${icons[d.type]||'📄'}</div>
+      <div>
+        <div class="doc-name">${d.name}</div>
+        <div class="doc-meta">${d.size} · Ajouté le ${d.date}</div>
+      </div>
+      <div class="doc-dl">${d.downloads} téléch.</div>
+      <button class="act-btn danger" onclick="event.stopPropagation();toast('Document supprimé','warning')">Supprimer</button>
+    </div>`).join('');
+}
+function renderSettings(){
+  const sections=[
+    {title:'Général',items:[
+      {icon:'🏢',title:'Informations société',sub:'Nom, adresse, contacts GAMI',toggle:false},
+      {icon:'✉️',title:'Configuration email',sub:'SMTP, templates notification',toggle:false},
+      {icon:'💬',title:'WhatsApp Business',sub:'Numéro, messages auto',toggle:true,on:true},
+    ]},
+    {title:'Sécurité',items:[
+      {icon:'🔒',title:'Authentification 2FA',sub:'Sécurité renforcée DSI',toggle:true,on:false},
+      {icon:'📊',title:'Journal d\'accès',sub:'Historique des connexions',toggle:false},
+    ]},
+    {title:'Site web',items:[
+      {icon:'🌐',title:'SEO & métadonnées',sub:'Titres, descriptions',toggle:false},
+      {icon:'📈',title:'Google Analytics',sub:'Suivi audience',toggle:true,on:true},
+      {icon:'🔔',title:'Notifications push',sub:'Alertes transporteurs',toggle:true,on:true},
+    ]},
+  ];
+  document.getElementById('settings-body').innerHTML=sections.map(s=>`
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">${s.title}</div>
+      <div class="settings-section">
+        ${s.items.map(i=>`
+          <div class="settings-row" onclick="${i.toggle?`toggleSetting(this)`:`toast('Ouvrir : ${i.title}','blue')`}">
+            <div class="sr-left">
+              <span class="sr-icon">${i.icon}</span>
+              <div><div class="sr-title">${i.title}</div><div class="sr-sub">${i.sub}</div></div>
+            </div>
+            <div class="sr-right">
+              ${i.toggle?`<div class="toggle ${i.on?'on':''}" onclick="this.classList.toggle('on');event.stopPropagation();toast(this.classList.contains('on')?'Activé ✓':'Désactivé','success')"></div>`:
+              '<span style="color:var(--text3);font-size:13px">›</span>'}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+function renderCapacity(){
+  const routes=[
+    {route:'Dakar → Bamako',cap:85,trucks:8,status:'optimal'},
+    {route:'Bamako → Sikasso',cap:42,trucks:3,status:'low'},
+    {route:'Abidjan → Bamako',cap:91,trucks:6,status:'overload'},
+    {route:'Bamako → Mopti',cap:28,trucks:2,status:'low'},
+    {route:'Conakry → Bamako',cap:67,trucks:5,status:'optimal'},
+  ];
+  document.getElementById('capacity-table').innerHTML=`
+    <table class="dt"><thead><tr><th>Route</th><th>Capacité</th><th>Camions actifs</th><th>Statut</th></tr></thead>
+    <tbody>${routes.map(r=>`
+      <tr>
+        <td class="dt-strong">${r.route}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden">
+              <div style="height:100%;width:${r.cap}%;background:${r.cap>80?'var(--red)':r.cap>50?'var(--orange)':'var(--green)'};border-radius:3px"></div>
+            </div>
+            <span style="font-size:12px;font-weight:600;color:var(--text);min-width:32px">${r.cap}%</span>
+          </div>
+        </td>
+        <td>${r.trucks} camions</td>
+        <td><span class="pill ${r.status==='overload'?'red':r.status==='optimal'?'orange':'green'}">${r.status==='overload'?'Saturé':r.status==='optimal'?'Optimal':'Faible'}</span></td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+// ═══════════════════════════════════════════════════
+//  ACTIVITY
+// ═══════════════════════════════════════════════════
+function addActivity(icon,color,title,sub){
+  DB.activity.unshift({icon,color,title,sub,time:"À l'instant"});
+  if(DB.activity.length>8) DB.activity.pop();
+  renderActivity();
+}
+
+// ═══════════════════════════════════════════════════
+//  UI HELPERS
+// ═══════════════════════════════════════════════════
+let sidebarCollapsed=false;
+function toggleSidebar(){
+  sidebarCollapsed=!sidebarCollapsed;
+  document.getElementById('sidebar').classList.toggle('collapsed',sidebarCollapsed);
+  document.getElementById('sb-toggle-icon').textContent=sidebarCollapsed?'›':'‹';
+}
+
+function toggleGroup(id){
+  const sub=document.getElementById(id);
+  const ch=document.getElementById(id+'-chevron');
+  const isOpen=sub.classList.contains('open');
+  sub.classList.toggle('open',!isOpen);
+  if(ch) ch.style.transform=isOpen?'':'rotate(90deg)';
+}
+
+function navClick(el,id){
+  document.querySelectorAll('.sbi').forEach(i=>i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const view=document.getElementById('view-'+id);
+  if(view) view.classList.add('active');
+  const titles={
+    overview:'Tableau de bord',transporters:'Transporteurs',
+    offers:'Offres transport',candidates:'Candidatures',
+    content:'Contenu site',media:'Médias & Galerie',
+    users:'Utilisateurs',docs:'Documents',settings:'Paramètres'
+  };
+  document.getElementById('tb-title').textContent=titles[id]||id;
+  closeDetailPanel();closeAllOverlays();
+  window.scrollTo(0,0);
+  // Close mobile sidebar
+  closeMobileSidebar();
+}
+
+function switchTab(btn,id){
+  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  ['ov-workload','ov-ooo','ov-capacity'].forEach(tid=>{
+    const e=document.getElementById(tid);
+    if(e) e.style.display=tid===id?'block':'none';
+  });
+}
+
+function openOverlay(id){closeAllOverlays();document.getElementById(id).classList.add('open')}
+function closeOverlay(id){document.getElementById(id).classList.remove('open')}
+function closeAllOverlays(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('open'));document.getElementById('notif-panel').classList.remove('open')}
+
+function openDetailPanel(){document.getElementById('detail-panel').classList.add('open')}
+function closeDetailPanel(){document.getElementById('detail-panel').classList.remove('open')}
+
+function confirmAction(title,sub,onConfirm,type='warning'){
+  document.getElementById('conf-title').textContent=title;
+  document.getElementById('conf-sub').textContent=sub;
+  document.getElementById('conf-icon').textContent=type==='error'?'⚠️':'❓';
+  const btn=document.getElementById('conf-btn');
+  btn.style.background=type==='error'?'var(--red)':'var(--blue)';
+  btn.onclick=()=>onConfirm();
+  openOverlay('ov-confirm');
+}
+
+function globalSearch(q){
+  if(!q) return;
+  const count=Math.floor(Math.random()*6)+1;
+  toast(`Recherche "${q}" — ${count} résultat(s) trouvé(s)`);
+}
+
+function exportReport(type){
+  toast(`Export ${type} en cours...`);
+  setTimeout(()=>toast(`✅ Export ${type} téléchargé`,'success'),1500);
+}
+
+function toggleMobileSidebar(){
+  const sb=document.getElementById('sidebar');
+  const ov=document.getElementById('sidebar-overlay');
+  const isOpen=sb.classList.toggle('mobile-open');
+  ov.classList.toggle('open',isOpen);
+  document.body.style.overflow=isOpen?'hidden':'';
+}
+function closeMobileSidebar(){
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function mobileSidebar(){toggleMobileSidebar()}
+
+// ESC key
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllOverlays();closeDetailPanel()}});
+// Click outside notif panel
+document.addEventListener('click',e=>{
+  const panel=document.getElementById('notif-panel');
+  const btn=e.target.closest('.tb-btn');
+  if(!panel.contains(e.target)&&!btn) panel.classList.remove('open');
+});
+
+// ═══════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════
+function toast(msg,type='default'){
+  const c=document.getElementById('toast-container');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.innerHTML=`<span>${type==='success'?'✓':type==='warning'?'⚠':type==='error'?'✕':'ℹ'}</span> ${msg}`;
+  c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(20px)';setTimeout(()=>t.remove(),300)},3000);
+}
+
+// Auto-close sidebar overlay on resize to desktop
+window.addEventListener('resize',()=>{
+  if(window.innerWidth>900){
+    closeMobileSidebar();
+  }
+});
+</script>
+</body>
+</html>

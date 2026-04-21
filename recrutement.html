@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GAMI — Recrutement</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.rec-layout{display:grid;grid-template-columns:1fr 380px;gap:36px;align-items:start}
+.job-filter-bar{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.jfb{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 20px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif}
+.jfb.active,.jfb:hover{background:var(--blue);border-color:var(--blue);color:#fff}
+.job-cards{display:flex;flex-direction:column;gap:14px}
+.job-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:.25s;gap:20px}
+.job-card:hover,.job-card.selected{border-color:var(--blue);box-shadow:0 8px 28px rgba(27,79,138,.09);background:var(--light)}
+.jc-title{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:8px;font-family:'Playfair Display',serif}
+.jc-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.jc-apply{background:var(--blue);color:#fff;border:none;padding:11px 24px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.2s;font-family:'Outfit',sans-serif;flex-shrink:0}
+.jc-apply:hover{background:var(--orange)}
+
+.form-panel{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:32px;position:sticky;top:90px;box-shadow:0 4px 24px rgba(0,0,0,.04)}
+.fp-title{font-size:1.15rem;color:var(--dark);margin-bottom:6px}
+.fp-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5;font-family:'Outfit',sans-serif;font-weight:300}
+
+.why-join{background:var(--dark);padding:80px;color:#fff}
+.wj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.wj-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:28px;transition:.2s}
+.wj-card:hover{border-color:var(--orange);background:rgba(232,134,26,.06)}
+.wj-icon{font-size:28px;margin-bottom:16px}
+.wj-card h3{color:#fff;font-size:1rem;margin-bottom:8px}
+.wj-card p{color:rgba(255,255,255,.5);font-size:13px;line-height:1.65;font-family:'Outfit',sans-serif;font-weight:300}
+
+/* ── PAGE RESPONSIVE ── */
+@media(max-width:900px){
+  .section-pad{padding:56px 24px}
+  .rec-grid,.contact-grid,.actu-grid{grid-template-columns:1fr !important}
+  .contact-info,.form-section{padding:32px 24px}
+}
+@media(max-width:640px){
+  .section-pad{padding:40px 18px !important}
+}
+
+/* ── RECRUTEMENT RESPONSIVE ── */
+@media(max-width:1100px){
+  .rec-layout{grid-template-columns:1fr}
+  .form-panel{position:relative;top:auto;margin-top:32px}
+}
+@media(max-width:900px){
+  .why-join{padding:64px 24px}
+  .wj-grid{grid-template-columns:1fr 1fr;gap:16px}
+  .section-pad{padding:56px 24px}
+}
+@media(max-width:640px){
+  .why-join{padding:48px 18px}
+  .wj-grid{grid-template-columns:1fr}
+  .job-card{flex-direction:column;align-items:flex-start;gap:14px}
+  .jc-apply{width:100%;text-align:center}
+  .job-filter-bar{gap:6px}
+  .jfb{font-size:12px;padding:7px 14px}
+  .form-panel{padding:24px 18px}
+  .section-pad{padding:40px 18px !important}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal"><button class="modal-x" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
+  <h3 id="mt" style="margin-bottom:6px"></h3><p id="ms" style="font-size:13px;color:var(--muted);margin-bottom:20px;font-family:Outfit,sans-serif"></p><div id="mb"></div></div>
+</div>
+<nav id="nav">
+  <div class="nav-logo"><div class="logo-sq">G</div><div><div class="logo-name">Groupe AMI</div><div class="logo-sub">GMM · SEMM · SEMS</div></div></div>
+  <div class="nav-links">
+    <a class="nl" href="index.html">Accueil</a><a class="nl" href="groupe.html">Le Groupe</a><a class="nl" href="filiales.html">Filiales</a><a class="nl" href="actualites.html">Actualités</a><a class="nl active" href="recrutement.html">Recrutement</a><a class="nl" href="transporteurs.html">Transporteurs</a><a class="nl" href="contact.html">Contact</a>
+  </div>
+  <a class="nav-cta" href="backoffice.html">Espace DSI</a>
+</nav>
+
+<div class="page-hero">
+  <div class="ph-bg" style="background-image:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1800&q=85&fit=crop')"></div>
+  <div class="ph-ov"></div><div class="ph-ov2"></div><div class="ph-grid"></div><div class="ph-geo"></div>
+  <div class="ph-inner">
+    <div class="ph-breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>Recrutement</span></div>
+    <div class="ph-tag"><span class="ph-tag-dot"></span>Carrières & Opportunités</div>
+    <h1>Rejoignez <em>l'équipe</em> GAMI</h1>
+    <p>Découvrez nos offres d'emploi et postulez directement en ligne. Votre dossier sera transmis à la DRH pour examen dans les meilleurs délais.</p>
+    <div class="ph-stats">
+      <div class="ph-stat"><div class="ph-stat-v">4</div><div class="ph-stat-l">Postes ouverts</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">3</div><div class="ph-stat-l">Pays : SN · ML · GN</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">CDI / CDD</div><div class="ph-stat-l">Types de contrats</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-pad" style="padding-top:60px">
+  <div class="rec-layout">
+    <div>
+      <div class="job-filter-bar">
+        <button class="jfb active" onclick="filterJobs('all',this)">Tous (4)</button>
+        <button class="jfb" onclick="filterJobs('gmm',this)">GMM</button>
+        <button class="jfb" onclick="filterJobs('semm',this)">SEMM</button>
+        <button class="jfb" onclick="filterJobs('sems',this)">SEMS</button>
+      </div>
+      <div class="job-cards" id="job-list">
+        <div class="job-card" data-entity="gmm" onclick="selectJob(this,'Ingénieur Maintenance Senior','GMM')">
+          <div style="flex:1">
+            <div class="jc-title">Ingénieur Maintenance Senior</div>
+            <div class="jc-meta"><span class="badge badge-blue">GMM</span><span class="badge badge-green">CDI</span><span class="badge badge-amber">📍 Dakar / Site</span></div>
+          </div>
+          <button class="jc-apply" onclick="event.stopPropagation();selectJob(this.closest('.job-card'),'Ingénieur Maintenance Senior','GMM')">Postuler</button>
+        </div>
+        <div class="job-card" data-entity="semm" onclick="selectJob(this,'Technicien Équipements Miniers','SEMM')">
+          <div style="flex:1">
+            <div class="jc-title">Technicien Équipements Miniers</div>
+            <div class="jc-meta"><span class="badge badge-blue">SEMM</span><span class="badge badge-green">CDI</span><span class="badge badge-amber">📍 Mali</span></div>
+          </div>
+          <button class="jc-apply" onclick="event.stopPropagation();selectJob(this.closest('.job-card'),'Technicien Équipements Miniers','SEMM')">Postuler</button>
+        </div>
+        <div class="job-card" data-entity="sems" onclick="selectJob(this,'Consultant Technique','SEMS')">
+          <div style="flex:1">
+            <div class="jc-title">Consultant Technique</div>
+            <div class="jc-meta"><span class="badge badge-blue">SEMS</span><span class="badge badge-amber">CDD</span><span class="badge" style="background:#F0E6FC;color:#6C3483">📍 Dakar</span></div>
+          </div>
+          <button class="jc-apply" onclick="event.stopPropagation();selectJob(this.closest('.job-card'),'Consultant Technique','SEMS')">Postuler</button>
+        </div>
+        <div class="job-card" data-entity="gmm" onclick="selectJob(this,'Chef de Chantier','GMM')">
+          <div style="flex:1">
+            <div class="jc-title">Chef de Chantier</div>
+            <div class="jc-meta"><span class="badge badge-blue">GMM</span><span class="badge badge-green">CDI</span><span class="badge badge-amber">📍 Guinée</span></div>
+          </div>
+          <button class="jc-apply" onclick="event.stopPropagation();selectJob(this.closest('.job-card'),'Chef de Chantier','GMM')">Postuler</button>
+        </div>
+      </div>
+      <!-- Image teaser -->
+      <div style="margin-top:36px;border-radius:20px;overflow:hidden;height:220px">
+        <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=900&q=80&fit=crop" alt="Équipe GAMI" style="width:100%;height:100%;object-fit:cover"/>
+      </div>
+    </div>
+    <div class="form-panel">
+      <h3 class="fp-title">Déposer une candidature</h3>
+      <p class="fp-sub" id="form-job-title">Sélectionnez un poste ou candidature spontanée</p>
+      <div class="form-group"><label class="form-label">Prénom & Nom</label><input class="form-input" placeholder="Ex : Mamadou Diallo"/></div>
+      <div class="form-group"><label class="form-label">Email professionnel</label><input class="form-input" type="email" placeholder="email@exemple.com"/></div>
+      <div class="form-group"><label class="form-label">Téléphone / WhatsApp</label><input class="form-input" placeholder="+221 77 000 00 00"/></div>
+      <div class="form-group"><label class="form-label">Poste souhaité</label>
+        <select class="form-select" id="job-select">
+          <option>Candidature spontanée</option>
+          <option>Ingénieur Maintenance Senior</option>
+          <option>Technicien Équipements Miniers</option>
+          <option>Consultant Technique</option>
+          <option>Chef de Chantier</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Lettre de motivation</label><textarea class="form-textarea" placeholder="Présentez-vous en quelques lignes..."></textarea></div>
+      <div class="file-drop" onclick="toast('Sélection du fichier CV...')"><p>📎 <strong>Joindre votre CV</strong></p><p>PDF, DOC — max 5 Mo</p></div>
+      <button class="submit-btn" style="margin-top:14px" onclick="toast('✅ Candidature envoyée à la DRH — merci !')">Envoyer ma candidature →</button>
+    </div>
+  </div>
+</div>
+
+<div class="why-join">
+  <div style="text-align:center;margin-bottom:0"><span class="tag" style="color:var(--orange2)">POURQUOI NOUS REJOINDRE</span><h2 class="section-title" style="color:#fff;margin-top:10px">Travailler chez GAMI</h2></div>
+  <div class="wj-grid">
+    <div class="wj-card"><div class="wj-icon">🌍</div><h3>Impact continental</h3><p>Travaillez sur des projets industriels d'envergure qui façonnent le développement économique de l'Afrique de l'Ouest.</p></div>
+    <div class="wj-card"><div class="wj-icon">📈</div><h3>Évolution rapide</h3><p>GAMI offre des parcours de carrière accélérés pour les talents ambitieux dans un groupe en pleine croissance.</p></div>
+    <div class="wj-card"><div class="wj-icon">🎓</div><h3>Formation continue</h3><p>Bénéficiez de programmes de formation et de perfectionnement professionnel tout au long de votre parcours.</p></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="f-brand"><div class="f-logo"><div class="logo-sq">G</div><span style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#fff">Groupe AMI — GAMI</span></div><p>L'industrie au service du développement.</p><div class="f-socials"><div class="f-soc">f</div><div class="f-soc">𝕏</div><div class="f-soc">in</div></div></div>
+    <div class="f-col"><h4>À propos</h4><ul><li><a href="groupe.html">Notre histoire</a></li><li><a href="groupe.html">Vision & Mission</a></li><li><a href="actualites.html">Blog</a></li></ul></div>
+    <div class="f-col"><h4>Entités</h4><ul><li><a href="filiales.html">GMM</a></li><li><a href="filiales.html">SEMM</a></li><li><a href="filiales.html">SEMS</a></li></ul></div>
+    <div class="f-col"><h4>Contact</h4><ul><li><a href="contact.html">contact@groupeami.sn</a></li><li><a href="#">+221 33 000 00 00</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>©2025 Groupe AMI — GAMI.</span><span>Python8080</span></div>
+</footer>
+<script src="shared.js"></script>
+<script>
+function filterJobs(entity,btn){
+  document.querySelectorAll('.jfb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.job-card').forEach(c=>{
+    c.style.display=(entity==='all'||c.dataset.entity===entity)?'flex':'none';
+  });
+}
+function selectJob(el,title,entity){
+  document.querySelectorAll('.job-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('form-job-title').textContent='Candidature : '+title+' ('+entity+')';
+  document.getElementById('job-select').value=title;
+  toast('Formulaire pré-rempli pour : '+title);
+  document.querySelector('.form-panel').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>

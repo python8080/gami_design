@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GAMI — Le Groupe</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+.vision-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:56px}
+.vision-card{border-radius:20px;padding:36px;border:1px solid var(--border);transition:.25s}
+.vision-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.07)}
+.vision-card.blue-accent{border-left:4px solid var(--blue)}
+.vision-card.orange-accent{border-left:4px solid var(--orange)}
+.vc-icon{font-size:28px;margin-bottom:18px}
+.vc-tag{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.vc-title{font-size:1.2rem;color:var(--dark);margin-bottom:12px}
+.vc-text{font-size:14px;color:var(--muted);line-height:1.75;font-weight:300}
+
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:48px}
+.tab{padding:14px 28px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s;font-family:'Outfit',sans-serif}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
+.tab-content{display:none;animation:fadeIn .3s ease}
+.tab-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.orga-table{width:100%;border-collapse:collapse;border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.orga-table thead{background:var(--blue)}
+.orga-table th{padding:16px 24px;text-align:left;font-size:12px;font-weight:600;color:#fff;letter-spacing:.5px;font-family:'Outfit',sans-serif;text-transform:uppercase}
+.orga-table tbody tr{border-top:1px solid var(--border);transition:.15s;cursor:default}
+.orga-table tbody tr:hover{background:var(--light)}
+.orga-table td{padding:18px 24px;font-size:14px;color:var(--text);font-family:'Outfit',sans-serif}
+.orga-table td:first-child{font-weight:600;color:var(--blue)}
+
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.val-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px;text-align:center;transition:.25s}
+.val-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 12px 32px rgba(27,79,138,.07)}
+.val-icon{width:60px;height:60px;border-radius:16px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 18px}
+.val-card h3{font-size:1.05rem;margin-bottom:10px;color:var(--dark)}
+.val-card p{font-size:13px;color:var(--muted);line-height:1.65;font-family:'Outfit',sans-serif;font-weight:300}
+
+.history-line{position:relative;padding-left:32px}
+.history-line::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--border)}
+.hl-item{position:relative;margin-bottom:36px}
+.hl-dot{position:absolute;left:-28px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 2px var(--blue)}
+.hl-year{font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px;font-family:'Outfit',sans-serif;letter-spacing:.5px}
+.hl-title{font-size:15px;font-weight:600;color:var(--dark);margin-bottom:6px}
+.hl-text{font-size:13px;color:var(--muted);line-height:1.6;font-weight:300;font-family:'Outfit',sans-serif}
+
+.about-img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+/* ── Image band ── */
+.about-img-band{background:var(--light);padding:56px 80px;border-top:1px solid var(--border)}
+.aib-inner{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;max-width:1280px;margin:0 auto}
+.aib-main{position:relative;border-radius:20px;overflow:hidden;height:360px;cursor:pointer}
+.aib-main img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.aib-main:hover img{transform:scale(1.04)}
+.aib-main-caption{position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(to top,rgba(11,25,41,.85),transparent)}
+.aib-cap-tag{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#f5a030;display:block;margin-bottom:6px}
+.aib-main-caption p{font-size:14px;color:rgba(255,255,255,.85);font-family:'Outfit',sans-serif;font-weight:400;line-height:1.5;margin:0}
+.aib-side{display:flex;flex-direction:column;gap:16px}
+.aib-sm{position:relative;border-radius:16px;overflow:hidden;flex:1;min-height:160px;cursor:pointer}
+.aib-sm img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.aib-sm:hover img{transform:scale(1.06)}
+.aib-sm-caption{position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:linear-gradient(to top,rgba(11,25,41,.75),transparent)}
+.aib-sm-caption span{font-size:12px;color:rgba(255,255,255,.8);font-family:'Outfit',sans-serif;font-weight:500}
+@media(max-width:768px){.about-img-band{padding:40px 24px}.aib-inner{grid-template-columns:1fr}.aib-main{height:260px}}
+
+.stats-band{background:linear-gradient(135deg,var(--blue),var(--blue3));padding:64px 80px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:0 -80px}
+.sb-stat{text-align:center;padding:20px;border-right:1px solid rgba(255,255,255,.15)}
+.sb-stat:last-child{border-right:none}
+.sb-stat strong{font-family:'Playfair Display',serif;font-size:2.6rem;color:#fff;display:block;line-height:1}
+.sb-stat span{font-size:12px;color:rgba(255,255,255,.55);display:block;margin-top:6px;letter-spacing:.5px}
+
+/* ── GROUPE PAGE RESPONSIVE ── */
+@media(max-width:900px){
+  .stats-band{margin:0 !important;padding:48px 24px}
+  .tabs{gap:0;padding:0}
+  .about-img-band{padding:40px 24px}
+}
+@media(max-width:640px){
+  .vision-grid{grid-template-columns:1fr}
+  .values-grid{grid-template-columns:1fr}
+  /* history 2-col -> 1col */
+  #t4 > div{grid-template-columns:1fr !important;gap:28px}
+  #t4 > div > div:last-child{display:none}
+  .stats-band{grid-template-columns:1fr 1fr;padding:36px 18px}
+  .orga-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .about-img-band{padding:28px 18px}
+  .aib-inner{grid-template-columns:1fr}
+  .aib-main{height:220px}
+  .section-pad{padding:44px 18px !important}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<nav id="nav">
+  <div class="nav-logo"><div class="logo-sq">G</div><div><div class="logo-name">Groupe AMI</div><div class="logo-sub">GMM · SEMM · SEMS</div></div></div>
+  <div class="nav-links">
+    <a class="nl" href="index.html">Accueil</a><a class="nl active" href="groupe.html">Le Groupe</a><a class="nl" href="filiales.html">Filiales</a><a class="nl" href="actualites.html">Actualités</a><a class="nl" href="recrutement.html">Recrutement</a><a class="nl" href="transporteurs.html">Transporteurs</a><a class="nl" href="contact.html">Contact</a>
+  </div>
+  <a class="nav-cta" href="backoffice.html">Espace DSI</a>
+</nav>
+
+<div class="page-hero">
+  <div class="ph-bg" style="background-image:url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1800&q=85&fit=crop')"></div>
+  <div class="ph-ov"></div><div class="ph-ov2"></div><div class="ph-grid"></div><div class="ph-geo"></div>
+  <div class="ph-inner">
+    <div class="ph-breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>Le Groupe</span></div>
+    <div class="ph-tag"><span class="ph-tag-dot"></span>Notre identité & vision</div>
+    <h1>Le Groupe AMI — <em>GAMI</em></h1>
+    <p>Né du GIE AMI, GAMI est aujourd'hui un groupe industriel structuré, moderne et engagé dans le développement économique de l'Afrique de l'Ouest avec trois filiales spécialisées.</p>
+    <div class="ph-stats">
+      <div class="ph-stat"><div class="ph-stat-v">15+</div><div class="ph-stat-l">Années d'expérience</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">3</div><div class="ph-stat-l">Filiales industrielles</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">5</div><div class="ph-stat-l">Pays en Afrique de l'Ouest</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="about-img-band">
+  <div class="aib-inner">
+    <div class="aib-main">
+      <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=900&q=80&fit=crop" alt="Équipe GAMI au travail"/>
+      <div class="aib-main-caption">
+        <span class="aib-cap-tag">Expertise terrain</span>
+        <p>Nos équipes sur le terrain, au cœur des opérations industrielles</p>
+      </div>
+    </div>
+    <div class="aib-side">
+      <div class="aib-sm">
+        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=700&q=80&fit=crop" alt="Technologie GAMI"/>
+        <div class="aib-sm-caption"><span>Innovation & digital</span></div>
+      </div>
+      <div class="aib-sm">
+        <img src="https://images.unsplash.com/photo-1590965474613-7fff9b87e5e5?w=700&q=80&fit=crop" alt="Operations GAMI"/>
+        <div class="aib-sm-caption"><span>Opérations de terrain</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section-pad" style="padding-top:64px">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab(this,'t1')">Vision & Mission</div>
+    <div class="tab" onclick="switchTab(this,'t2')">Organisation</div>
+    <div class="tab" onclick="switchTab(this,'t3')">Nos Valeurs</div>
+    <div class="tab" onclick="switchTab(this,'t4')">Notre Histoire</div>
+  </div>
+
+  <div class="tab-content active" id="t1">
+    <div class="vision-grid">
+      <div class="vision-card blue-accent">
+        <div class="vc-icon">🎯</div>
+        <div class="vc-tag">Notre Vision</div>
+        <h3 class="vc-title">Être le groupe industriel de référence en Afrique de l'Ouest</h3>
+        <p class="vc-text">Reconnu pour son excellence opérationnelle, son innovation permanente et son engagement envers un développement industriel durable, inclusif et créateur de valeur pour les communautés africaines.</p>
+      </div>
+      <div class="vision-card orange-accent">
+        <div class="vc-icon">🚀</div>
+        <div class="vc-tag">Notre Mission</div>
+        <h3 class="vc-title">Fournir des services industriels d'excellence à nos clients</h3>
+        <p class="vc-text">Contribuer au développement économique des pays où nous opérons, en valorisant les talents locaux, en adoptant les meilleures technologies et en maintenant les plus hauts standards de qualité et de sécurité.</p>
+      </div>
+    </div>
+    <div class="stats-band">
+      <div class="sb-stat"><strong>3</strong><span>FILIALES SPÉCIALISÉES</span></div>
+      <div class="sb-stat"><strong>20+</strong><span>ANS D'EXISTENCE</span></div>
+      <div class="sb-stat"><strong>500+</strong><span>COLLABORATEURS</span></div>
+      <div class="sb-stat"><strong>5</strong><span>PAYS COUVERTS</span></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="t2">
+    <table class="orga-table">
+      <thead><tr><th>Partie prenante</th><th>Rôle dans le projet</th></tr></thead>
+      <tbody>
+        <tr><td>DSI</td><td>Hébergement, domaine, mise en ligne et exploitation du site</td></tr>
+        <tr><td>Prestataire</td><td>Design, développement et intégration de la solution</td></tr>
+        <tr><td>DRH</td><td>Validation du contenu et des offres du module Recrutement</td></tr>
+        <tr><td>DLM / DA</td><td>Validation du contenu du module Transporteur</td></tr>
+        <tr><td>Service Marketing</td><td>Validation du contenu éditorial du site</td></tr>
+        <tr><td>DG / DGA</td><td>Validation finale avant mise en production</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:20px;font-size:14px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300">La DSI et le service Communication assureront l'exploitation du site après livraison.</p>
+  </div>
+
+  <div class="tab-content" id="t3">
+    <div class="values-grid">
+      <div class="val-card"><div class="val-icon">🤝</div><h3>Intégrité</h3><p>Nous agissons avec honnêteté et transparence dans toutes nos relations professionnelles, avec nos clients, partenaires et collaborateurs.</p></div>
+      <div class="val-card"><div class="val-icon">💡</div><h3>Innovation</h3><p>Nous adoptons continuellement les technologies modernes pour améliorer nos services et nos processus opérationnels.</p></div>
+      <div class="val-card"><div class="val-icon">🌍</div><h3>Engagement local</h3><p>Nous investissons dans les communautés locales et favorisons l'emploi, la formation et le développement des talents africains.</p></div>
+      <div class="val-card"><div class="val-icon">🏆</div><h3>Excellence</h3><p>Nous maintenons les plus hauts standards de qualité dans chacune de nos interventions, quel que soit le secteur ou le pays.</p></div>
+      <div class="val-card"><div class="val-icon">🔒</div><h3>Sécurité</h3><p>La sécurité de nos équipes et de nos installations est une priorité absolue dans toutes nos opérations industrielles.</p></div>
+      <div class="val-card"><div class="val-icon">♻️</div><h3>Durabilité</h3><p>Nous intégrons les enjeux environnementaux et sociaux dans notre stratégie de développement à long terme.</p></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="t4">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start">
+      <div class="history-line">
+        <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2002</div><div class="hl-title">Création du GIE AMI</div><div class="hl-text">Fondation du Groupement d'Intérêt Économique AMI, premier pas dans le secteur industriel en Afrique de l'Ouest.</div></div>
+        <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2008</div><div class="hl-title">Expansion au Mali</div><div class="hl-text">Ouverture des premières opérations au Mali, début de la couverture régionale pour les contrats miniers.</div></div>
+        <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2015</div><div class="hl-title">Création de GMM & SEMM</div><div class="hl-text">Structuration du groupe avec deux filiales spécialisées, répondant à la croissance des activités industrielles et minières.</div></div>
+        <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2020</div><div class="hl-title">Lancement de SEMS</div><div class="hl-text">Troisième filiale dédiée aux expertises et services spécialisés, élargissant l'offre du groupe.</div></div>
+        <div class="hl-item"><div class="hl-dot" style="background:var(--orange)"></div><div class="hl-year">2024</div><div class="hl-title">Passage de GIE AMI vers GAMI</div><div class="hl-text">Nouvelle identité visuelle, nouvelle organisation, intégration de nouvelles entités et lancement du site institutionnel moderne.</div></div>
+      </div>
+      <div>
+        <div style="border-radius:20px;overflow:hidden;height:320px;margin-bottom:20px"><img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80&fit=crop" alt="" style="width:100%;height:100%"/></div>
+        <div style="border-radius:16px;overflow:hidden;height:200px"><img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80&fit=crop" alt="" style="width:100%;height:100%"/></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="f-brand"><div class="f-logo"><div class="logo-sq">G</div><span style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#fff">Groupe AMI — GAMI</span></div><p>L'industrie au service du développement. GMM · SEMM · SEMS.</p><div class="f-socials"><div class="f-soc">f</div><div class="f-soc">𝕏</div><div class="f-soc">in</div></div></div>
+    <div class="f-col"><h4>À propos</h4><ul><li><a href="groupe.html">Notre histoire</a></li><li><a href="groupe.html">Vision & Mission</a></li><li><a href="groupe.html">Valeurs</a></li><li><a href="actualites.html">Blog</a></li></ul></div>
+    <div class="f-col"><h4>Entités</h4><ul><li><a href="filiales.html">GMM</a></li><li><a href="filiales.html">SEMM</a></li><li><a href="filiales.html">SEMS</a></li><li><a href="transporteurs.html">Transporteurs</a></li></ul></div>
+    <div class="f-col"><h4>Contact</h4><ul><li><a href="contact.html">contact@groupeami.sn</a></li><li><a href="#">+221 33 000 00 00</a></li><li><a href="#">Dakar, Sénégal</a></li><li><a href="recrutement.html">Recrutement</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>©2025 Groupe AMI — GAMI.</span><span>Python8080</span></div>
+</footer>
+<script src="shared.js"></script>
+<script>
+function switchTab(el,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>
