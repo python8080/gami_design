@@ -31,7 +31,7 @@
 .hb-stat span{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.5px;margin-top:4px;display:block}
 
 /* ABOUT STRIP */
-.about-strip{display:grid;grid-template-columns:1.1fr 1fr;gap:0;min-height:520px;border-top:1px solid var(--border)}
+.about-strip{ margin: 2em;display:grid;grid-template-columns:1.1fr 1fr;gap:0;min-height:520px;border-top:1px solid var(--border)}
 .as-img{position:relative;overflow:hidden;min-height:520px}
 .as-img img{width:100%;height:100%;object-fit:cover;transition:.6s ease}
 .as-img:hover img{transform:scale(1.04)}
@@ -116,6 +116,14 @@
 .np-read{font-size:12px;font-weight:700;color:var(--blue);margin-top:14px;display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:50px;background:rgba(27,79,138,.06);transition:.2s}
 .np-read:hover{background:var(--blue);color:#fff}
 
+/* ─── PARTENAIRES ─── */
+.partenaires{padding:60px 80px;background:#fff;border-top:1px solid var(--border)}
+.partenaires h3{text-align:center;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:36px}
+.part-logos{display:flex;gap:52px;align-items:center;justify-content:center;flex-wrap:wrap}
+.part-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--muted);opacity:.4;transition:.2s;cursor:default}
+.part-logo:hover{opacity:.7;color:var(--blue)}
+
+
 /* NEWSLETTER */
 .newsletter{background:var(--light);padding:72px 80px}
 .nl-inner{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
@@ -166,12 +174,12 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg"><img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1800&q=85&fit=crop" alt=""/></div>
+  <div class="hero-bg"><img src="./images/slide-show-visuel.png" alt=""/></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-badge"><span class="dot"></span>L'industrie au service du développement</div>
     <h1>Construisons <em>l'Afrique</em><br>industrielle ensemble</h1>
-    <p class="hero-sub">Groupe AMI — GAMI opère à travers GMM, SEMM et SEMS pour offrir des services industriels, logistiques et miniers d'excellence en Afrique de l'Ouest.</p>
+    <p class="hero-sub">Le Groupement AMI — GIE AMI — est un acteur majeur de l'industrie malienne. À travers GCM, GMM, SEMM et GAM Transit, nous produisons, transformons et distribuons des biens essentiels pour l'Afrique de l'Ouest</p>
     <div class="hero-search-bar">
       <div class="hs-field"><div class="hs-lbl">Filiale</div><div class="hs-val">GMM · SEMM · SEMS</div></div>
       <div class="hs-field"><div class="hs-lbl">Secteur</div><div class="hs-val">Mines · BTP · Logistique</div></div>
@@ -179,36 +187,36 @@
       <button class="hero-cta" onclick="window.location='filiales.html'">Explorer →</button>
     </div>
   </div>
-  <div class="hero-bottom">
+  <!-- <div class="hero-bottom">
     <div class="hb-stat"><strong>3</strong><span>FILIALES ACTIVES</span></div>
     <div class="hb-stat"><strong>20+</strong><span>ANS D'EXPERTISE</span></div>
     <div class="hb-stat"><strong>500+</strong><span>COLLABORATEURS</span></div>
     <div class="hb-stat"><strong>5</strong><span>PAYS COUVERTS</span></div>
     <div class="hb-stat"><strong>48</strong><span>TRANSPORTEURS VÉRIFIÉS</span></div>
-  </div>
+  </div> -->
 </section>
 
 <!-- ABOUT STRIP -->
 <div class="about-strip">
   <div class="as-img">
-    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1200&q=85&fit=crop" alt="Équipe GAMI"/>
+    <img src="./images/WEBTest.jpg" alt="Équipe GAMI"/>
     <div class="as-img-overlay"></div>
     <div class="as-img-badge"><span class="as-img-badge-dot"></span>Groupe AMI — GAMI</div>
     <div class="as-img-grid">
-      <div class="as-ig-cell"><img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=300&q=80&fit=crop" alt="GMM"/></div>
-      <div class="as-ig-cell"><img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=300&q=80&fit=crop" alt="SEMM"/></div>
+      <div class="as-ig-cell"><img src="./images/Farine-GMM-2.jpg" alt="GMM"/></div>
+      <div class="as-ig-cell"><img src="./images/PASTA-PALLO-1.jpg" alt="SEMM"/></div>
       <div class="as-ig-cell"><img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=300&q=80&fit=crop" alt="SEMS"/></div>
       <div class="as-ig-cell"><img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=300&q=80&fit=crop" alt="Transport"/></div>
     </div>
   </div>
   <div class="as-content">
     <span class="tag">À PROPOS DU GROUPE</span>
-    <h2>Explorons chaque<br>secteur <em style="color:var(--blue);font-style:normal">avec vous</em></h2>
-    <p>Né du GIE AMI, le Groupe AMI — GAMI — incarne la transformation industrielle de l'Afrique de l'Ouest. Nos trois filiales couvrent la maintenance, l'équipement minier et les services spécialisés avec un savoir-faire reconnu depuis plus de 20 ans.</p>
+    <h2>Né avant l'indépendance<br><em style="color:var(--blue);font-style:normal">bâtisseur du Mali</em></h2>
+    <p>Le Groupement AMI est né avant l'indépendance du Mali. Son activité industrielle a débuté en 1950 avec la création de sa confiserie — ancêtre de la GCM. En 1954, rachat du Complexe de Magnambougou. Siège social : Zone Industrielle Sotuba, Rue 839, Bamako.</p>
     <div class="as-feats">
-      <div class="af"><div class="af-dot">⚙️</div><p>Expertise technique reconnue sur sites industriels & miniers</p></div>
-      <div class="af"><div class="af-dot" style="background:var(--orange);box-shadow:0 4px 14px rgba(232,134,26,.25)">🚛</div><p>Réseau logistique couvrant 5 pays d'Afrique de l'Ouest</p></div>
-      <div class="af"><div class="af-dot" style="background:#16a34a;box-shadow:0 4px 14px rgba(22,163,74,.2)">🏆</div><p>Standards internationaux adaptés aux réalités africaines</p></div>
+      <div class="af"><div class="af-dot">🏭</div><p>Production agro-industrielle : farine, eau minérale, confiserie, huile</p></div>
+      <div class="af"><div class="af-dot" style="background:var(--orange);box-shadow:0 4px 14px rgba(232,134,26,.25)">🚛</div><p>Transit international via Kouremale, Diboli, Zegoua — import/export</p></div>
+      <div class="af"><div class="af-dot" style="background:#16a34a;box-shadow:0 4px 14px rgba(22,163,74,.2)">💧</div><p>Eau minérale Diago — source naturelle dans les monts Mandingue, 35 km de Bamako</p></div>
     </div>
     <a class="btn-main" href="groupe.html">Découvrir le Groupe →</a>
     <div class="as-stats">
@@ -230,32 +238,32 @@
   </div>
   <div class="srv-grid">
     <div class="srv-card" onclick="window.location='filiales.html'">
-      <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80&fit=crop" alt=""/>
+      <img src="./images/Farine-GMM-2.jpg" alt=""/>
       <div class="srv-overlay"></div>
       <div class="srv-num">01</div>
       <div class="srv-arrow">→</div>
-      <div class="srv-content"><span class="srv-icon">⚙️</span><h3>Maintenance industrielle</h3><p>Préventive & corrective sur sites miniers</p></div>
+      <div class="srv-content"><span class="srv-icon">🌾</span><h3>Meunerie & Agro-industrie</h3><p>120 000 T/an farine · Riz Malo · Vitablé · Bunafama · Ami Tulu</p></div>
     </div>
     <div class="srv-card" onclick="window.location='transporteurs.html'">
-      <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&fit=crop" alt=""/>
+      <img src="./images/slide-show-visuel.png" alt=""/>
       <div class="srv-overlay"></div>
       <div class="srv-num">02</div>
       <div class="srv-arrow">→</div>
-      <div class="srv-content"><span class="srv-icon">🚛</span><h3>Transport & Logistique</h3><p>Routes internationales & nationales Mali</p></div>
+      <div class="srv-content"><span class="srv-icon">💧</span><h3>Eau minérale & boissons</h3><p>Diago N°1 Mali · Ami Fruité · Source certifiée Monts Mandingue</p></div>
     </div>
     <div class="srv-card" onclick="window.location='filiales.html'">
-      <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80&fit=crop" alt=""/>
+      <img src="./images/PASTA-PALLO-1.jpg" alt=""/>
       <div class="srv-overlay"></div>
       <div class="srv-num">03</div>
       <div class="srv-arrow">→</div>
-      <div class="srv-content"><span class="srv-icon">⛏️</span><h3>Équipements miniers</h3><p>Fourniture, installation & support</p></div>
+      <div class="srv-content"><span class="srv-icon">🍬</span><h3>Confiserie & Pâtes alimentaires</h3><p>Waraba · Sucre Vanilline · Pasta Nana · Ange Ameta® · Pasta Pallo</p></div>
     </div>
     <div class="srv-card" onclick="window.location='filiales.html'">
-      <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=300&q=80&fit=crop" alt=""/>
+      <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&fit=crop" alt=""/>
       <div class="srv-overlay"></div>
       <div class="srv-num">04</div>
       <div class="srv-arrow">→</div>
-      <div class="srv-content"><span class="srv-icon">🏗️</span><h3>Expertises & Services</h3><p>Conseil technique & accompagnement</p></div>
+      <div class="srv-content"><span class="srv-icon">🚛</span><h3>Transit & Logistique internationale</h3><p>Kouremale · Diboli · Zegoua · Import/export toutes origines</p></div>
     </div>
   </div>
 </section>
@@ -268,12 +276,12 @@
   </div>
   <div class="fil-strip">
     <div class="fil-card" onclick="window.location='filiales.html'">
-      <div class="fil-img"><img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=700&q=80&fit=crop" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Dakar · Mali</div></div>
-      <div class="fil-body"><div class="fil-abbr">GMM</div><div class="fil-name">Gestion & Maintenance Minière</div><div class="fil-tags"><span class="flt">Maintenance</span><span class="flt">Mines</span><span class="flt">BTP</span></div></div>
+      <div class="fil-img"><img src="./images/Farine-GMM-2.jpg" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Koulikoro</div></div>
+      <div class="fil-body"><div class="fil-abbr">GMM</div><div class="fil-name">Grands Moulins du Mali — 1979, capital 4 Mds FCFA. DG : Cyril ACHCAR</div><div class="fil-tags"><span class="flt">Riz Malo</span><span class="flt">Farine</span><span class="flt">Vitablé</span></div></div>
     </div>
     <div class="fil-card" onclick="window.location='filiales.html'">
-      <div class="fil-img"><img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=700&q=80&fit=crop" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Bamako · Conakry</div></div>
-      <div class="fil-body"><div class="fil-abbr">SEMM</div><div class="fil-name">Société d'Équipements Miniers</div><div class="fil-tags"><span class="flt">Équipements</span><span class="flt">Fourniture</span><span class="flt">Install.</span></div></div>
+      <div class="fil-img"><img src="./images/Diago-3-1.jpg" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Bamako · Conakry</div></div>
+      <div class="fil-body"><div class="fil-abbr">SEMM</div><div class="fil-name">Société des Eaux Minérales du Mali — rachetée en 1996 auprès de l'État Malien</div><div class="fil-tags"><span class="flt">Diago</span><span class="flt">Ami Fruité</span><span class="flt">Eau.</span></div></div>
     </div>
     <div class="fil-card" onclick="window.location='filiales.html'">
       <div class="fil-img"><img src="https://images.unsplash.com/photo-1590247813693-5541d1c609fd?w=700&q=80&fit=crop" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Dakar · Abidjan</div></div>
@@ -298,8 +306,8 @@
   <div class="flex-between"><div><span class="tag">ACTUALITÉS</span><h2 class="section-title" style="margin-top:8px">Nos dernières nouvelles</h2></div><a class="btn-outline" href="actualites.html">Tout voir →</a></div>
   <div class="np-grid">
     <div class="np-card" onclick="window.location='actualites.html'">
-      <div class="np-img"><img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&q=80&fit=crop" alt=""/><div class="np-img-ov"></div></div>
-      <div class="np-body"><div class="np-cat">Groupe</div><div class="np-title">GAMI inaugure son nouveau siège social à Dakar</div><div class="np-date">📅 15 Mars 2025</div><div class="np-read">Lire plus →</div></div>
+      <div class="np-img"><img src="https://gieami.net/wp-content/uploads/2020/02/85121021_2406557602988073_8695444780068372480_o-270x152.jpg" alt=""/><div class="np-img-ov"></div></div>
+      <div class="np-body"><div class="np-cat">Activités</div><div class="np-title">Journée Porte Ouverte (JPO) de la SEMM — Société des Eaux Minérales du Mali</div><div class="np-date">📅 15 Mars 2025</div><div class="np-read">Lire plus →</div></div>
     </div>
     <div class="np-card" onclick="window.location='actualites.html'">
       <div class="np-img"><img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&fit=crop" alt=""/><div class="np-img-ov"></div></div>
@@ -309,6 +317,19 @@
       <div class="np-img"><img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80&fit=crop" alt=""/><div class="np-img-ov"></div></div>
       <div class="np-body"><div class="np-cat">GMM</div><div class="np-title">Nouveau contrat de maintenance signé au Mali — 3 ans</div><div class="np-date">📅 20 Janvier 2025</div><div class="np-read">Lire plus →</div></div>
     </div>
+  </div>
+</section>
+
+<!-- PARTENAIRES -->
+<section class="partenaires">
+  <h3>Nos partenaires</h3>
+  <div class="part-logos">
+    <img src="https://gieami.net/wp-content/uploads/2019/03/MANE.png" alt="MANE" style="height:36px;width:auto;object-fit:contain;opacity:.45;filter:grayscale(1);transition:.2s" onmouseover="this.style.opacity='.8';this.style.filter='grayscale(0)'" onmouseout="this.style.opacity='.45';this.style.filter='grayscale(1)'"/>
+    <img src="https://gieami.net/wp-content/uploads/2019/03/FMBB.jpg" alt="FMBB" style="height:36px;width:auto;object-fit:contain;opacity:.45;filter:grayscale(1);transition:.2s" onmouseover="this.style.opacity='.8';this.style.filter='grayscale(0)'" onmouseout="this.style.opacity='.45';this.style.filter='grayscale(1)'"/>
+    <span class="part-logo">EVIAN International</span>
+    <span class="part-logo">BAGAMI</span>
+    <span class="part-logo">CMDB</span>
+    <span class="part-logo">CFBP</span>
   </div>
 </section>
 
