@@ -56,7 +56,7 @@
 .prod-card{background:#fff;border-radius:22px;overflow:hidden;border:1.5px solid var(--border);cursor:pointer;transition:.3s;display:flex;flex-direction:column}
 .prod-card:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(27,79,138,.13);border-color:transparent}
 .prod-img{height:240px;position:relative;overflow:hidden}
-.prod-img img{width:100%;height:100%;object-fit:fill;object-position:center;transition:.5s ease}
+.prod-img img{width:100%;height:100%;object-fit:contain;object-position:center;transition:.5s ease}
 .prod-card:hover .prod-img img{transform:scale(1.08)}
 .prod-fil{position:absolute;top:14px;left:14px;font-size:10px;font-weight:700;padding:5px 13px;border-radius:50px;letter-spacing:.6px;text-transform:uppercase}
 .prod-fil.gmm{background:#EBF3FF;color:#1B4F8A}
@@ -168,12 +168,23 @@
   .produits{padding:64px 24px}
   .prod-grid{grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
   .prod-img{height:200px}
+  /* Filiales */
+  .filiales-sec{padding:64px 24px}
+  .fil-strip{grid-template-columns:1fr 1fr;gap:14px;margin-top:32px}
+  .fil-img{height:180px}
+  /* News */
+  .news-preview{padding:64px 24px}
+  .np-grid{grid-template-columns:1fr 1fr;gap:14px;margin-top:32px}
+  .np-img{height:180px}
+  /* Newsletter */
+  .newsletter{padding:56px 24px}
+  .nl-inner{grid-template-columns:1fr;gap:28px}
 }
 
 /* ── Mobile ≤640px ── */
 @media(max-width:640px){
-  /* Hero */
-  .hero{min-height:100svh}
+  /* Hero — annule le margin-top de shared.css pour que l'image passe derrière le nav transparent */
+  .hero{min-height:100svh;margin-top:0;height:100svh}
   .hero-content{padding:0 18px}
   .hero h1{font-size:2rem}
   .hero-sub{font-size:.93rem;margin-bottom:28px}
@@ -211,7 +222,32 @@
   .services{padding:52px 18px}
   .srv-grid{grid-template-columns:1fr 1fr;gap:10px}
   .srv-card{height:240px}
-  /* News & partenaires */
+  /* Filiales — carousel horizontal swipeable */
+  .filiales-sec{padding:52px 0 52px 18px}
+  .filiales-sec .flex-between{padding-right:18px;margin-bottom:24px}
+  .fil-strip{
+    display:flex;flex-wrap:nowrap;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    gap:14px;
+    margin-top:0;
+    padding-right:18px
+  }
+  .fil-strip::-webkit-scrollbar{display:none}
+  .fil-card{flex:0 0 78%;min-width:0;scroll-snap-align:start}
+  .fil-img{height:170px}
+  /* News — colonne unique */
+  .news-preview{padding:52px 18px}
+  .np-grid{grid-template-columns:1fr;gap:14px;margin-top:24px}
+  .np-img{height:200px}
+  /* Newsletter */
+  .newsletter{padding:48px 18px}
+  .nl-inner{grid-template-columns:1fr;gap:24px}
+  .nl-form{flex-direction:column;gap:10px}
+  .nl-btn{width:100%;border-radius:12px}
+  /* Partenaires */
   .partenaires{padding:40px 18px}
   .part-logos{gap:24px}
 }
@@ -220,8 +256,10 @@
 @media(max-width:400px){
   .hero h1{font-size:1.75rem}
   .prod-card{flex:0 0 86%}
+  .fil-card{flex:0 0 88%}
   .srv-grid{grid-template-columns:1fr}
   .srv-card{height:220px}
+  .np-img{height:170px}
 }
 </style>
 </head>
@@ -389,24 +427,24 @@
     <!-- SEMS -->
     <div class="prod-card" onclick="window.location='nos-produits.html#sems'">
       <div class="prod-img">
-        <img src="./images/PASTA-WARABA4 (1).jpg" alt="Waraba"/>
+        <img src="./images/samao.png" alt="samao"/>
         <span class="prod-fil sems">SEMS</span>
       </div>
       <div class="prod-body">
-        <div class="prod-name">Waraba</div>
-        <div class="prod-desc">Confiserie emblématique du Groupe AMI, appréciée par les familles à travers toute l'Afrique. Un produit phare depuis plus de 70 ans.</div>
+        <div class="prod-name">Samao</div>
+        <div class="prod-desc">Eau minérale naturelle produite par la SEMS au Sénégal. Eau pure et équilibrée en minéraux essentiels, idéale pour une hydratation quotidienne optimale.</div>
         <span class="prod-link">Découvrir →</span>
       </div>
     </div>
 
     <div class="prod-card" onclick="window.location='nos-produits.html#sems'">
       <div class="prod-img">
-        <img src="./images/DOUBLE-GUM-VERT.jpg" alt="Double Gum Vert"/>
+        <img src="./images/samao.png" alt="Double Gum Vert"/>
         <span class="prod-fil sems">SEMS</span>
       </div>
       <div class="prod-body">
-        <div class="prod-name">Double Gum Vert</div>
-        <div class="prod-desc">Chewing-gum à la menthe verte, produit localement par SEMS. Fraîcheur longue durée, populaire auprès des jeunes consommateurs.</div>
+        <div class="prod-name">Samao</div>
+        <div class="prod-desc">Eau minérale naturelle produite par la SEMS au Sénégal. Eau pure et équilibrée en minéraux essentiels, idéale pour une hydratation quotidienne optimale.</div>
         <span class="prod-link">Découvrir →</span>
       </div>
     </div>

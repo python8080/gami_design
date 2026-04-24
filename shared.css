@@ -494,7 +494,3 @@ nav.transparent .nav-hamburger span{background:#fff}
   .srv-card{height:220px}
 }
 
-/* ── FIX: nav margin-top sur tous les .page-hero / sections ── */
-@media(max-width:640px){
-  .hero{margin-top:64px}
-}

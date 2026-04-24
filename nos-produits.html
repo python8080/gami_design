@@ -65,8 +65,8 @@
 .prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
 .prod-card{background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;cursor:pointer;transition:.25s;display:flex;flex-direction:column}
 .prod-card:hover{border-color:var(--blue);box-shadow:0 12px 40px rgba(27,79,138,.1);transform:translateY(-3px)}
-.pc-img{height:200px;background:var(--light);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.pc-img-icon{width:100%;height:100%;object-fit:fill;display:block}
+.pc-img{height:200px;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.pc-img-icon{width:100%;height:100%;object-fit:contain;display:block}
 .pc-img-label{position:absolute;top:12px;left:12px;background:var(--blue);color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:50px;letter-spacing:.5px}
 .pc-img-label.orange{background:var(--orange)}
 .pc-img-label.teal{background:#1A8060}
@@ -288,7 +288,7 @@
     <div class="prod-grid">
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#EBF3FF,#dbe9fa)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Farine-GMM-2.jpg" alt=""/>
           <span class="pc-img-label">Meunerie</span>
         </div>
@@ -304,7 +304,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#fffaeb,#fef0c0)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Vanille.jpg" alt=""/>
           <span class="pc-img-label">Aliment infantile</span>
         </div>
@@ -320,7 +320,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#f0f9f0,#d4edda)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Riz-malo-1.jpg" alt=""/>
           <span class="pc-img-label">Rizerie</span>
         </div>
@@ -336,7 +336,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#EBF3FF,#dbe9fa)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Farine-GMM-2.jpg" alt=""/>
           <span class="pc-img-label">Meunerie</span>
         </div>
@@ -364,7 +364,7 @@
     <div class="prod-grid">
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#fffbeb,#fde68a)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/AMI-TULU-2.png" alt=""/>
           <span class="pc-img-label">Huilerie</span>
         </div>
@@ -380,7 +380,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#f5f3ff,#ddd6fe)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Bunafama2.jpg" alt=""/>
           <span class="pc-img-label">Aliment bétail</span>
         </div>
@@ -396,7 +396,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#fff1f0,#fecaca)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/DOUBLE-GUM-VERT.jpg" alt=""/>
           <span class="pc-img-label">Confiserie</span>
         </div>
@@ -412,7 +412,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#fffbeb,#fde68a)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/AMI-TULU-2.png" alt=""/>
           <span class="pc-img-label">Huilerie</span>
         </div>
@@ -439,7 +439,7 @@
     <div class="prod-grid">
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#ecfdf5,#bbf7d0)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/albarka2-1.jpg" alt=""/>
           <span class="pc-img-label">Céréale</span>
         </div>
@@ -454,7 +454,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#fdf4ff,#f0abfc)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/PASTA-PALLO-1.jpg" alt=""/>
           <span class="pc-img-label">Pâtes</span>
         </div>
@@ -470,7 +470,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#fefce8,#fef08a)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/SUCRE-768x683-1.png" alt=""/>
           <span class="pc-img-label">Condiment</span>
         </div>
@@ -485,7 +485,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#ecfdf5,#bbf7d0)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/albarka2-1.jpg" alt=""/>
           <span class="pc-img-label">Céréale</span>
         </div>
@@ -545,7 +545,7 @@
     <div class="prod-grid">
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#eff6ff,#bfdbfe)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Diago-5.jpg" alt=""/>
           <span class="pc-img-label orange">Eau minérale</span>
         </div>
@@ -561,7 +561,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#dbeafe,#93c5fd)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Diago-1-1.jpg" alt=""/>
           <span class="pc-img-label orange">Eau minérale</span>
         </div>
@@ -577,7 +577,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#bfdbfe,#60a5fa)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Diago-4.jpg" alt=""/>
           <span class="pc-img-label orange">Eau minérale</span>
         </div>
@@ -593,7 +593,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#93c5fd,#3b82f6)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Diago-6.jpg" alt=""/>
           <span class="pc-img-label orange">Eau minérale</span>
         </div>
@@ -609,7 +609,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#fef9c3,#fde047)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Ami-N2.jpg" alt=""/>
           <span class="pc-img-label orange">Boisson aromatisée</span>
         </div>
@@ -625,7 +625,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#f0fdf4,#86efac)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/Ami-2.jpg" alt=""/>
           <span class="pc-img-label orange">Boisson aromatisée</span>
         </div>
@@ -685,7 +685,7 @@
     <div class="prod-grid">
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#ecfdf5,#a7f3d0)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/samao.png" alt=""/>
           <span class="pc-img-label teal">Eau minérale</span>
         </div>
@@ -701,7 +701,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#d1fae5,#34d399)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/samao.png" alt=""/>
           <span class="pc-img-label teal">Eau minérale</span>
         </div>
@@ -717,7 +717,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#a7f3d0,#059669)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/samao.png" alt=""/>
           <span class="pc-img-label teal">Eau minérale</span>
         </div>
@@ -733,7 +733,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#fef3c7,#f59e0b)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/samao.png alt=""/>
           <span class="pc-img-label teal">Boisson</span>
         </div>
@@ -749,7 +749,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#ffe4e6,#fb7185)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/samao.png" alt=""/>
           <span class="pc-img-label teal">Boisson</span>
         </div>
@@ -765,7 +765,7 @@
       </div>
 
       <div class="prod-card">
-        <div class="pc-img" style="background:linear-gradient(135deg,#fce7f3,#ec4899)">
+        <div class="pc-img">
           <img class="pc-img-icon" src="./images/samao.png" alt=""/>
           <span class="pc-img-label teal">Boisson</span>
         </div>
