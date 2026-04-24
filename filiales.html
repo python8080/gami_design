@@ -5,116 +5,197 @@
 <title>GAMI — Filiales</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="shared.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <style>
-/* ── Filiales strip section ── */
-.fil-strip-section{background:var(--light);padding:56px 80px;border-top:1px solid var(--border)}
-.fil-strip-header{text-align:center;margin-bottom:36px}
-.fil-strip-header .tag{display:block;margin-bottom:10px}
-.fil-strip-header h2{font-size:clamp(1.6rem,2.5vw,2.2rem);color:var(--dark);margin-bottom:8px}
-.fil-strip-header p{font-size:14px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300}
-.fil-hero-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.fhs{position:relative;height:360px;cursor:pointer;overflow:hidden;border-radius:18px}
-.fhs img{width:100%;height:100%;object-fit:cover;transition:.55s ease}
-.fhs:hover img{transform:scale(1.07)}
-.fhs-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(11,25,41,.9) 30%,rgba(11,25,41,.25) 75%);transition:.3s}
-.fhs:hover .fhs-ov{background:linear-gradient(to top,rgba(232,134,26,.88) 25%,rgba(11,25,41,.45) 80%)}
-.fhs-content{position:absolute;bottom:0;left:0;right:0;padding:28px 26px;color:#fff}
-.fhs-abbr{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:800;display:block;margin-bottom:4px;line-height:1}
-.fhs-name{font-size:13px;opacity:.8;font-weight:300;font-family:'Outfit',sans-serif;margin-bottom:14px;line-height:1.4}
-.fhs-tags{display:flex;gap:6px;flex-wrap:wrap}
-.fhs-tag{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:10px;font-weight:600;padding:4px 10px;border-radius:50px;font-family:'Outfit',sans-serif}
-.fhs-arrow{position:absolute;top:18px;right:18px;width:34px;height:34px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;transition:.2s;font-size:14px}
-.fhs:hover .fhs-arrow{background:var(--orange);border-color:var(--orange)}
-.fhs-num{position:absolute;top:18px;left:22px;font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:800;color:rgba(255,255,255,.07);line-height:1;pointer-events:none}
-@media(max-width:900px){.fil-hero-strip{grid-template-columns:1fr}.fhs{height:280px}.fil-strip-section{padding:40px 24px}}
+/* ═══════════════════════════════════════════════
+   HERO FILIALES
+════════════════════════════════════════════════ */
+.fil-hero{
+  margin-top:72px;min-height:440px;position:relative;
+  display:flex;align-items:flex-end;
+  padding:0 80px 64px;overflow:hidden;
+}
+.fil-hero .ph-bg{
+  position:absolute;inset:0;
+  background-image:url('https://images.unsplash.com/photo-1584539724758-7aecb6b87fb9?q=80&w=1172&auto=format&fit=crop');
+  background-size:cover;background-position:center;
+  transform:scale(1.04);transition:transform 10s ease;
+}
+.fil-hero:hover .ph-bg{transform:scale(1)}
+.fil-hero .ph-ov{position:absolute;inset:0;background:linear-gradient(108deg,rgba(11,25,41,.93) 0%,rgba(11,25,41,.75) 50%,rgba(11,25,41,.38) 100%)}
+.fil-hero .ph-ov2{position:absolute;inset:0;background:linear-gradient(to top,rgba(11,25,41,.9) 0%,transparent 60%)}
+.fil-hero .ph-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:60px 60px;pointer-events:none;
+}
+.fil-hero .ph-inner{position:relative;z-index:2;max-width:680px}
+.fil-hero .ph-breadcrumb{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:14px;display:flex;align-items:center;gap:6px;font-family:'Outfit',sans-serif}
+.fil-hero .ph-breadcrumb a{color:rgba(255,255,255,.75);transition:.2s}
+.fil-hero .ph-breadcrumb a:hover{color:#E8861A}
+.fil-hero .ph-tag{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(232,134,26,.12);border:1px solid rgba(232,134,26,.28);
+  border-radius:20px;padding:4px 13px;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;color:#f5a030;text-transform:uppercase;
+  margin-bottom:16px;width:fit-content;font-family:'Outfit',sans-serif;
+}
+.fil-hero .ph-tag-dot{width:5px;height:5px;background:#E8861A;border-radius:50%}
+.fil-hero h1{font-size:clamp(2rem,4vw,3.2rem);color:#fff;margin-bottom:14px;line-height:1.1}
+.fil-hero h1 em{color:#E8861A;font-style:normal}
+.fil-hero p{font-size:1rem;color:rgba(255,255,255,.65);max-width:520px;line-height:1.8;font-weight:300;font-family:'Outfit',sans-serif}
+.fil-hero .ph-stats{display:flex;gap:0;margin-top:32px;border-top:1px solid rgba(255,255,255,.1);padding-top:24px;flex-wrap:wrap}
+.fil-hero .ph-stat{display:flex;flex-direction:column;gap:3px;padding-right:32px;margin-right:32px;border-right:1px solid rgba(255,255,255,.1)}
+.fil-hero .ph-stat:last-child{border-right:none}
+.fil-hero .ph-stat-v{font-size:1.6rem;font-weight:800;color:#fff;font-family:'Playfair Display',serif;line-height:1}
+.fil-hero .ph-stat-l{font-size:11px;color:rgba(255,255,255,.5);font-family:'Outfit',sans-serif}
 
-.fil-detail{padding:90px 80px}
+/* ═══════════════════════════════════════════════
+   CARTE + SECTION PRINCIPALE
+════════════════════════════════════════════════ */
+<style>
+/* ═══ HERO ═══ */
+.fil-hero{margin-top:72px;min-height:440px;position:relative;display:flex;align-items:flex-end;padding:0 80px 64px;overflow:hidden}
+.fil-hero .ph-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1584539724758-7aecb6b87fb9?q=80&w=1172&auto=format&fit=crop');background-size:cover;background-position:center;transform:scale(1.04);transition:transform 10s ease}
+.fil-hero:hover .ph-bg{transform:scale(1)}
+.fil-hero .ph-ov{position:absolute;inset:0;background:linear-gradient(108deg,rgba(11,25,41,.93) 0%,rgba(11,25,41,.75) 50%,rgba(11,25,41,.38) 100%)}
+.fil-hero .ph-ov2{position:absolute;inset:0;background:linear-gradient(to top,rgba(11,25,41,.9) 0%,transparent 60%)}
+.fil-hero .ph-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.fil-hero .ph-inner{position:relative;z-index:2;max-width:680px}
+.fil-hero .ph-breadcrumb{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:14px;display:flex;align-items:center;gap:6px;font-family:'Outfit',sans-serif}
+.fil-hero .ph-breadcrumb a{color:rgba(255,255,255,.75);transition:.2s}
+.fil-hero .ph-breadcrumb a:hover{color:#E8861A}
+.fil-hero .ph-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(232,134,26,.12);border:1px solid rgba(232,134,26,.28);border-radius:20px;padding:4px 13px;font-size:10px;font-weight:700;letter-spacing:1.5px;color:#f5a030;text-transform:uppercase;margin-bottom:16px;width:fit-content;font-family:'Outfit',sans-serif}
+.fil-hero .ph-tag-dot{width:5px;height:5px;background:#E8861A;border-radius:50%}
+.fil-hero h1{font-size:clamp(2rem,4vw,3.2rem);color:#fff;margin-bottom:14px;line-height:1.1}
+.fil-hero h1 em{color:#E8861A;font-style:normal}
+.fil-hero p{font-size:1rem;color:rgba(255,255,255,.65);max-width:520px;line-height:1.8;font-weight:300;font-family:'Outfit',sans-serif}
+.fil-hero .ph-stats{display:flex;gap:0;margin-top:32px;border-top:1px solid rgba(255,255,255,.1);padding-top:24px;flex-wrap:wrap}
+.fil-hero .ph-stat{display:flex;flex-direction:column;gap:3px;padding-right:32px;margin-right:32px;border-right:1px solid rgba(255,255,255,.1)}
+.fil-hero .ph-stat:last-child{border-right:none}
+.fil-hero .ph-stat-v{font-size:1.6rem;font-weight:800;color:#fff;font-family:'Playfair Display',serif;line-height:1}
+.fil-hero .ph-stat-l{font-size:11px;color:rgba(255,255,255,.5);font-family:'Outfit',sans-serif}
+/* ═══ CARTE LEAFLET ═══ */
+.map-section{background:var(--dark);padding:80px 80px;position:relative;overflow:hidden}
+.map-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.map-section-header{text-align:center;margin-bottom:48px;position:relative;z-index:2}
+.map-section-header .tag{color:var(--orange2);display:block;margin-bottom:10px}
+.map-section-header h2{color:#fff;font-size:clamp(1.8rem,3vw,2.6rem);margin-bottom:12px}
+.map-section-header p{color:rgba(255,255,255,.5);font-size:15px;font-weight:300;font-family:'Outfit',sans-serif;max-width:520px;margin:0 auto}
+.map-layout{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start;position:relative;z-index:2}
+#leaflet-map{height:520px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.leaflet-popup-content-wrapper{background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.25);border:none;padding:0;overflow:hidden}
+.leaflet-popup-tip{background:#fff}
+.leaflet-popup-content{margin:0 !important;width:230px !important}
+.gami-popup{padding:18px 20px}
+.gami-popup-badge{display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:10px;padding:4px 8px;margin-bottom:10px;border:1px solid #e5e9f0}
+.gami-popup-badge img{height:30px;max-width:90px;object-fit:contain;display:block}
+.gami-popup h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:#0F1923;margin-bottom:6px}
+.gami-popup-country{font-size:12px;color:#7F8C9A;font-family:'Outfit',sans-serif;margin-bottom:8px}
+.gami-popup p{font-size:12px;color:#7F8C9A;font-family:'Outfit',sans-serif;line-height:1.6;margin:0}
+.gami-popup-footer{background:#F4F7FC;padding:10px 20px;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;color:#E8861A;letter-spacing:.5px;cursor:pointer;text-align:center;transition:.2s}
+.gami-popup-footer:hover{background:#E0E8F0}
+/* ═══ SIDEBAR ═══ */
+.fil-sidebar{display:flex;flex-direction:column;gap:12px}
+.fil-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;cursor:pointer;transition:all .3s ease;position:relative;overflow:hidden}
+.fil-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:.3s;border-radius:3px 0 0 3px}
+.fil-card.active,.fil-card:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);transform:translateX(4px)}
+.fil-card.gmm.active::before,.fil-card.gmm:hover::before{background:#1B4F8A}
+.fil-card.semm.active::before,.fil-card.semm:hover::before{background:var(--orange)}
+.fil-card.sems.active::before,.fil-card.sems:hover::before{background:#1A8060}
+.fc-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.fc-badge{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:800;font-size:11px;flex-shrink:0}
+.fc-badge.gmm{background:#fff;border:1px solid rgba(27,79,138,.3)}
+.fc-badge.semm{background:#fff;border:1px solid rgba(232,134,26,.3)}
+.fc-badge.sems{background:#fff;border:1px solid rgba(26,128,96,.3)}
+.fc-head{flex:1}
+.fc-name{font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;color:#fff;margin-bottom:2px;line-height:1.2}
+.fc-fullname{font-size:11px;color:rgba(255,255,255,.45);font-family:'Outfit',sans-serif}
+.fc-country{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;margin-bottom:10px;width:fit-content}
+.fc-flag{width:20px;height:14px;border-radius:2px;object-fit:cover;vertical-align:middle;flex-shrink:0}
+.fc-badge img{width:100%;height:100%;object-fit:contain;border-radius:8px;padding:3px}
+.fc-country-name{font-size:11px;font-weight:600;color:rgba(255,255,255,.7);font-family:'Outfit',sans-serif}
+.fc-tags{display:flex;gap:5px;flex-wrap:wrap}
+.fc-tag{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;font-family:'Outfit',sans-serif}
+.fc-tag.gmm{background:rgba(27,79,138,.2);color:#5B9FE0}
+.fc-tag.semm{background:rgba(232,134,26,.15);color:#F5A030}
+.fc-tag.sems{background:rgba(26,128,96,.2);color:#2ECC9E}
+/* ═══ DETAIL SECTION ═══ */
+.fil-detail-section{padding:80px 80px;background:var(--light);border-top:1px solid var(--border)}
+.fds-header{text-align:center;margin-bottom:56px}
+.fds-header .tag{display:block;margin-bottom:10px}
+.fds-header h2{font-size:clamp(1.6rem,2.5vw,2.2rem);color:var(--dark);margin-bottom:8px}
+.fds-header p{font-size:14px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300}
 .fd-block{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:100px;padding-bottom:80px;border-bottom:1px solid var(--border)}
 .fd-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
 .fd-block.reverse{direction:rtl}
 .fd-block.reverse>*{direction:ltr}
 .fd-img{border-radius:24px;overflow:hidden;height:420px;position:relative}
-.fd-img img{width:100%;height:100%}
+.fd-img img{width:100%;height:100%;object-fit:cover}
 .fd-img-badge{position:absolute;top:20px;left:20px;background:var(--blue);color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:50px;letter-spacing:.5px}
 .fd-img-badge.orange{background:var(--orange)}
 .fd-img-badge.teal{background:#1ABC9C}
+.fd-country-pill{display:inline-flex;align-items:center;gap:8px;background:#E6F1FB;border:1px solid #C3D9F5;border-radius:20px;padding:6px 14px;margin-bottom:14px}
+.fd-country-pill.mali{background:#FFF3E8;border-color:#F5D5A5}
+.fd-country-pill.sn{background:#EAF7EF;border-color:#A5D9BC}
+.fd-country-pill .pflag{font-size:16px}
+.fd-country-pill .pname{font-size:12px;font-weight:700;color:var(--text);font-family:'Outfit',sans-serif;letter-spacing:.3px}
 .fd-content .tag{display:block;margin-bottom:12px}
 .fd-content h2{font-size:2rem;color:var(--dark);margin-bottom:16px;line-height:1.2}
 .fd-content p{color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:28px;font-size:15px}
 .fd-services{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
-.fd-srv{background:var(--light);border-radius:12px;padding:16px;display:flex;align-items:center;gap:10px}
+.fd-srv{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:10px;transition:.2s}
+.fd-srv:hover{border-color:var(--blue);background:#F4F7FC}
 .fd-srv-icon{font-size:18px}
 .fd-srv-text{font-size:13px;font-weight:600;color:var(--text);font-family:'Outfit',sans-serif}
 .fd-stat-row{display:flex;gap:24px;padding-top:24px;border-top:1px solid var(--border);margin-top:8px}
 .fd-stat strong{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--blue);display:block}
 .fd-stat span{font-size:11px;color:var(--muted);letter-spacing:.5px;font-family:'Outfit',sans-serif}
-
+.fd-cta{display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:11px 22px;border-radius:50px;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;letter-spacing:.3px;text-decoration:none;transition:all .25s ease;border:2px solid var(--blue);color:var(--blue)}
+.fd-cta:hover{background:var(--blue);color:#fff}
+.fd-cta.orange{border-color:var(--orange);color:var(--orange)}
+.fd-cta.orange:hover{background:var(--orange);color:#fff}
+.fd-cta.teal{border-color:#1A8060;color:#1A8060}
+.fd-cta.teal:hover{background:#1A8060;color:#fff}
+/* ═══ ZONES BAND ═══ */
 .zones-band{background:var(--dark);padding:72px 80px;color:#fff}
 .zones-band h2{color:#fff;text-align:center;margin-bottom:12px}
 .zones-band .section-sub{color:rgba(255,255,255,.55);text-align:center;margin:0 auto 48px}
 .zones-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
 .zone-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;text-align:center;cursor:pointer;transition:.2s}
 .zone-card:hover{border-color:var(--orange);background:rgba(232,134,26,.1)}
-.zone-flag{margin-bottom:12px;display:flex;justify-content:center}
-.zone-flag img{width:56px;height:38px;object-fit:cover;border-radius:5px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.zone-flag{margin-bottom:12px;display:flex;justify-content:center;font-size:28px}
 .zone-name{font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;font-family:'Outfit',sans-serif}
 .zone-cities{font-size:11px;color:rgba(255,255,255,.45)}
-
-/* ── FILIALES PAGE RESPONSIVE ── */
-@media(max-width:900px){
-  .fil-strip-section{padding:40px 24px}
-  .fil-hero-strip{grid-template-columns:1fr}
-  .fhs{height:260px}
-  .fil-detail{padding:56px 24px}
-  .fd-block{grid-template-columns:1fr !important;gap:28px;margin-bottom:56px;padding-bottom:48px}
-  .fd-block.reverse{direction:ltr !important}
-  .fd-block.reverse > *{direction:ltr !important}
-  .fd-img{height:280px}
-  .zones-band{padding:56px 24px}
-  .zones-grid{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:640px){
-  .fil-hero-strip{grid-template-columns:1fr}
-  .fhs{height:240px}
-  .fil-detail{padding:40px 18px}
-  .fd-img{height:220px}
-  .fd-services{grid-template-columns:1fr 1fr}
-  .fd-stat-row{flex-wrap:wrap;gap:12px}
-  .zones-grid{grid-template-columns:1fr 1fr}
-  .zones-band{padding:44px 18px}
-}
-@media(max-width:400px){
-  .fd-services{grid-template-columns:1fr}
-  .zones-grid{grid-template-columns:1fr 1fr}
-}
+.zone-fil{font-size:10px;color:var(--orange2);font-weight:600;margin-top:6px;font-family:'Outfit',sans-serif;letter-spacing:.5px}
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:1100px){.map-layout{grid-template-columns:1fr}.fil-sidebar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}#leaflet-map{height:420px}}
+@media(max-width:900px){.fil-hero{padding:0 24px 48px;min-height:380px}.map-section{padding:56px 24px}.fil-detail-section{padding:56px 24px}.fd-block{grid-template-columns:1fr !important;gap:28px;margin-bottom:56px;padding-bottom:48px}.fd-block.reverse{direction:ltr !important}.fd-block.reverse>*{direction:ltr !important}.fd-img{height:280px}.zones-band{padding:56px 24px}.zones-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.map-section{padding:40px 18px}.fil-sidebar{grid-template-columns:1fr}#leaflet-map{height:320px}}
+@media(max-width:640px){.fil-hero .ph-stats{flex-direction:column}.fil-hero .ph-stat{border-right:none;padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid rgba(255,255,255,.1)}.fil-hero .ph-stat:last-child{border-bottom:none}.fd-services{grid-template-columns:1fr 1fr}.fd-stat-row{flex-wrap:wrap;gap:12px}.zones-grid{grid-template-columns:1fr 1fr}}
+</style>
 </style>
 </head>
 <body>
 <div class="toast" id="toast"></div>
+
+<!-- NAV -->
 <nav id="nav">
   <div class="nav-logo"><img src="./images/logo_GAMI.png" alt="Groupe AMI — GAMI" class="nav-logo-img"/></div>
-    <div class="nav-links">
+  <div class="nav-links">
     <a class="nl" href="index.html">Accueil</a>
     <a class="nl" href="groupe.html">Le Groupe</a>
-    <a class="nl" href="filiales.html">Filiales</a>
+    <a class="nl active" href="filiales.html">Filiales</a>
     <div class="nav-dropdown">
       <a class="nl" href="nos-produits.html">Nos Produits</a>
       <div class="nav-drop-menu">
-        <a class="ndm-item" href="nos-produits.html#gmm">
-          <div class="ndm-badge gmm">GMM</div>
-          <span>Grands Moulins du Mali</span>
-        </a>
-        <a class="ndm-item" href="nos-produits.html#semm">
-          <div class="ndm-badge semm">SEMM</div>
-          <span>Eaux Minérales du Mali</span>
-        </a>
-        <a class="ndm-item" href="nos-produits.html#sems">
-          <div class="ndm-badge sems">SEMS</div>
-          <span>Eaux Minérales du Sénégal</span>
-        </a>
+        <a class="ndm-item" href="nos-produits.html#gmm"><div class="ndm-badge gmm">GMM</div><span>Grands Moulins du Mali</span></a>
+        <a class="ndm-item" href="nos-produits.html#semm"><div class="ndm-badge semm">SEMM</div><span>Eaux Minérales du Mali</span></a>
+        <a class="ndm-item" href="nos-produits.html#sems"><div class="ndm-badge sems">SEMS</div><span>Eaux Minérales du Sénégal</span></a>
       </div>
     </div>
     <a class="nl" href="actualites.html">Actualités</a>
+    <a class="nl" href="galerie.html">Galerie</a>
     <a class="nl" href="recrutement.html">Recrutement</a>
     <a class="nl" href="transporteurs.html">Transporteurs</a>
     <a class="nl" href="contact.html">Contact</a>
@@ -122,77 +203,115 @@
   <a class="nav-cta" href="backoffice.html">Espace DSI</a>
 </nav>
 
-<div class="page-hero">
-  <div class="ph-bg" style="background-image:url('https://images.unsplash.com/photo-1584539724758-7aecb6b87fb9?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"></div>
-  <div class="ph-ov"></div><div class="ph-ov2"></div><div class="ph-grid"></div><div class="ph-geo"></div>
+<!-- HERO -->
+<div class="fil-hero">
+  <div class="ph-bg"></div>
+  <div class="ph-ov"></div><div class="ph-ov2"></div><div class="ph-grid"></div>
   <div class="ph-inner">
     <div class="ph-breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>Filiales</span></div>
     <div class="ph-tag"><span class="ph-tag-dot"></span>Écosystème industriel GAMI</div>
-    <h1>Nos trois <em>filiales</em> spécialisées</h1>
-    <p>GMM, SEMM et SEMS forment un écosystème industriel complet, couvrant la maintenance, les équipements miniers et les services spécialisés en Afrique de l'Ouest.</p>
+    <h1>Nos <em>filiales</em> en Afrique</h1>
+    <p>GMM, SEMM et SEMS forment un écosystème industriel ancré en Afrique de l'Ouest. Explorez leur implantation géographique sur la carte.</p>
     <div class="ph-stats">
       <div class="ph-stat"><div class="ph-stat-v">3</div><div class="ph-stat-l">Filiales actives</div></div>
-      <div class="ph-stat"><div class="ph-stat-v">5</div><div class="ph-stat-l">Pays couverts</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">2</div><div class="ph-stat-l">Pays d'implantation</div></div>
       <div class="ph-stat"><div class="ph-stat-v">200+</div><div class="ph-stat-l">Collaborateurs</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">1979</div><div class="ph-stat-l">Première filiale</div></div>
     </div>
   </div>
 </div>
 
-<!-- FILIALES STRIP -->
-<section class="fil-strip-section">
-  <div class="fil-strip-header">
-    <span class="tag">NOS FILIALES</span>
-    <h2>Trois entités, <em style="color:var(--orange);font-style:normal">une vision commune</em></h2>
-    <p>Cliquez sur une filiale pour découvrir ses services et son périmètre d'intervention en Afrique de l'Ouest.</p>
+<!-- SECTION CARTE INTERACTIVE -->
+<section class="map-section">
+  <div class="map-section-header">
+    <span class="tag">CARTE INTERACTIVE</span>
+    <h2>Implantation géographique</h2>
+    <p>Cliquez sur un pays ou une filiale pour explorer son implantation en Afrique de l'Ouest.</p>
   </div>
-  <div class="fil-hero-strip">
-    <div class="fhs" id="gmm-card" onclick="document.getElementById('gmm').scrollIntoView({behavior:'smooth'})">
-      <img src="./images/logo-GMM-1024x722.jpg" alt="GMM"/>
-      <div class="fhs-ov"></div>
-      <div class="fhs-num">01</div>
-      <div class="fhs-arrow">→</div>
-      <div class="fhs-content">
-        <span class="fhs-abbr">GMM</span>
-        <div class="fhs-name">Grands Moulins du Mali — fondés en 1979</div>
-        <div class="fhs-tags"><span class="fhs-tag">Farine</span><span class="fhs-tag">Riz Malo</span><span class="fhs-tag">Vitablé</span></div>
+
+  <div class="map-layout">
+    <!-- Carte Leaflet -->
+    <div id="leaflet-map"></div>
+
+    <!-- Sidebar filiales -->
+    <div class="fil-sidebar">
+      <div class="fil-card gmm active" id="card-gmm" onclick="focusFiliale('gmm')">
+        <div class="fc-top">
+          <div class="fc-badge gmm"><img src="./images/logo-GMM-1024x722.jpg" alt="GMM"/></div>
+          <div class="fc-head">
+            <div class="fc-name">Grands Moulins du Mali</div>
+            <div class="fc-fullname">Filiale agro-industrielle</div>
+          </div>
+        </div>
+        <div class="fc-country"><img class="fc-flag" src="https://flagcdn.com/w20/ml.png" alt="Mali"/><span class="fc-country-name">Mali — Koulikoro</span></div>
+        <div class="fc-tags">
+          <span class="fc-tag gmm">Farine</span>
+          <span class="fc-tag gmm">Riz Malo</span>
+          <span class="fc-tag gmm">Vitablé</span>
+          <span class="fc-tag gmm">Huilerie</span>
+        </div>
       </div>
-    </div>
-    <div class="fhs" id="semm-card" onclick="document.getElementById('semm').scrollIntoView({behavior:'smooth'})">
-      <img src="./images/semm.jpg" alt="SEMM"/>
-      <div class="fhs-ov"></div>
-      <div class="fhs-num">02</div>
-      <div class="fhs-arrow">→</div>
-      <div class="fhs-content">
-        <span class="fhs-abbr">SEMM</span>
-        <div class="fhs-name">Société des Eaux Minérales du Mali — 1996</div>
-        <div class="fhs-tags"><span class="fhs-tag">Diago</span><span class="fhs-tag">Ami Fruité</span><span class="fhs-tag">Eau.</span></div>
+
+      <div class="fil-card semm" id="card-semm" onclick="focusFiliale('semm')">
+        <div class="fc-top">
+          <div class="fc-badge semm"><img src="./images/semm.jpg" alt="SEMM"/></div>
+          <div class="fc-head">
+            <div class="fc-name">Eaux Minérales du Mali</div>
+            <div class="fc-fullname">Filiale hydrique — N°1 au Mali</div>
+          </div>
+        </div>
+        <div class="fc-country"><img class="fc-flag" src="https://flagcdn.com/w20/ml.png" alt="Mali"/><span class="fc-country-name">Mali — Monts Mandingue</span></div>
+        <div class="fc-tags">
+          <span class="fc-tag semm">Diago</span>
+          <span class="fc-tag semm">Ami Fruité</span>
+          <span class="fc-tag semm">Source naturelle</span>
+        </div>
       </div>
-    </div>
-    <div class="fhs" id="sems-card" onclick="document.getElementById('sems').scrollIntoView({behavior:'smooth'})">
-      <img src="./images/logo-SEMS.png" alt="SEMS"/>
-      <div class="fhs-ov"></div>
-      <div class="fhs-num">03</div>
-      <div class="fhs-arrow">→</div>
-      <div class="fhs-content">
-        <span class="fhs-abbr">SEMS</span>
-        <div class="fhs-name">Expertises & Services Spécialisés</div>
-        <div class="fhs-tags"><span class="fhs-tag">Expertise</span><span class="fhs-tag">Conseil</span><span class="fhs-tag">Services</span></div>
+
+      <div class="fil-card sems" id="card-sems" onclick="focusFiliale('sems')">
+        <div class="fc-top">
+          <div class="fc-badge sems"><img src="./images/logo-SEMS.png" alt="SEMS"/></div>
+          <div class="fc-head">
+            <div class="fc-name">Eaux Minérales du Sénégal</div>
+            <div class="fc-fullname">Filiale hydrique — Sénégal</div>
+          </div>
+        </div>
+        <div class="fc-country"><img class="fc-flag" src="https://flagcdn.com/w20/sn.png" alt="Sénégal"/><span class="fc-country-name">Sénégal — Dakar</span></div>
+        <div class="fc-tags">
+          <span class="fc-tag sems">Samao</span>
+          <span class="fc-tag sems">Ami Fruité</span>
+          <span class="fc-tag sems">Distribution</span>
+        </div>
       </div>
+
+      <a href="#fil-detail" class="btn-main" style="justify-content:center;text-align:center;margin-top:4px;" onclick="smoothDetail(event)">
+        Voir le détail <span>↓</span>
+      </a>
     </div>
   </div>
 </section>
+<!-- DETAILS FILIALES -->
+<div class="fil-detail-section" id="fil-detail">
+  <div class="fds-header">
+    <span class="tag">NOS FILIALES</span>
+    <h2>Trois entités, <em style="color:var(--orange);font-style:normal">une vision commune</em></h2>
+    <p>Découvrez l'histoire, les activités et les chiffres clés de chaque filiale.</p>
+  </div>
 
-<!-- DETAILS -->
-<div class="fil-detail">
-  <div class="fd-block" id="gmm">
+  <!-- GMM -->
+  <div class="fd-block" id="fd-gmm">
     <div class="fd-img">
       <img src="./images/logo-GMM-1024x722.jpg" alt="GMM"/>
       <div class="fd-img-badge">FILIALE GMM</div>
     </div>
     <div class="fd-content">
       <span class="tag">GMM</span>
+      <div class="fd-country-pill mali">
+        <span class="pflag">🇲🇱</span>
+        <span class="pname">Mali — Koulikoro, à 55 km de Bamako</span>
+      </div>
       <h2>Grands Moulins<br>du Mali</h2>
-      <p>Créés en 1979, les GMM représentent plus de <strong>50% du chiffre d'affaires</strong> du GIE AMI et constituent l'une des industries les plus importantes du pays. Capital de <strong>4 milliards FCFA</strong>, Directeur Général : <strong>Cyril ACHCAR</strong>. Usines à Koulikoro (55 km de Bamako) sur 5 secteurs agro-industriels.</p>
+      <p>Créés en 1979, les GMM représentent plus de <strong>50% du chiffre d'affaires</strong> du GIE AMI et constituent l'une des industries les plus importantes du pays. Capital de <strong>4 milliards FCFA</strong>, Directeur Général : <strong>Cyril ACHCAR</strong>. Usines à Koulikoro sur 5 secteurs agro-industriels.</p>
       <div class="fd-services">
         <div class="fd-srv"><div class="fd-srv-icon">🌾</div><div class="fd-srv-text">Moulins à farine — 120 000 T/an</div></div>
         <div class="fd-srv"><div class="fd-srv-icon">🍚</div><div class="fd-srv-text">Rizerie — Riz Malo 15 000 T/an</div></div>
@@ -204,52 +323,65 @@
         <div class="fd-stat"><strong>15k T</strong><span>RIZ MALO / AN</span></div>
         <div class="fd-stat"><strong>4 Mds</strong><span>CAPITAL FCFA</span></div>
       </div>
+      <a href="#" class="fd-cta" target="_blank">Visiter le site GMM <span>→</span></a>
     </div>
   </div>
 
-  <div class="fd-block reverse" id="semm">
+  <!-- SEMM -->
+  <div class="fd-block reverse" id="fd-semm">
     <div class="fd-img">
       <img src="./images/semm.jpg" alt="SEMM"/>
       <div class="fd-img-badge orange">FILIALE SEMM</div>
     </div>
     <div class="fd-content">
       <span class="tag">SEMM</span>
+      <div class="fd-country-pill mali">
+        <span class="pflag">🇲🇱</span>
+        <span class="pname">Mali — Monts Mandingue, 35 km de Bamako</span>
+      </div>
       <h2>Société des Eaux<br>Minérales du Mali</h2>
-      <p>La SEMM a vu le jour en <strong>1996</strong> par le rachat auprès de l'État Malien de la source découverte et conseillée par <strong>EVIAN International</strong>. Situés à 35 km de Bamako sur les collines des monts Mandingue, les forages de Diago offrent une eau traitée à la pointe de la technologie. Diago est le <strong>N°1 de l'eau minérale au Mali</strong>.</p>
+      <p>La SEMM a vu le jour en <strong>1996</strong> par rachat auprès de l'État Malien de la source découverte et conseillée par <strong>EVIAN International</strong>. Les forages de Diago offrent une eau traitée à la pointe de la technologie. Diago est le <strong>N°1 de l'eau minérale au Mali</strong>.</p>
       <div class="fd-services">
         <div class="fd-srv"><div class="fd-srv-icon">💧</div><div class="fd-srv-text">Diago — eau minérale 4 formats</div></div>
         <div class="fd-srv"><div class="fd-srv-icon">🍹</div><div class="fd-srv-text">Ami Fruité — 0,25L · 0,38L · 0,5L</div></div>
-        <div class="fd-srv"><div class="fd-srv-icon">🏔️</div><div class="fd-srv-text">Source monts Mandingue, 35 km Bamako</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🏔️</div><div class="fd-srv-text">Source monts Mandingue naturelle</div></div>
         <div class="fd-srv"><div class="fd-srv-icon">🧪</div><div class="fd-srv-text">Traitement pointe technologique</div></div>
       </div>
       <div class="fd-stat-row">
         <div class="fd-stat"><strong>1996</strong><span>FONDATION</span></div>
         <div class="fd-stat"><strong>N°1</strong><span>EAU MINÉRALE MALI</span></div>
         <div class="fd-stat"><strong>4</strong><span>FORMATS DIAGO</span></div>
-       </div>
+      </div>
+      <a href="https://sites.google.com/view/rmgmm/accueil?authuser=0" class="fd-cta orange" target="_blank">Visiter le site SEMM <span>→</span></a>
     </div>
   </div>
 
-  <div class="fd-block" id="sems">
+  <!-- SEMS -->
+  <div class="fd-block" id="fd-sems">
     <div class="fd-img">
       <img src="./images/logo-SEMS.png" alt="SEMS"/>
       <div class="fd-img-badge teal">FILIALE SEMS</div>
     </div>
     <div class="fd-content">
       <span class="tag">SEMS</span>
+      <div class="fd-country-pill sn">
+        <span class="pflag">🇸🇳</span>
+        <span class="pname">Sénégal — Dakar</span>
+      </div>
       <h2>Société des Eaux<br>Minérales du Sénégal</h2>
       <p>La SEMS est la déclinaison sénégalaise du savoir-faire hydrique du Groupe AMI. Implantée au Sénégal, elle produit et distribue de l'eau minérale naturelle de haute qualité ainsi que des boissons aromatisées pour répondre à la demande croissante du marché ouest-africain.</p>
       <div class="fd-services">
         <div class="fd-srv"><div class="fd-srv-icon">💧</div><div class="fd-srv-text">Samao — eau minérale 4 formats</div></div>
-        <div class="fd-srv"><div class="fd-srv-icon">🍹</div><div class="fd-srv-text">Ami Fruité — 0,25L · 0,38L · 0,5L</div></div>
-        <div class="fd-srv"><div class="fd-srv-icon">🏔️</div><div class="fd-srv-text">Source monts Mandingue, 35 km Bamako</div></div>
-        <div class="fd-srv"><div class="fd-srv-icon">🧪</div><div class="fd-srv-text">Traitement pointe technologique</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🍹</div><div class="fd-srv-text">Ami Fruité — boissons aromatisées</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🌍</div><div class="fd-srv-text">Distribution Afrique de l'Ouest</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🧪</div><div class="fd-srv-text">Haute qualité certifiée</div></div>
       </div>
       <div class="fd-stat-row">
-        <div class="fd-stat"><strong>1996</strong><span>FONDATION</span></div>
-        <div class="fd-stat"><strong>N°1</strong><span>EAU MINÉRALE SENEGAL</span></div>
+        <div class="fd-stat"><strong>Dakar</strong><span>SIÈGE SÉNÉGAL</span></div>
+        <div class="fd-stat"><strong>N°1</strong><span>EAU MINÉRALE SÉNÉGAL</span></div>
         <div class="fd-stat"><strong>4</strong><span>FORMATS SAMAO</span></div>
-       </div>
+      </div>
+      <a href="https://samao.sn/" class="fd-cta teal" target="_blank">Visiter le site SEMS <span>→</span></a>
     </div>
   </div>
 </div>
@@ -257,31 +389,237 @@
 <!-- ZONES -->
 <div class="zones-band">
   <span class="tag" style="color:var(--orange2);display:block;text-align:center;margin-bottom:10px">COUVERTURE GÉOGRAPHIQUE</span>
-  <h2 class="section-title">Nos zones d'opération</h2>
-  <p class="section-sub">GAMI et ses filiales interviennent dans 5 pays d'Afrique de l'Ouest avec des équipes locales et des partenaires établis.</p>
+  <h2 class="section-title" style="text-align:center;color:#fff">Nos zones d'opération</h2>
+  <p class="section-sub" style="text-align:center;margin:0 auto 48px">GAMI et ses filiales interviennent dans 5 pays d'Afrique de l'Ouest avec des équipes locales et des partenaires établis.</p>
   <div class="zones-grid">
-    <div class="zone-card"><div class="zone-flag"><img src="https://flagcdn.com/w80/sn.png" alt="Drapeau Sénégal"/></div><div class="zone-name">Sénégal</div><div class="zone-cities">Dakar · Thiès · Ziguinchor</div></div>
-    <div class="zone-card"><div class="zone-flag"><img src="https://flagcdn.com/w80/ml.png" alt="Drapeau Mali"/></div><div class="zone-name">Mali</div><div class="zone-cities">Bamako · Sikasso · Kayes</div></div>
-    <div class="zone-card"><div class="zone-flag"><img src="https://flagcdn.com/w80/gn.png" alt="Drapeau Guinée"/></div><div class="zone-name">Guinée</div><div class="zone-cities">Conakry · Labé · Kankan</div></div>
-    <div class="zone-card"><div class="zone-flag"><img src="https://flagcdn.com/w80/ci.png" alt="Drapeau Côte d'Ivoire"/></div><div class="zone-name">Côte d'Ivoire</div><div class="zone-cities">Abidjan · Bouaké</div></div>
-    <div class="zone-card"><div class="zone-flag"><img src="https://flagcdn.com/w80/mr.png" alt="Drapeau Mauritanie"/></div><div class="zone-name">Mauritanie</div><div class="zone-cities">Nouakchott · Zouerate</div></div>
+    <div class="zone-card" onclick="window.location='#fd-semm'">
+      <div class="zone-flag">🇲🇱</div>
+      <div class="zone-name">Mali</div>
+      <div class="zone-cities">Bamako · Koulikoro · Sikasso</div>
+      <div class="zone-fil">GMM · SEMM</div>
+    </div>
+    <div class="zone-card" onclick="window.location='#fd-sems'">
+      <div class="zone-flag">🇸🇳</div>
+      <div class="zone-name">Sénégal</div>
+      <div class="zone-cities">Dakar · Thiès · Ziguinchor</div>
+      <div class="zone-fil">SEMS</div>
+    </div>
+    <div class="zone-card">
+      <div class="zone-flag">🇬🇳</div>
+      <div class="zone-name">Guinée</div>
+      <div class="zone-cities">Conakry · Labé · Kankan</div>
+      <div class="zone-fil">Distribution</div>
+    </div>
+    <div class="zone-card">
+      <div class="zone-flag">🇨🇮</div>
+      <div class="zone-name">Côte d'Ivoire</div>
+      <div class="zone-cities">Abidjan · Bouaké</div>
+      <div class="zone-fil">Partenaires</div>
+    </div>
+    <div class="zone-card">
+      <div class="zone-flag">🇲🇷</div>
+      <div class="zone-name">Mauritanie</div>
+      <div class="zone-cities">Nouakchott · Zouerate</div>
+      <div class="zone-fil">Distribution</div>
+    </div>
   </div>
 </div>
 
+<!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-top">
-    <div class="f-brand"><div class="f-logo"><div class="logo-sq">G</div><span style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#fff">Groupe AMI — GAMI</span></div><p>L'industrie au service du développement.</p><div class="f-socials"><div class="f-soc">f</div><div class="f-soc">𝕏</div><div class="f-soc">in</div></div></div>
-    <div class="f-col"><h4>À propos</h4><ul><li><a href="groupe.html">Notre histoire</a></li><li><a href="groupe.html">Vision & Mission</a></li><li><a href="actualites.html">Blog</a></li></ul></div>
-    <div class="f-col"><h4>Entités</h4><ul><li><a href="filiales.html">GMM</a></li><li><a href="filiales.html">SEMM</a></li><li><a href="filiales.html">SEMS</a></li></ul></div>
+    <div class="f-brand">
+      <div class="f-logo"><div class="logo-sq">G</div><span style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#fff">Groupe AMI — GAMI</span></div>
+      <p>L'industrie au service du développement.</p>
+      <div class="f-socials"><div class="f-soc">f</div><div class="f-soc">𝕏</div><div class="f-soc">in</div></div>
+    </div>
+    <div class="f-col"><h4>À propos</h4><ul><li><a href="groupe.html">Notre histoire</a></li><li><a href="groupe.html">Vision &amp; Mission</a></li><li><a href="actualites.html">Blog</a></li></ul></div>
+    <div class="f-col"><h4>Filiales</h4><ul><li><a href="#fd-gmm">GMM</a></li><li><a href="#fd-semm">SEMM</a></li><li><a href="#fd-sems">SEMS</a></li></ul></div>
     <div class="f-col"><h4>Contact</h4><ul><li><a href="contact.html">contact@groupeami.sn</a></li><li><a href="#">+221 33 000 00 00</a></li><li><a href="recrutement.html">Recrutement</a></li></ul></div>
   </div>
   <div class="footer-bottom"><span>©2025 Groupe AMI — GAMI.</span><span>Python8080</span></div>
 </footer>
+
 <script src="shared.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-document.getElementById('gmm-card').onclick=()=>document.getElementById('gmm').scrollIntoView({behavior:'smooth'});
-document.getElementById('semm-card').onclick=()=>document.getElementById('semm').scrollIntoView({behavior:'smooth'});
-document.getElementById('sems-card').onclick=()=>document.getElementById('sems').scrollIntoView({behavior:'smooth'});
+// ══ CONFIG FILIALES ══
+const FILIALES = {
+  gmm:  { lat: 12.86, lng: -6.1,  country: 'ML', color: '#1B4F8A', name: 'Grands Moulins du Mali',       short: '<img src="./images/logo-GMM-1024x722.jpg" alt="GMM"/>',  ville: 'Koulikoro, Mali',    desc: 'Leader de la farine au Mali depuis 1979. 120 000 T/an.', detail:'fd-gmm' },
+  semm: { lat: 12.60, lng: -8.0,  country: 'ML', color: '#E8861A', name: 'Eaux Minérales du Mali',       short: '<img src="./images/semm.jpg" alt="SEMM"/>', ville: 'Bamako, Mali',        desc: 'Source Diago, N°1 de l\'eau minérale au Mali.', detail:'fd-semm' },
+  sems: { lat: 14.72, lng: -17.46, country: 'SN', color: '#1A8060', name: 'Eaux Minérales du Sénégal',   short: '<img src="./images/logo-SEMS.png" alt="SEMS"/>', ville: 'Dakar, Sénégal',      desc: 'Marque Samao, eau minérale naturelle de haute qualité.', detail:'fd-sems' },
+};
+
+const COUNTRY_COLORS = {
+  ML: { active: '#1B4F8A', hover: '#2a6fc0' },
+  SN: { active: '#1A8060', hover: '#22a07a' },
+};
+
+// ══ INIT CARTE LEAFLET ══
+const map = L.map('leaflet-map', {
+  center: [12, -5],
+  zoom: 4,
+  zoomControl: true,
+  scrollWheelZoom: false,
+  attributionControl: false,
+  minZoom: 3,
+  maxZoom: 7,
+});
+
+// Tiles sombres style TravelMap
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {
+  maxZoom: 19,
+}).addTo(map);
+
+// ══ GeoJSON des pays africains depuis un CDN public ══
+let geoLayer = null;
+let currentFiliale = 'gmm';
+
+function styleCountry(feature) {
+  const iso = feature.properties.ISO_A2 || feature.properties.iso_a2 || '';
+  if (iso === 'ML') return { fillColor:'#1B4F8A', fillOpacity:.55, color:'#fff', weight:1.5 };
+  if (iso === 'SN') return { fillColor:'#1A8060', fillOpacity:.55, color:'#fff', weight:1.5 };
+  return { fillColor:'#1e3248', fillOpacity:.8, color:'#2c4a6a', weight:.8 };
+}
+
+function highlightCountry(feature) {
+  const iso = feature.properties.ISO_A2 || feature.properties.iso_a2 || '';
+  if (iso === 'ML') return { fillColor:'#2a6fc0', fillOpacity:.75, color:'#fff', weight:2 };
+  if (iso === 'SN') return { fillColor:'#22a07a', fillOpacity:.75, color:'#fff', weight:2 };
+  return { fillColor:'#2a4d6a', fillOpacity:.9, color:'#4a7a9a', weight:1 };
+}
+
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+  .then(r => r.json())
+  .then(world => {
+    // Filtrer seulement l'Afrique (bounding box approximatif)
+    const topojson = world;
+    // Utiliser une alternative plus propre avec GeoJSON direct
+  })
+  .catch(() => {});
+
+// Fallback: charger GeoJSON Afrique depuis jsdelivr
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json')
+  .then(r => r.json())
+  .then(data => {
+    // Convertir TopoJSON → GeoJSON via inline
+    loadAfricaGeoJSON();
+  });
+
+function loadAfricaGeoJSON() {
+  // GeoJSON simplifié des pays clés + fallback polygones
+  const africaGeoURL = 'https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson';
+  
+  fetch('https://cdn.jsdelivr.net/npm/@geo-maps/countries-land-10km@1.0.0/map.geo.json')
+    .then(r => r.json())
+    .then(geojson => {
+      // Filtrer seulement l'Afrique
+      const africaFeatures = geojson.features.filter(f => {
+        const coords = f.geometry && f.geometry.coordinates;
+        if (!coords) return false;
+        const iso = f.properties.A3 || f.properties.ISO_A2 || '';
+        const africaCodes = ['DZ','AO','BJ','BW','BF','BI','CM','CV','CF','TD','KM','CD','CG','CI','DJ','EG','GQ','ER','SZ','ET','GA','GM','GH','GN','GW','KE','LS','LR','LY','MG','MW','ML','MR','MU','MA','MZ','NA','NE','NG','RW','ST','SN','SL','SO','ZA','SS','SD','TZ','TG','TN','UG','ZM','ZW','EH'];
+        return africaCodes.includes(iso) || africaCodes.includes(f.properties.A3);
+      });
+
+      geoLayer = L.geoJSON({ type:'FeatureCollection', features: africaFeatures }, {
+        style: styleCountry,
+        onEachFeature(feature, layer) {
+          const iso = feature.properties.ISO_A2 || feature.properties.A3 || '';
+          layer.on({
+            mouseover(e) {
+              e.target.setStyle(highlightCountry(feature));
+            },
+            mouseout(e) {
+              geoLayer.resetStyle(e.target);
+            },
+            click() {
+              if (iso === 'ML') focusFiliale('gmm');
+              else if (iso === 'SN') focusFiliale('sems');
+            }
+          });
+        }
+      }).addTo(map);
+    })
+    .catch(() => {
+      // Si le GeoJSON échoue, on garde juste les markers
+    });
+}
+
+loadAfricaGeoJSON();
+
+// ══ PINS CUSTOM ══
+function makeIcon(color) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40">
+    <path d="M16 0C9.37 0 4 5.37 4 12c0 9 12 28 12 28s12-19 12-28C28 5.37 22.63 0 16 0z" fill="${color}" stroke="#fff" stroke-width="2"/>
+    <circle cx="16" cy="12" r="5" fill="#fff" fill-opacity=".9"/>
+  </svg>`;
+  return L.divIcon({
+    html: svg,
+    className: '',
+    iconSize: [32, 40],
+    iconAnchor: [16, 40],
+    popupAnchor: [0, -42],
+  });
+}
+
+const markers = {};
+Object.entries(FILIALES).forEach(([id, f]) => {
+  const marker = L.marker([f.lat, f.lng], { icon: makeIcon(f.color) });
+
+  const popupHTML = `
+    <div class="gami-popup">
+      <span class="gami-popup-badge ${id}">${f.short}</span>
+      <h3>${f.name}</h3>
+      <div class="gami-popup-country">${f.ville}</div>
+      <p>${f.desc}</p>
+    </div>
+    <div class="gami-popup-footer" onclick="smoothToDetail('${f.detail}')">Voir le détail →</div>
+  `;
+
+  marker.bindPopup(popupHTML, {
+    maxWidth: 240,
+    minWidth: 220,
+    closeButton: false,
+  });
+
+  marker.on('click', () => {
+    setActiveCard(id);
+  });
+
+  marker.addTo(map);
+  markers[id] = marker;
+});
+
+// ══ INTERACTIONS SIDEBAR ══
+function focusFiliale(id) {
+  setActiveCard(id);
+  const f = FILIALES[id];
+  map.flyTo([f.lat, f.lng], 5.5, { duration: 1 });
+  setTimeout(() => markers[id].openPopup(), 1100);
+}
+
+function setActiveCard(id) {
+  currentFiliale = id;
+  document.querySelectorAll('.fil-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.add('active');
+}
+
+function smoothDetail(detailId) {
+  const el = document.getElementById(detailId || FILIALES[currentFiliale].detail);
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ══ INIT ══
+setActiveCard('gmm');
+setTimeout(() => markers['gmm'].openPopup(), 800);
+
+// Bouton smooth scroll
+document.querySelector('a[href="#fil-detail"]').addEventListener('click', function(e) {
+  e.preventDefault();
+  smoothDetail(FILIALES[currentFiliale].detail);
+});
 </script>
 </body>
 </html>

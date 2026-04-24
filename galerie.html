@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GAMI — Galerie</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+
+/* ── ONGLETS PRINCIPAUX (Photos / Vidéos) ── */
+.gal-tabs{display:flex;gap:0;margin-bottom:32px;border-bottom:2px solid var(--border)}
+.gt{background:transparent;border:none;padding:14px 28px;font-size:15px;font-weight:600;color:var(--muted);cursor:pointer;position:relative;font-family:'Outfit',sans-serif;transition:.2s;white-space:nowrap}
+.gt::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--blue);transform:scaleX(0);transition:.25s}
+.gt.active{color:var(--blue)}
+.gt.active::after{transform:scaleX(1)}
+.gt:hover:not(.active){color:var(--dark)}
+.gt-count{display:inline-flex;align-items:center;justify-content:center;background:rgba(27,79,138,.1);color:var(--blue);font-size:11px;font-weight:700;width:22px;height:22px;border-radius:50%;margin-left:6px}
+.gt.active .gt-count{background:var(--blue);color:#fff}
+
+/* ── FILTRES SECONDAIRES ── */
+.gal-filters{display:flex;gap:8px;margin-bottom:36px;flex-wrap:wrap}
+.gf{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:8px 20px;border-radius:50px;font-size:13px;font-weight:500;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif}
+.gf.active,.gf:hover{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* ── SECTION TYPE ── */
+.gal-section{display:none}
+.gal-section.active{display:block}
+
+/* ── GRILLE PHOTOS — MASONRY ── */
+.gal-grid{columns:3;column-gap:20px}
+.gal-card{break-inside:avoid;margin-bottom:20px;border-radius:18px;overflow:hidden;background:#fff;border:1.5px solid var(--border);cursor:pointer;transition:.28s;display:block}
+.gal-card:hover{transform:translateY(-5px);box-shadow:0 20px 52px rgba(27,79,138,.13);border-color:transparent}
+.gal-card-img{position:relative;overflow:hidden}
+.gal-card-img img{width:100%;height:auto;display:block;transition:transform .45s ease,filter .3s ease;filter:brightness(.95)}
+.gal-card:hover .gal-card-img img{transform:scale(1.05);filter:brightness(1)}
+.gal-card-body{padding:14px 16px 16px}
+.gal-card-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:5px;line-height:1.3}
+.gal-card-desc{font-size:12.5px;color:var(--muted);line-height:1.6;font-weight:300}
+
+/* Badges */
+.gal-badge{position:absolute;top:12px;left:12px;font-size:9px;font-weight:700;letter-spacing:.6px;padding:3px 10px;border-radius:50px;text-transform:uppercase;z-index:2}
+.gal-badge.gmm{background:#EBF3FF;color:#1B4F8A}
+.gal-badge.semm{background:#FFF3E8;color:#C4700E}
+.gal-badge.sems{background:#E8F7EF;color:#1A7A55}
+.gal-badge.groupe{background:rgba(11,25,41,.65);color:#fff;border:1px solid rgba(255,255,255,.2)}
+
+/* Hover overlay subtil sur photo */
+.gal-card-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(11,25,41,.45) 0%,transparent 55%);opacity:0;transition:opacity .3s}
+.gal-card:hover .gal-card-img-ov{opacity:1}
+
+/* ── GRILLE VIDÉOS — UNIFORME ── */
+.vid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.vid-card{border-radius:18px;overflow:hidden;background:#fff;border:1.5px solid var(--border);cursor:pointer;transition:.28s}
+.vid-card:hover{transform:translateY(-5px);box-shadow:0 20px 52px rgba(27,79,138,.13);border-color:transparent}
+.vid-thumb{position:relative;overflow:hidden;aspect-ratio:16/9}
+.vid-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease,filter .3s ease;filter:brightness(.85)}
+.vid-card:hover .vid-thumb img{transform:scale(1.06);filter:brightness(.7)}
+.vid-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3}
+.vid-play-btn{width:54px;height:54px;background:rgba(255,255,255,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(0,0,0,.25);transition:.25s}
+.vid-play-btn svg{width:20px;height:20px;fill:var(--blue);margin-left:3px}
+.vid-card:hover .vid-play-btn{background:var(--blue);transform:scale(1.1)}
+.vid-card:hover .vid-play-btn svg{fill:#fff}
+.vid-duration{position:absolute;bottom:10px;right:10px;background:rgba(11,25,41,.75);color:#fff;font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;font-family:'Outfit',sans-serif;z-index:3}
+.vid-body{padding:14px 16px 16px}
+.vid-title{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:5px;line-height:1.3}
+.vid-desc{font-size:12.5px;color:var(--muted);line-height:1.6;font-weight:300}
+
+/* ── LIGHTBOX PHOTOS ── */
+.lightbox{position:fixed;inset:0;z-index:900;background:rgba(8,16,26,.95);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;animation:lbIn .22s ease}
+.lightbox.open{display:flex}
+@keyframes lbIn{from{opacity:0}to{opacity:1}}
+.lb-img-wrap{position:relative;max-width:85vw;max-height:82vh;display:flex;flex-direction:column;align-items:center;gap:16px}
+.lb-img-wrap img{max-width:85vw;max-height:72vh;object-fit:contain;border-radius:14px;box-shadow:0 40px 100px rgba(0,0,0,.5)}
+.lb-info{text-align:center;color:#fff}
+.lb-info-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:4px}
+.lb-info-desc{font-size:13px;color:rgba(255,255,255,.6);font-family:'Outfit',sans-serif;font-weight:300}
+.lb-close{position:fixed;top:20px;right:24px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;width:42px;height:42px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;z-index:10}
+.lb-close:hover{background:var(--orange);border-color:var(--orange)}
+.lb-arrow{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;width:48px;height:48px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;z-index:10}
+.lb-arrow:hover{background:var(--blue);border-color:var(--blue)}
+.lb-prev{left:16px}
+.lb-next{right:16px}
+.lb-counter{position:fixed;top:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.5);font-size:12px;font-family:'Outfit',sans-serif;background:rgba(11,25,41,.5);padding:5px 14px;border-radius:50px}
+
+/* ── MODAL VIDÉO ── */
+.vid-modal{position:fixed;inset:0;z-index:900;background:rgba(8,16,26,.95);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;animation:lbIn .22s ease}
+.vid-modal.open{display:flex}
+.vid-modal-inner{position:relative;width:min(820px,92vw)}
+.vid-modal-player{width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.vid-modal-player iframe,.vid-modal-player video{width:100%;height:100%;border:none}
+.vid-modal-info{margin-top:16px;color:#fff}
+.vid-modal-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:5px}
+.vid-modal-desc{font-size:13px;color:rgba(255,255,255,.6);font-family:'Outfit',sans-serif;font-weight:300;line-height:1.6}
+.vm-close{position:fixed;top:20px;right:24px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;width:42px;height:42px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;z-index:10}
+.vm-close:hover{background:var(--orange);border-color:var(--orange)}
+
+/* ── VIDE ── */
+.gal-empty{text-align:center;padding:80px 0;color:var(--muted);font-size:14px;display:none}
+.gal-empty svg{display:block;margin:0 auto 16px;opacity:.3}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .gal-grid{columns:2;column-gap:16px}
+  .vid-grid{grid-template-columns:repeat(2,1fr);gap:16px}
+}
+@media(max-width:900px){
+  .section-pad{padding:56px 24px}
+  .gal-tabs{margin-bottom:24px}
+  .gt{padding:12px 18px;font-size:14px}
+}
+@media(max-width:640px){
+  .gal-grid{columns:1;column-gap:0}
+  .vid-grid{grid-template-columns:1fr}
+  .gal-card,.vid-card{margin-bottom:14px}
+  .gal-filters{gap:6px}
+  .gf{font-size:12px;padding:7px 14px}
+  .lb-arrow{width:38px;height:38px;font-size:16px}
+  .lb-prev{left:8px}
+  .lb-next{right:8px}
+  .gt{padding:10px 14px;font-size:13px}
+  .section-pad{padding:40px 18px !important}
+}
+@media(max-width:400px){
+  .gt-count{display:none}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- LIGHTBOX PHOTOS -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLb()">
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <button class="lb-arrow lb-prev" onclick="moveLb(-1)">&#8592;</button>
+  <div class="lb-img-wrap">
+    <img id="lb-img" src="" alt=""/>
+    <div class="lb-info">
+      <div class="lb-info-title" id="lb-title"></div>
+      <div class="lb-info-desc" id="lb-desc"></div>
+    </div>
+  </div>
+  <button class="lb-arrow lb-next" onclick="moveLb(1)">&#8594;</button>
+  <div class="lb-counter" id="lb-counter"></div>
+</div>
+
+<!-- MODAL VIDÉO -->
+<div class="vid-modal" id="vidModal" onclick="if(event.target===this)closeVid()">
+  <button class="vm-close" onclick="closeVid()">✕</button>
+  <div class="vid-modal-inner">
+    <div class="vid-modal-player" id="vidPlayer"></div>
+    <div class="vid-modal-info">
+      <div class="vid-modal-title" id="vid-modal-title"></div>
+      <div class="vid-modal-desc" id="vid-modal-desc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo"><img src="./images/logo_GAMI.png" alt="Groupe AMI — GAMI" class="nav-logo-img"/></div>
+  <div class="nav-links">
+    <a class="nl" href="index.html">Accueil</a>
+    <a class="nl" href="groupe.html">Le Groupe</a>
+    <a class="nl" href="filiales.html">Filiales</a>
+    <div class="nav-dropdown">
+      <a class="nl" href="nos-produits.html">Nos Produits</a>
+      <div class="nav-drop-menu">
+        <a class="ndm-item" href="nos-produits.html#gmm">
+          <div class="ndm-badge gmm">GMM</div>
+          <span>Grands Moulins du Mali</span>
+        </a>
+        <a class="ndm-item" href="nos-produits.html#semm">
+          <div class="ndm-badge semm">SEMM</div>
+          <span>Eaux Minérales du Mali</span>
+        </a>
+        <a class="ndm-item" href="nos-produits.html#sems">
+          <div class="ndm-badge sems">SEMS</div>
+          <span>Eaux Minérales du Sénégal</span>
+        </a>
+      </div>
+    </div>
+    <a class="nl" href="actualites.html">Actualités</a>
+    <a class="nl active" href="galerie.html">Galerie</a>
+    <a class="nl" href="recrutement.html">Recrutement</a>
+    <a class="nl" href="transporteurs.html">Transporteurs</a>
+    <a class="nl" href="contact.html">Contact</a>
+  </div>
+  <a class="nav-cta" href="backoffice.html">Espace DSI</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="ph-bg" style="background-image:url('./images/WEBTest.jpg')"></div>
+  <div class="ph-ov"></div>
+  <div class="ph-ov2"></div>
+  <div class="ph-grid"></div>
+  <div class="ph-geo"></div>
+  <div class="ph-inner">
+    <div class="ph-breadcrumb">
+      <a href="index.html">Accueil</a><span>/</span><span>Galerie</span>
+    </div>
+    <div class="ph-tag"><span class="ph-tag-dot"></span>Médiathèque</div>
+    <h1>Notre <em>Galerie</em></h1>
+    <p>Découvrez en images et en vidéos les produits, les installations et les moments forts du Groupe AMI — GAMI à travers ses filiales GMM, SEMM et SEMS.</p>
+  </div>
+</section>
+
+<!-- GALERIE -->
+<section class="section-pad">
+  <div class="flex-between" style="margin-bottom:32px">
+    <div>
+      <span class="tag">MÉDIATHÈQUE</span>
+      <h2 class="section-title" style="margin-top:8px">Photos &amp; Vidéos</h2>
+    </div>
+  </div>
+
+  <!-- Onglets principaux -->
+  <div class="gal-tabs">
+    <button class="gt active" data-tab="photos" onclick="switchTab('photos')">
+      Photos <span class="gt-count" id="cnt-photos">23</span>
+    </button>
+    <button class="gt" data-tab="videos" onclick="switchTab('videos')">
+      Vidéos <span class="gt-count" id="cnt-videos">6</span>
+    </button>
+  </div>
+
+  <!-- ══ SECTION PHOTOS ══ -->
+  <div class="gal-section active" id="sec-photos">
+    <div class="gal-filters" id="filters-photos">
+      <button class="gf active" data-filter="all" onclick="filterGallery('photos','all')">Tous</button>
+      <button class="gf" data-filter="gmm" onclick="filterGallery('photos','gmm')">GMM</button>
+      <button class="gf" data-filter="semm" onclick="filterGallery('photos','semm')">SEMM</button>
+      <button class="gf" data-filter="sems" onclick="filterGallery('photos','sems')">SEMS</button>
+      <button class="gf" data-filter="groupe" onclick="filterGallery('photos','groupe')">Groupe</button>
+    </div>
+
+    <div class="gal-grid" id="photoGrid">
+
+      <div class="gal-card" data-cat="groupe" data-title="Groupe AMI — GAMI" data-desc="Vue emblématique du Groupe AMI — GAMI, acteur industriel majeur de l'Afrique de l'Ouest depuis plus de 20 ans." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge groupe">Groupe</span>
+          <img src="./images/WEBTest.jpg" alt="Groupe AMI — GAMI"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Groupe AMI — GAMI</div>
+          <div class="gal-card-desc">Vue emblématique du Groupe AMI — GAMI, acteur industriel majeur de l'Afrique de l'Ouest depuis plus de 20 ans.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="Farine de Blé GMM" data-desc="Farine premium issue de blé sélectionné, produite à 120 000 T/an. Référence incontournable de la boulangerie au Mali." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/Farine-GMM-2.jpg" alt="Farine de Blé GMM"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Farine de Blé GMM</div>
+          <div class="gal-card-desc">Farine premium issue de blé sélectionné, produite à 120 000 T/an. Référence de la boulangerie et pâtisserie au Mali.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="semm" data-title="Eau Minérale Diago" data-desc="Eau naturelle puisée dans les monts Mandingue, à 35 km de Bamako. N°1 de l'eau minérale au Mali." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge semm">SEMM</span>
+          <img src="./images/Diago-1-1.jpg" alt="Eau Minérale Diago"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Eau Minérale Diago</div>
+          <div class="gal-card-desc">Eau naturelle puisée dans les monts Mandingue, à 35 km de Bamako. N°1 de l'eau minérale au Mali.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="Riz Malo — GMM" data-desc="Riz de qualité supérieure cultivé et distribué à grande échelle. Le grain préféré des familles maliennes depuis des décennies." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/Riz-malo-1.jpg" alt="Riz Malo GMM"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Riz Malo — GMM</div>
+          <div class="gal-card-desc">Riz de qualité supérieure cultivé et distribué à grande échelle. Le grain préféré des familles maliennes.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="semm" data-title="Ami Fruité — SEMM" data-desc="Boisson fruitée rafraîchissante produite localement avec des arômes naturels. Disponible en plusieurs saveurs." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge semm">SEMM</span>
+          <img src="./images/Ami-2.jpg" alt="Ami Fruité"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Ami Fruité — SEMM</div>
+          <div class="gal-card-desc">Boisson fruitée rafraîchissante produite localement avec des arômes naturels. Disponible en plusieurs saveurs appréciées de tous.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="Pasta Pallo — GMM" data-desc="Pâtes alimentaires de qualité supérieure, fabriquées localement pour les marchés d'Afrique de l'Ouest." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/PASTA-PALLO-1.jpg" alt="Pasta Pallo"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Pasta Pallo — GMM</div>
+          <div class="gal-card-desc">Pâtes alimentaires de qualité supérieure, fabriquées localement pour les marchés d'Afrique de l'Ouest.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="semm" data-title="Diago — Gamme complète" data-desc="La gamme complète Diago déclinée en différents formats. Une eau certifiée, pure et naturelle pour toute la famille." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge semm">SEMM</span>
+          <img src="./images/Diago-2-1.jpg" alt="Diago gamme"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Diago — Gamme complète</div>
+          <div class="gal-card-desc">La gamme complète Diago déclinée en différents formats. Une eau certifiée, pure et naturelle pour toute la famille.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="Bunafama — GMM" data-desc="Produit agroalimentaire de haute qualité issu de la production GMM. Un incontournable sur les marchés locaux." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/Bunafama.jpg" alt="Bunafama GMM"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Bunafama — GMM</div>
+          <div class="gal-card-desc">Produit agroalimentaire de haute qualité issu de la production GMM. Un incontournable sur les marchés locaux.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="semm" data-title="Diago — Source naturelle" data-desc="La source naturelle Diago, certifiée et protégée dans les monts Mandingue. Un patrimoine naturel précieux." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge semm">SEMM</span>
+          <img src="./images/Diago-3-1.jpg" alt="Diago source"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Diago — Source naturelle</div>
+          <div class="gal-card-desc">La source naturelle Diago, certifiée et protégée dans les monts Mandingue. Un patrimoine naturel précieux.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="Sucre Vanilline — GMM" data-desc="Sucre vanilliné de qualité supérieure pour la pâtisserie et la confiserie. Arôme naturel et saveur incomparable." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/Vanille.jpg" alt="Sucre Vanilline"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Sucre Vanilline — GMM</div>
+          <div class="gal-card-desc">Sucre vanilliné de qualité supérieure pour la pâtisserie et la confiserie. Arôme naturel et saveur incomparable.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="semm" data-title="Ami Fruité N°2 — SEMM" data-desc="La nouvelle déclinaison de la gamme Ami Fruité. Goût intense, fabrication locale, qualité SEMM garantie." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge semm">SEMM</span>
+          <img src="./images/Ami-N2.jpg" alt="Ami N2"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Ami Fruité N°2 — SEMM</div>
+          <div class="gal-card-desc">La nouvelle déclinaison de la gamme Ami Fruité. Goût intense, fabrication locale, qualité SEMM garantie.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="Double Gum — GMM" data-desc="Confiserie populaire produite par GMM. Un produit apprécié par les jeunes et distribué dans toute l'Afrique de l'Ouest." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/DOUBLE-GUM-VERT.jpg" alt="Double Gum"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Double Gum — GMM</div>
+          <div class="gal-card-desc">Confiserie populaire produite par GMM. Un produit apprécié distribué dans toute l'Afrique de l'Ouest.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="semm" data-title="Diago — Bouteilles" data-desc="Les bouteilles Diago, symboles de pureté et de qualité. Un design reconnaissable dans tout le Mali." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge semm">SEMM</span>
+          <img src="./images/Diago-4.jpg" alt="Diago bouteilles"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Diago — Bouteilles</div>
+          <div class="gal-card-desc">Les bouteilles Diago, symboles de pureté et de qualité. Un design reconnaissable dans tout le Mali.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="Pasta Waraba — GMM" data-desc="Pâtes alimentaires Waraba, productes avec soin par GMM. Un produit de qualité pour toute la famille malienne." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/PASTA-WARABA4 (1).jpg" alt="Pasta Waraba"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Pasta Waraba — GMM</div>
+          <div class="gal-card-desc">Pâtes alimentaires Waraba produites avec soin par GMM. Un produit de qualité pour toute la famille malienne.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="semm" data-title="Diago — Conditionnement" data-desc="Le processus de conditionnement Diago garantit une eau fraîche et pure à chaque ouverture. Norme certifiée." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge semm">SEMM</span>
+          <img src="./images/Diago-5.jpg" alt="Diago conditionnement"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Diago — Conditionnement</div>
+          <div class="gal-card-desc">Le processus de conditionnement Diago garantit une eau fraîche et pure à chaque ouverture. Norme certifiée.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="Sucre — GMM" data-desc="Sucre cristallisé de qualité produit et distribué par GMM. Un produit essentiel dans les foyers d'Afrique de l'Ouest." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/SUCRE-768x683-1.png" alt="Sucre GMM"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Sucre — GMM</div>
+          <div class="gal-card-desc">Sucre cristallisé de qualité produit et distribué par GMM. Un produit essentiel dans les foyers d'Afrique de l'Ouest.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="semm" data-title="Diago — Premium" data-desc="La gamme premium Diago pour les professionnels de la restauration et de l'hôtellerie au Mali et en Guinée." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge semm">SEMM</span>
+          <img src="./images/Diago-6.jpg" alt="Diago premium"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Diago — Premium</div>
+          <div class="gal-card-desc">La gamme premium Diago pour les professionnels de la restauration et de l'hôtellerie au Mali et en Guinée.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="AMI Tulu — GMM" data-desc="AMI Tulu, produit phare de la gamme GMM. Qualité supérieure et disponibilité assurée sur tout le territoire malien." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/AMI-TULU-2.png" alt="Ami Tulu"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">AMI Tulu — GMM</div>
+          <div class="gal-card-desc">AMI Tulu, produit phare de la gamme GMM. Qualité supérieure et disponibilité assurée sur tout le territoire malien.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="sems" data-title="Samao — SEMS" data-desc="Eau minérale naturelle produite par la SEMS au Sénégal. Pure et équilibrée en minéraux essentiels pour l'hydratation quotidienne." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge sems">SEMS</span>
+          <img src="./images/samao.png" alt="Samao SEMS"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Samao — SEMS</div>
+          <div class="gal-card-desc">Eau minérale naturelle produite par la SEMS au Sénégal. Pure et équilibrée en minéraux essentiels pour l'hydratation quotidienne.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="Albarka — GMM" data-desc="Albarka, la marque de bénédiction de la gamme GMM. Un produit agroalimentaire de confiance pour les ménages maliens." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/albarka2-1.jpg" alt="Albarka"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Albarka — GMM</div>
+          <div class="gal-card-desc">Albarka, la marque de bénédiction de la gamme GMM. Un produit agroalimentaire de confiance pour les ménages maliens.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="gmm" data-title="Bunafama 2 — GMM" data-desc="Deuxième édition de Bunafama, revisitée avec une formule améliorée. Plus savoureuse, plus nutritive et toujours locale." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/Bunafama2.jpg" alt="Bunafama 2"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Bunafama 2 — GMM</div>
+          <div class="gal-card-desc">Deuxième édition de Bunafama, revisitée avec une formule améliorée. Plus savoureuse, plus nutritive et toujours locale.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="groupe" data-title="Usine GMM — Koulikoro" data-desc="L'usine des Grands Moulins du Mali à Koulikoro, cœur industriel du groupe. 120 000 T de capacité de production annuelle." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge groupe">Groupe</span>
+          <img src="./images/GMM.jpg" alt="Usine GMM"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Usine GMM — Koulikoro</div>
+          <div class="gal-card-desc">L'usine des Grands Moulins du Mali à Koulikoro, cœur industriel du groupe. 120 000 T de capacité annuelle.</div>
+        </div>
+      </div>
+
+      <div class="gal-card" data-cat="groupe" data-title="Site SEMM — Bamako" data-desc="Le site de production de la SEMM à Bamako, d'où sort chaque jour l'eau Diago qui alimente tout le Mali." onclick="openLb(this)">
+        <div class="gal-card-img">
+          <span class="gal-badge groupe">Groupe</span>
+          <img src="./images/semm.jpg" alt="Site SEMM"/>
+          <div class="gal-card-img-ov"></div>
+        </div>
+        <div class="gal-card-body">
+          <div class="gal-card-title">Site SEMM — Bamako</div>
+          <div class="gal-card-desc">Le site de production de la SEMM à Bamako, d'où sort chaque jour l'eau Diago qui alimente tout le Mali.</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="gal-empty" id="photos-empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Aucune photo dans cette catégorie
+    </div>
+  </div>
+
+  <!-- ══ SECTION VIDÉOS ══ -->
+  <div class="gal-section" id="sec-videos">
+    <div class="gal-filters" id="filters-videos">
+      <button class="gf active" data-filter="all" onclick="filterGallery('videos','all')">Tous</button>
+      <button class="gf" data-filter="gmm" onclick="filterGallery('videos','gmm')">GMM</button>
+      <button class="gf" data-filter="semm" onclick="filterGallery('videos','semm')">SEMM</button>
+      <button class="gf" data-filter="sems" onclick="filterGallery('videos','sems')">SEMS</button>
+      <button class="gf" data-filter="groupe" onclick="filterGallery('videos','groupe')">Groupe</button>
+    </div>
+
+    <div class="vid-grid" id="videoGrid">
+
+      <div class="vid-card" data-cat="groupe"
+           data-title="Présentation du Groupe AMI — GAMI"
+           data-desc="Découvrez en vidéo l'histoire, la vision et les ambitions du Groupe AMI — GAMI, acteur industriel majeur de l'Afrique de l'Ouest."
+           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+           onclick="openVid(this)">
+        <div class="vid-thumb">
+          <span class="gal-badge groupe">Groupe</span>
+          <img src="./images/WEBTest.jpg" alt="Présentation Groupe GAMI"/>
+          <div class="vid-play"><div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+          <div class="vid-duration">3:42</div>
+        </div>
+        <div class="vid-body">
+          <div class="vid-title">Présentation du Groupe AMI — GAMI</div>
+          <div class="vid-desc">Découvrez en vidéo l'histoire, la vision et les ambitions du Groupe AMI — GAMI, acteur industriel majeur de l'Afrique de l'Ouest.</div>
+        </div>
+      </div>
+
+      <div class="vid-card" data-cat="gmm"
+           data-title="Visite de l'usine GMM — Koulikoro"
+           data-desc="Plongez dans les coulisses de l'usine des Grands Moulins du Mali. Découvrez le processus de fabrication de la farine de blé et des pâtes alimentaires."
+           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+           onclick="openVid(this)">
+        <div class="vid-thumb">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/Farine-GMM-2.jpg" alt="Visite usine GMM"/>
+          <div class="vid-play"><div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+          <div class="vid-duration">5:18</div>
+        </div>
+        <div class="vid-body">
+          <div class="vid-title">Visite de l'usine GMM — Koulikoro</div>
+          <div class="vid-desc">Plongez dans les coulisses de l'usine des Grands Moulins du Mali. Découvrez le processus de fabrication de la farine de blé.</div>
+        </div>
+      </div>
+
+      <div class="vid-card" data-cat="semm"
+           data-title="La source Diago — Monts Mandingue"
+           data-desc="Une immersion au cœur de la source naturelle Diago, nichée dans les monts Mandingue à 35 km de Bamako. Pure, certifiée et protégée."
+           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+           onclick="openVid(this)">
+        <div class="vid-thumb">
+          <span class="gal-badge semm">SEMM</span>
+          <img src="./images/Diago-3-1.jpg" alt="Source Diago"/>
+          <div class="vid-play"><div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+          <div class="vid-duration">2:55</div>
+        </div>
+        <div class="vid-body">
+          <div class="vid-title">La source Diago — Monts Mandingue</div>
+          <div class="vid-desc">Une immersion au cœur de la source naturelle Diago, nichée dans les monts Mandingue à 35 km de Bamako. Pure et certifiée.</div>
+        </div>
+      </div>
+
+      <div class="vid-card" data-cat="semm"
+           data-title="Journée Porte Ouverte SEMM 2024"
+           data-desc="Retour en images sur la Journée Porte Ouverte de la SEMM. Une occasion unique de découvrir les installations et de rencontrer les équipes."
+           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+           onclick="openVid(this)">
+        <div class="vid-thumb">
+          <span class="gal-badge semm">SEMM</span>
+          <img src="./images/semm.jpg" alt="JPO SEMM"/>
+          <div class="vid-play"><div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+          <div class="vid-duration">7:04</div>
+        </div>
+        <div class="vid-body">
+          <div class="vid-title">Journée Porte Ouverte SEMM 2024</div>
+          <div class="vid-desc">Retour en images sur la Journée Porte Ouverte de la SEMM. Une occasion de découvrir les installations et rencontrer les équipes.</div>
+        </div>
+      </div>
+
+      <div class="vid-card" data-cat="sems"
+           data-title="Samao — L'eau du Sénégal"
+           data-desc="Découvrez l'histoire de Samao, l'eau minérale naturelle produite par la SEMS au Sénégal. Un produit de qualité pour une hydratation optimale."
+           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+           onclick="openVid(this)">
+        <div class="vid-thumb">
+          <span class="gal-badge sems">SEMS</span>
+          <img src="./images/samao.png" alt="Samao SEMS"/>
+          <div class="vid-play"><div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+          <div class="vid-duration">4:12</div>
+        </div>
+        <div class="vid-body">
+          <div class="vid-title">Samao — L'eau du Sénégal</div>
+          <div class="vid-desc">Découvrez l'histoire de Samao, l'eau minérale naturelle produite par la SEMS au Sénégal. Qualité et pureté garanties.</div>
+        </div>
+      </div>
+
+      <div class="vid-card" data-cat="gmm"
+           data-title="Le processus de fabrication — Pasta GMM"
+           data-desc="De la semoule aux pâtes finies, suivez étape par étape le processus de fabrication des pâtes alimentaires GMM dans notre usine de Koulikoro."
+           data-src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+           onclick="openVid(this)">
+        <div class="vid-thumb">
+          <span class="gal-badge gmm">GMM</span>
+          <img src="./images/PASTA-PALLO-1.jpg" alt="Fabrication Pasta GMM"/>
+          <div class="vid-play"><div class="vid-play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+          <div class="vid-duration">6:30</div>
+        </div>
+        <div class="vid-body">
+          <div class="vid-title">Le processus de fabrication — Pasta GMM</div>
+          <div class="vid-desc">De la semoule aux pâtes finies, suivez étape par étape le processus de fabrication des pâtes alimentaires GMM à Koulikoro.</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="gal-empty" id="videos-empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      Aucune vidéo dans cette catégorie
+    </div>
+  </div>
+
+</section>
+
+<!-- CTA BAND -->
+<!-- <div class="cta-band">
+  <span class="tag" style="color:rgba(255,255,255,.6)">EN SAVOIR PLUS</span>
+  <h2>Découvrez nos produits en détail</h2>
+  <p>Explorez notre gamme complète de produits agroalimentaires et de boissons fabriqués en Afrique de l'Ouest.</p>
+  <div class="cta-btns">
+    <a class="btn-main" href="nos-produits.html">Voir nos produits</a>
+    <a class="btn-outline" style="border-color:rgba(255,255,255,.35);color:#fff" href="filiales.html">Nos filiales</a>
+  </div>
+</div> -->
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="f-brand"><div class="f-logo"><div class="logo-sq">G</div><span style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#fff">Groupe AMI — GAMI</span></div><p>L'industrie au service du développement. GMM · SEMM · SEMS opèrent en Afrique de l'Ouest.</p><div class="f-socials"><div class="f-soc">f</div><div class="f-soc">𝕏</div><div class="f-soc">in</div></div></div>
+    <div class="f-col"><h4>À propos</h4><ul><li><a href="groupe.html">Notre histoire</a></li><li><a href="groupe.html">Vision &amp; Mission</a></li><li><a href="groupe.html">Valeurs</a></li><li><a href="actualites.html">Blog</a></li></ul></div>
+    <div class="f-col"><h4>Nos entités</h4><ul><li><a href="filiales.html">GMM</a></li><li><a href="filiales.html">SEMM</a></li><li><a href="filiales.html">SEMS</a></li><li><a href="transporteurs.html">Transporteurs</a></li></ul></div>
+    <div class="f-col"><h4>Contact</h4><ul><li><a href="contact.html">contact@groupeami.sn</a></li><li><a href="#">+221 33 000 00 00</a></li><li><a href="#">Dakar, Sénégal</a></li><li><a href="recrutement.html">Recrutement</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>©2025 Groupe AMI — GAMI. Tous droits réservés.</span><span>Conçu &amp; développé par Python8080</span></div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+
+/* ── ONGLETS ── */
+function switchTab(tab) {
+  document.querySelectorAll('.gal-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.gt').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + tab).classList.add('active');
+  document.querySelector('.gt[data-tab="' + tab + '"]').classList.add('active');
+}
+
+/* ── FILTRAGE ── */
+function filterGallery(type, cat) {
+  const section = document.getElementById('sec-' + type);
+  const btns = section.querySelectorAll('.gf');
+  btns.forEach(b => b.classList.remove('active'));
+  section.querySelector('.gf[data-filter="' + cat + '"]').classList.add('active');
+
+  const gridId = type === 'photos' ? 'photoGrid' : 'videoGrid';
+  const emptyId = type + '-empty';
+  const items = document.getElementById(gridId).children;
+  let visible = 0;
+
+  Array.from(items).forEach(item => {
+    const show = cat === 'all' || item.dataset.cat === cat;
+    item.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+
+  document.getElementById(emptyId).style.display = visible === 0 ? 'block' : 'none';
+}
+
+/* ── LIGHTBOX PHOTOS ── */
+let lbItems = [];
+let lbIdx = 0;
+
+function openLb(el) {
+  lbItems = Array.from(document.querySelectorAll('#photoGrid .gal-card')).filter(c => c.style.display !== 'none');
+  lbIdx = lbItems.indexOf(el);
+  showLb();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function showLb() {
+  const el = lbItems[lbIdx];
+  document.getElementById('lb-img').src = el.querySelector('img').src;
+  document.getElementById('lb-img').alt = el.dataset.title || '';
+  document.getElementById('lb-title').textContent = el.dataset.title || '';
+  document.getElementById('lb-desc').textContent = el.dataset.desc || '';
+  document.getElementById('lb-counter').textContent = (lbIdx + 1) + ' / ' + lbItems.length;
+}
+
+function moveLb(dir) {
+  lbIdx = (lbIdx + dir + lbItems.length) % lbItems.length;
+  showLb();
+}
+
+function closeLb() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── MODAL VIDÉO ── */
+function openVid(el) {
+  document.getElementById('vid-modal-title').textContent = el.dataset.title || '';
+  document.getElementById('vid-modal-desc').textContent = el.dataset.desc || '';
+  const src = el.dataset.src || '';
+  document.getElementById('vidPlayer').innerHTML = src
+    ? '<iframe src="' + src + '?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>'
+    : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,.5);font-family:Outfit,sans-serif;font-size:14px">Vidéo à venir</div>';
+  document.getElementById('vidModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeVid() {
+  document.getElementById('vidModal').classList.remove('open');
+  document.getElementById('vidPlayer').innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+/* ── CLAVIER ── */
+document.addEventListener('keydown', e => {
+  if (document.getElementById('lightbox').classList.contains('open')) {
+    if (e.key === 'ArrowRight') moveLb(1);
+    if (e.key === 'ArrowLeft')  moveLb(-1);
+    if (e.key === 'Escape')     closeLb();
+  }
+  if (document.getElementById('vidModal').classList.contains('open')) {
+    if (e.key === 'Escape') closeVid();
+  }
+});
+</script>
+</body>
+</html>
