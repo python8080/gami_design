@@ -945,6 +945,29 @@ input,select,textarea{font-family:'Inter',sans-serif}
   </div>
 </div>
 
+<div class="overlay" id="ov-product" onclick="if(event.target===this)closeOverlay('ov-product')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeOverlay('ov-product')">✕</button>
+    <h2 id="prod-modal-title">Ajouter un produit</h2>
+    <div class="modal-sub">Catalogue GAMI — Nos Produits</div>
+    <div class="form-grid2">
+      <div class="fg full"><label>Nom du produit *</label><input id="prod-name" placeholder="Ex : Farine GMM"/></div>
+      <div class="fg"><label>Filiale *</label>
+        <select id="prod-filiale">
+          <option value="GMM">GMM — Grands Moulins du Mali</option>
+          <option value="SEMM">SEMM — Eaux Minérales du Mali</option>
+          <option value="SEMS">SEMS — Eaux Minérales du Sénégal</option>
+        </select>
+      </div>
+      <div class="fg"><label>Catégorie *</label><input id="prod-cat" placeholder="Ex : Meunerie, Eau minérale…"/></div>
+      <div class="fg full"><label>Description</label><textarea id="prod-desc" rows="3" placeholder="Description du produit…" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);padding:8px 10px;font-size:13px;resize:vertical"></textarea></div>
+      <div class="fg full"><label>Tags (séparés par des virgules)</label><input id="prod-tags" placeholder="Ex : Farine blanche, Semoule, Distribution nationale"/></div>
+    </div>
+    <input type="hidden" id="prod-edit-id" value=""/>
+    <button class="submit-btn" onclick="saveProd()">💾 Enregistrer le produit</button>
+  </div>
+</div>
+
 <div class="overlay" id="ov-candidate" onclick="if(event.target===this)closeOverlay('ov-candidate')">
   <div class="modal">
     <button class="modal-close" onclick="closeOverlay('ov-candidate')">✕</button>
@@ -984,7 +1007,7 @@ input,select,textarea{font-family:'Inter',sans-serif}
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-brand">
-      <span class="sb-brand-logo">GAM<span>I</span></span>
+      <img src="./images/logo_GAMI.png" alt="GAMI" style="height:38px;width:auto;object-fit:contain;flex-shrink:0"/>
     </div>
 
     <!-- Collapse toggle -->
@@ -1022,6 +1045,12 @@ input,select,textarea{font-family:'Inter',sans-serif}
         <span class="sbi-badge" id="badge-cand">4</span>
         <div class="sbi-tip">Candidatures</div>
       </div>
+      <div class="sbi" data-view="products" onclick="navClick(this,'products')">
+        <span class="sbi-icon">📦</span>
+        <span class="sbi-txt">Nos Produits</span>
+        <span class="sbi-badge green" id="badge-prod">16</span>
+        <div class="sbi-tip">Nos Produits</div>
+      </div>
 
       <!-- Collapsible: Work Management style -->
       <div class="sbi" onclick="toggleGroup('grp-admin')">
@@ -1052,6 +1081,7 @@ input,select,textarea{font-family:'Inter',sans-serif}
         <div class="sbi-sub-item" onclick="window.location='actualites.html'">Actualités</div>
         <div class="sbi-sub-item" onclick="window.location='recrutement.html'">Recrutement</div>
         <div class="sbi-sub-item" onclick="window.location='transporteurs.html'">Transporteurs</div>
+        <div class="sbi-sub-item" onclick="window.location='nos-produits.html'">Nos Produits</div>
         <div class="sbi-sub-item" onclick="window.location='contact.html'">Contact</div>
       </div>
 
@@ -1367,6 +1397,33 @@ input,select,textarea{font-family:'Inter',sans-serif}
         <div id="settings-body"></div>
       </div>
 
+      <!-- ═══════ NOS PRODUITS ═══════ -->
+      <div class="view" id="view-products">
+        <div class="page-header">
+          <h1>Nos Produits</h1>
+          <p>Gestion du catalogue produits — GMM · SEMM · SEMS</p>
+        </div>
+        <div class="table-panel">
+          <div class="tp-header">
+            <span class="tp-title">Catalogue produits (<span id="prod-count">0</span>)</span>
+            <div class="tp-actions">
+              <div class="tp-search"><span>⌕</span><input placeholder="Rechercher un produit..." oninput="searchProd(this.value)"/></div>
+              <button class="small-btn" onclick="openAddProd()">+ Ajouter un produit</button>
+            </div>
+          </div>
+          <div class="filters-bar">
+            <button class="filter-chip active" onclick="filterProd('all',this)">Tous</button>
+            <button class="filter-chip blue" onclick="filterProd('GMM',this)">GMM</button>
+            <button class="filter-chip orange" onclick="filterProd('SEMM',this)">SEMM</button>
+            <button class="filter-chip green" onclick="filterProd('SEMS',this)">SEMS</button>
+          </div>
+          <table class="dt">
+            <thead><tr><th>Produit</th><th>Filiale</th><th>Catégorie</th><th>Description</th><th>Tags</th><th>Actions</th></tr></thead>
+            <tbody id="prod-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
     </div><!-- /content -->
   </div><!-- /main -->
 </div><!-- /app -->
@@ -1453,6 +1510,25 @@ const DB = {
     {name:'Conditions transporteurs.pdf',size:'1.1 MB',date:'01 Avr 2025',downloads:156,type:'pdf'},
     {name:'Formulaire inscription.docx',size:'0.5 MB',date:'01 Avr 2025',downloads:234,type:'docx'},
   ],
+  products:[
+    {id:1,name:'Farine GMM',filiale:'GMM',cat:'Meunerie',desc:'120 000 tonnes de farine par an. Farine blanche, complète, semoule. Distribution sur tout le territoire malien.',tags:['Farine blanche','Semoule','Distribution nationale']},
+    {id:2,name:'Vitablé / Nutriblé',filiale:'GMM',cat:'Aliment infantile',desc:'Farine infantile enrichie en vitamines et minéraux pour les enfants dès 6 mois. Plusieurs saveurs disponibles.',tags:['Dès 6 mois','Vitamines & minéraux','Multi-saveurs']},
+    {id:3,name:'Riz Malo',filiale:'GMM',cat:'Rizerie',desc:'Riz de qualité de la rizerie GMM en différents conditionnements. Distribution nationale et export CEDEAO.',tags:['Riz blanc','Multi-formats','Export CEDEAO']},
+    {id:4,name:'Ami Tulu',filiale:'GMM',cat:'Huilerie',desc:'Huile pure raffinée issue des graines de coton, produite dans la seule raffinerie d\'huile du Mali.',tags:['Graine de coton','Format 5L','Sachet 250 ml']},
+    {id:5,name:'Bunafama',filiale:'GMM',cat:'Aliment bétail',desc:'Tourteau de coton pour l\'alimentation animale — bovins, volailles et poissons. Riche en protéines.',tags:['Bétail','Volaille','Pisciculture']},
+    {id:6,name:'Waraba Confiserie',filiale:'GMM',cat:'Confiserie',desc:'Premiers bonbons et chewing-gums du Mali. Sogho-Sogho®, Black Ginger, ATT bonbon, Sweet milk, Double Gum…',tags:['Bonbons','Chewing-gum','Made in Mali']},
+    {id:7,name:'Albarka',filiale:'GMM',cat:'Céréale',desc:'Céréale complète et nutritive pour la consommation quotidienne. Produit de la station de mélange GMM.',tags:['Nutrition','Quotidien']},
+    {id:8,name:'Pasta GMM',filiale:'GMM',cat:'Pâtes',desc:'Pâtes alimentaires à base de farines GMM. Spaghetti, macaroni, fusilli. Qualité constante, prix accessible.',tags:['Spaghetti','Macaroni','Qualité constante']},
+    {id:9,name:'Sucre Vanilline',filiale:'GMM',cat:'Condiment',desc:'Sucre aromatisé à la vanilline pour la pâtisserie et les préparations culinaires. Sachets doseurs pratiques.',tags:['Pâtisserie','Sachet doseur']},
+    {id:10,name:'Diago 0,33 L',filiale:'SEMM',cat:'Eau minérale',desc:'Format individuel pratique. Eau minérale naturelle des monts Mandingue, filtrée naturellement à travers les roches.',tags:['33 cl','On-the-go','Naturelle']},
+    {id:11,name:'Diago 0,5 L',filiale:'SEMM',cat:'Eau minérale',desc:'La bouteille demi-litre, format le plus populaire. Idéale pour la journée, les repas et le sport.',tags:['50 cl','Sport','Best-seller']},
+    {id:12,name:'Diago 1,5 L',filiale:'SEMM',cat:'Eau minérale',desc:'Grande bouteille familiale. Numéro 1 sur le marché malien, disponible en format grande consommation.',tags:['1,5 L','Familial','Restaurant']},
+    {id:13,name:'Diago 5 L / 10 L',filiale:'SEMM',cat:'Eau minérale',desc:'Grands formats économiques pour foyers, bureaux et hôtels. Compatible avec les distributeurs d\'eau.',tags:['5 L','10 L','Bureau & Hôtel']},
+    {id:14,name:'Ami Fruité — Orange',filiale:'SEMM',cat:'Boisson aromatisée',desc:'Boisson rafraîchissante à base d\'eau Diago. Parfum orange. Zéro colorant artificiel. 0,33 L et 0,5 L.',tags:['Orange','Eau Diago','Rafraîchissant']},
+    {id:15,name:'Ami Fruité — Ananas Cocktail',filiale:'SEMM',cat:'Boisson aromatisée',desc:'Boisson ananas cocktail à base d\'eau Diago. Saveur tropicale désaltérante. Large gamme de parfums.',tags:['Ananas','Cocktail tropical','Multi-parfums']},
+    {id:16,name:'Boisson Aromatisée SEMS — Fraise',filiale:'SEMS',cat:'Boisson',desc:'Boisson aromatisée fraise produite par SEMS — Eaux Minérales du Sénégal.',tags:['Fraise','SEMS','Sénégal']},
+    {id:17,name:'Boisson Bissap SEMS',filiale:'SEMS',cat:'Boisson',desc:'Boisson aromatisée au bissap, saveur locale authentique, produite par SEMS au Sénégal.',tags:['Bissap','Authentique','Sénégal']},
+  ],
 };
 
 // ═══════════════════════════════════════════════════
@@ -1479,6 +1555,7 @@ function renderAll(){
   renderDocs();
   renderSettings();
   renderCapacity();
+  renderProducts();
 }
 
 function setDate(){
@@ -1493,6 +1570,7 @@ function updateCounts(){
   const unread=DB.notifications.filter(n=>!n.read).length;
   document.getElementById('badge-trans').textContent=pending;
   document.getElementById('badge-cand').textContent=candPending;
+  document.getElementById('badge-prod').textContent=DB.products.length;
   document.getElementById('tab-cand-count').textContent=candPending;
   document.getElementById('np-count').textContent=unread;
   document.getElementById('tb-notif-dot').style.display=unread>0?'block':'none';
@@ -1976,6 +2054,105 @@ function renderCapacity(){
 }
 
 // ═══════════════════════════════════════════════════
+//  NOS PRODUITS
+// ═══════════════════════════════════════════════════
+let prodFilter='all';
+function renderProducts(list){
+  const data=list||DB.products;
+  document.getElementById('prod-count').textContent=data.length;
+  const filialeColor={GMM:'blue',SEMM:'orange',SEMS:'green'};
+  document.getElementById('prod-tbody').innerHTML=data.map(p=>`
+    <tr>
+      <td><strong>${p.name}</strong></td>
+      <td><span class="pill ${filialeColor[p.filiale]||'blue'}">${p.filiale}</span></td>
+      <td>${p.cat}</td>
+      <td style="max-width:260px;font-size:12px;color:var(--text2);white-space:normal">${p.desc}</td>
+      <td style="font-size:11px;color:var(--text3)">${(p.tags||[]).join(', ')}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="small-btn" onclick="editProd(${p.id})">✏️ Modifier</button>
+          <button class="small-btn" style="background:var(--red-dim);color:var(--red)" onclick="deleteProd(${p.id})">🗑 Suppr.</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+function searchProd(v){
+  const q=v.toLowerCase();
+  renderProducts(DB.products.filter(p=>
+    p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)||
+    p.filiale.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q)
+  ));
+}
+function filterProd(f,btn){
+  prodFilter=f;
+  document.querySelectorAll('#view-products .filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(f==='all'?DB.products:DB.products.filter(p=>p.filiale===f));
+}
+function openAddProd(){
+  document.getElementById('prod-modal-title').textContent='Ajouter un produit';
+  document.getElementById('prod-name').value='';
+  document.getElementById('prod-filiale').value='GMM';
+  document.getElementById('prod-cat').value='';
+  document.getElementById('prod-desc').value='';
+  document.getElementById('prod-tags').value='';
+  document.getElementById('prod-edit-id').value='';
+  openOverlay('ov-product');
+}
+function editProd(id){
+  const p=DB.products.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('prod-modal-title').textContent='Modifier le produit';
+  document.getElementById('prod-name').value=p.name;
+  document.getElementById('prod-filiale').value=p.filiale;
+  document.getElementById('prod-cat').value=p.cat;
+  document.getElementById('prod-desc').value=p.desc;
+  document.getElementById('prod-tags').value=(p.tags||[]).join(', ');
+  document.getElementById('prod-edit-id').value=id;
+  openOverlay('ov-product');
+}
+function saveProd(){
+  const name=document.getElementById('prod-name').value.trim();
+  const filiale=document.getElementById('prod-filiale').value;
+  const cat=document.getElementById('prod-cat').value.trim();
+  const desc=document.getElementById('prod-desc').value.trim();
+  const tags=document.getElementById('prod-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const editId=parseInt(document.getElementById('prod-edit-id').value)||0;
+  if(!name){toast('Le nom du produit est obligatoire','warning');return;}
+  if(!cat){toast('La catégorie est obligatoire','warning');return;}
+  if(editId){
+    const p=DB.products.find(x=>x.id===editId);
+    if(p){Object.assign(p,{name,filiale,cat,desc,tags});}
+    toast('Produit mis à jour ✓','success');
+  } else {
+    const newId=Math.max(0,...DB.products.map(x=>x.id))+1;
+    DB.products.push({id:newId,name,filiale,cat,desc,tags});
+    document.getElementById('badge-prod').textContent=DB.products.length;
+    toast('Produit ajouté ✓','success');
+  }
+  closeOverlay('ov-product');
+  renderProducts(prodFilter==='all'?DB.products:DB.products.filter(p=>p.filiale===prodFilter));
+  document.getElementById('prod-count').textContent=
+    (prodFilter==='all'?DB.products:DB.products.filter(p=>p.filiale===prodFilter)).length;
+  document.getElementById('badge-prod').textContent=DB.products.length;
+}
+function deleteProd(id){
+  const p=DB.products.find(x=>x.id===id);
+  if(!p) return;
+  confirmAction(
+    'Supprimer "'+p.name+'" ?',
+    'Cette action est irréversible.',
+    ()=>{
+      DB.products=DB.products.filter(x=>x.id!==id);
+      closeOverlay('ov-confirm');
+      renderProducts(prodFilter==='all'?DB.products:DB.products.filter(pr=>pr.filiale===prodFilter));
+      document.getElementById('badge-prod').textContent=DB.products.length;
+      toast('Produit supprimé','warning');
+    },'error'
+  );
+}
+
+// ═══════════════════════════════════════════════════
 //  ACTIVITY
 // ═══════════════════════════════════════════════════
 function addActivity(icon,color,title,sub){
@@ -2011,6 +2188,7 @@ function navClick(el,id){
   const titles={
     overview:'Tableau de bord',transporters:'Transporteurs',
     offers:'Offres transport',candidates:'Candidatures',
+    products:'Nos Produits',
     content:'Contenu site',media:'Médias & Galerie',
     users:'Utilisateurs',docs:'Documents',settings:'Paramètres'
   };

@@ -55,7 +55,8 @@
 .zones-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
 .zone-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;text-align:center;cursor:pointer;transition:.2s}
 .zone-card:hover{border-color:var(--orange);background:rgba(232,134,26,.1)}
-.zone-flag{font-size:28px;margin-bottom:10px}
+.zone-flag{margin-bottom:12px;display:flex;justify-content:center}
+.zone-flag img{width:56px;height:38px;object-fit:cover;border-radius:5px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .zone-name{font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;font-family:'Outfit',sans-serif}
 .zone-cities{font-size:11px;color:rgba(255,255,255,.45)}
 
@@ -91,9 +92,32 @@
 <body>
 <div class="toast" id="toast"></div>
 <nav id="nav">
-  <div class="nav-logo"><div class="logo-sq">G</div><div><div class="logo-name">Groupe AMI</div><div class="logo-sub">GMM · SEMM · SEMS</div></div></div>
-  <div class="nav-links">
-    <a class="nl" href="index.html">Accueil</a><a class="nl" href="groupe.html">Le Groupe</a><a class="nl active" href="filiales.html">Filiales</a><a class="nl" href="actualites.html">Actualités</a><a class="nl" href="recrutement.html">Recrutement</a><a class="nl" href="transporteurs.html">Transporteurs</a><a class="nl" href="contact.html">Contact</a>
+  <div class="nav-logo"><img src="./images/logo_GAMI.png" alt="Groupe AMI — GAMI" class="nav-logo-img"/></div>
+    <div class="nav-links">
+    <a class="nl" href="index.html">Accueil</a>
+    <a class="nl" href="groupe.html">Le Groupe</a>
+    <a class="nl" href="filiales.html">Filiales</a>
+    <div class="nav-dropdown">
+      <a class="nl" href="nos-produits.html">Nos Produits</a>
+      <div class="nav-drop-menu">
+        <a class="ndm-item" href="nos-produits.html#gmm">
+          <div class="ndm-badge gmm">GMM</div>
+          <span>Grands Moulins du Mali</span>
+        </a>
+        <a class="ndm-item" href="nos-produits.html#semm">
+          <div class="ndm-badge semm">SEMM</div>
+          <span>Eaux Minérales du Mali</span>
+        </a>
+        <a class="ndm-item" href="nos-produits.html#sems">
+          <div class="ndm-badge sems">SEMS</div>
+          <span>Eaux Minérales du Sénégal</span>
+        </a>
+      </div>
+    </div>
+    <a class="nl" href="actualites.html">Actualités</a>
+    <a class="nl" href="recrutement.html">Recrutement</a>
+    <a class="nl" href="transporteurs.html">Transporteurs</a>
+    <a class="nl" href="contact.html">Contact</a>
   </div>
   <a class="nav-cta" href="backoffice.html">Espace DSI</a>
 </nav>
@@ -123,7 +147,7 @@
   </div>
   <div class="fil-hero-strip">
     <div class="fhs" id="gmm-card" onclick="document.getElementById('gmm').scrollIntoView({behavior:'smooth'})">
-      <img src="./images/Farine-GMM-2.jpg" alt="GMM"/>
+      <img src="./images/logo-GMM-1024x722.jpg" alt="GMM"/>
       <div class="fhs-ov"></div>
       <div class="fhs-num">01</div>
       <div class="fhs-arrow">→</div>
@@ -134,7 +158,7 @@
       </div>
     </div>
     <div class="fhs" id="semm-card" onclick="document.getElementById('semm').scrollIntoView({behavior:'smooth'})">
-      <img src="./images/Diago-3-1.jpg" alt="SEMM"/>
+      <img src="./images/semm.jpg" alt="SEMM"/>
       <div class="fhs-ov"></div>
       <div class="fhs-num">02</div>
       <div class="fhs-arrow">→</div>
@@ -145,7 +169,7 @@
       </div>
     </div>
     <div class="fhs" id="sems-card" onclick="document.getElementById('sems').scrollIntoView({behavior:'smooth'})">
-      <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&q=80&fit=crop" alt="SEMS"/>
+      <img src="./images/logo-SEMS.png" alt="SEMS"/>
       <div class="fhs-ov"></div>
       <div class="fhs-num">03</div>
       <div class="fhs-arrow">→</div>
@@ -162,7 +186,7 @@
 <div class="fil-detail">
   <div class="fd-block" id="gmm">
     <div class="fd-img">
-      <img src="./images/Farine-GMM-2.jpg" alt="GMM"/>
+      <img src="./images/logo-GMM-1024x722.jpg" alt="GMM"/>
       <div class="fd-img-badge">FILIALE GMM</div>
     </div>
     <div class="fd-content">
@@ -185,7 +209,7 @@
 
   <div class="fd-block reverse" id="semm">
     <div class="fd-img">
-      <img src="./images/Diago-3-1.jpg" alt="SEMM"/>
+      <img src="./images/semm.jpg" alt="SEMM"/>
       <div class="fd-img-badge orange">FILIALE SEMM</div>
     </div>
     <div class="fd-content">
@@ -208,24 +232,24 @@
 
   <div class="fd-block" id="sems">
     <div class="fd-img">
-      <img src="https://images.unsplash.com/photo-1590247813693-5541d1c609fd?w=900&q=80&fit=crop" alt="SEMS"/>
+      <img src="./images/logo-SEMS.png" alt="SEMS"/>
       <div class="fd-img-badge teal">FILIALE SEMS</div>
     </div>
     <div class="fd-content">
       <span class="tag">SEMS</span>
-      <h2>Expertises & Services<br>Spécialisés</h2>
-      <p>SEMS offre des services d'expertise technique, de conseil stratégique et d'accompagnement aux groupes industriels opérant en Afrique de l'Ouest. De l'audit à l'optimisation des processus, SEMS est le partenaire des décideurs industriels.</p>
+      <h2>Société des Eaux<br>Minérales du Sénégal</h2>
+      <p>La SEMS est la déclinaison sénégalaise du savoir-faire hydrique du Groupe AMI. Implantée au Sénégal, elle produit et distribue de l'eau minérale naturelle de haute qualité ainsi que des boissons aromatisées pour répondre à la demande croissante du marché ouest-africain.</p>
       <div class="fd-services">
-        <div class="fd-srv"><div class="fd-srv-icon">📋</div><div class="fd-srv-text">Audit technique</div></div>
-        <div class="fd-srv"><div class="fd-srv-icon">💼</div><div class="fd-srv-text">Conseil stratégique</div></div>
-        <div class="fd-srv"><div class="fd-srv-icon">📈</div><div class="fd-srv-text">Optimisation procédés</div></div>
-        <div class="fd-srv"><div class="fd-srv-icon">🎓</div><div class="fd-srv-text">Formations spécialisées</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">💧</div><div class="fd-srv-text">Samao — eau minérale 4 formats</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🍹</div><div class="fd-srv-text">Ami Fruité — 0,25L · 0,38L · 0,5L</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🏔️</div><div class="fd-srv-text">Source monts Mandingue, 35 km Bamako</div></div>
+        <div class="fd-srv"><div class="fd-srv-icon">🧪</div><div class="fd-srv-text">Traitement pointe technologique</div></div>
       </div>
       <div class="fd-stat-row">
-        <div class="fd-stat"><strong>50+</strong><span>MISSIONS RÉALISÉES</span></div>
-        <div class="fd-stat"><strong>30+</strong><span>EXPERTS</span></div>
-        <div class="fd-stat"><strong>5</strong><span>PAYS D'INTERVENTION</span></div>
-      </div>
+        <div class="fd-stat"><strong>1996</strong><span>FONDATION</span></div>
+        <div class="fd-stat"><strong>N°1</strong><span>EAU MINÉRALE SENEGAL</span></div>
+        <div class="fd-stat"><strong>4</strong><span>FORMATS SAMAO</span></div>
+       </div>
     </div>
   </div>
 </div>
@@ -236,11 +260,11 @@
   <h2 class="section-title">Nos zones d'opération</h2>
   <p class="section-sub">GAMI et ses filiales interviennent dans 5 pays d'Afrique de l'Ouest avec des équipes locales et des partenaires établis.</p>
   <div class="zones-grid">
-    <div class="zone-card"><div class="zone-flag">🇸🇳</div><div class="zone-name">Sénégal</div><div class="zone-cities">Dakar · Thiès · Ziguinchor</div></div>
-    <div class="zone-card"><div class="zone-flag">🇲🇱</div><div class="zone-name">Mali</div><div class="zone-cities">Bamako · Sikasso · Kayes</div></div>
-    <div class="zone-card"><div class="zone-flag">🇬🇳</div><div class="zone-name">Guinée</div><div class="zone-cities">Conakry · Labé · Kankan</div></div>
-    <div class="zone-card"><div class="zone-flag">🇨🇮</div><div class="zone-name">Côte d'Ivoire</div><div class="zone-cities">Abidjan · Bouaké</div></div>
-    <div class="zone-card"><div class="zone-flag">🇲🇷</div><div class="zone-name">Mauritanie</div><div class="zone-cities">Nouakchott · Zouerate</div></div>
+    <div class="zone-card"><div class="zone-flag"><img src="https://flagcdn.com/w80/sn.png" alt="Drapeau Sénégal"/></div><div class="zone-name">Sénégal</div><div class="zone-cities">Dakar · Thiès · Ziguinchor</div></div>
+    <div class="zone-card"><div class="zone-flag"><img src="https://flagcdn.com/w80/ml.png" alt="Drapeau Mali"/></div><div class="zone-name">Mali</div><div class="zone-cities">Bamako · Sikasso · Kayes</div></div>
+    <div class="zone-card"><div class="zone-flag"><img src="https://flagcdn.com/w80/gn.png" alt="Drapeau Guinée"/></div><div class="zone-name">Guinée</div><div class="zone-cities">Conakry · Labé · Kankan</div></div>
+    <div class="zone-card"><div class="zone-flag"><img src="https://flagcdn.com/w80/ci.png" alt="Drapeau Côte d'Ivoire"/></div><div class="zone-name">Côte d'Ivoire</div><div class="zone-cities">Abidjan · Bouaké</div></div>
+    <div class="zone-card"><div class="zone-flag"><img src="https://flagcdn.com/w80/mr.png" alt="Drapeau Mauritanie"/></div><div class="zone-name">Mauritanie</div><div class="zone-cities">Nouakchott · Zouerate</div></div>
   </div>
 </div>
 

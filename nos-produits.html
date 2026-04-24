@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GAMI — Nos Produits</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+/* ── PAGE HERO ── */
+.page-hero{position:relative;height:380px;margin-top:0;display:flex;align-items:flex-end;overflow:hidden}
+.ph-bg{position:absolute;inset:0}
+.ph-bg img{width:100%;height:100%;object-fit:cover}
+.ph-ov{position:absolute;inset:0;background:linear-gradient(160deg,rgba(11,25,41,.78) 0%,rgba(27,79,138,.65) 100%)}
+.ph-ov2{position:absolute;inset:0;background:linear-gradient(to top,rgba(11,25,41,.85) 0%,transparent 60%)}
+.ph-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px}
+.ph-inner{position:relative;z-index:2;padding:0 80px 56px;width:100%}
+.ph-breadcrumb{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.55);font-size:13px;font-family:'Outfit',sans-serif;margin-bottom:12px}
+.ph-breadcrumb a{color:rgba(255,255,255,.55);transition:.2s}.ph-breadcrumb a:hover{color:#fff}
+.ph-breadcrumb span{color:rgba(255,255,255,.3)}
+.ph-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:11px;font-weight:600;padding:5px 14px;border-radius:50px;font-family:'Outfit',sans-serif;letter-spacing:.8px;margin-bottom:14px}
+.ph-tag-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.8)}}
+.ph-inner h1{font-size:clamp(2rem,4vw,3rem);color:#fff;line-height:1.1;margin-bottom:10px}
+.ph-inner p{color:rgba(255,255,255,.65);font-family:'Outfit',sans-serif;font-weight:300;font-size:15px;max-width:560px;line-height:1.7}
+
+/* ── TABS ── */
+.tabs-wrap{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:72px;z-index:100}
+.tabs-inner{display:flex;gap:0;padding:0 80px;overflow-x:auto;scrollbar-width:none}
+.tabs-inner::-webkit-scrollbar{display:none}
+.tab-btn{display:flex;align-items:center;gap:10px;padding:18px 28px;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;transition:.2s;white-space:nowrap;flex-shrink:0}
+.tab-btn:hover{color:var(--blue)}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:50px;letter-spacing:.5px}
+.tab-badge.gmm{background:none;padding:0;width:32px;height:22px;border-radius:6px;overflow:hidden;object-fit:cover}
+.tab-badge.semm{background:#FFF3E8;color:#E8861A}
+.tab-badge.sems{background:#E8F7EF;color:#1A8060}
+
+/* ── PANELS ── */
+.panel{display:none;animation:fadeUp .35s ease}
+.panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ── BRAND HEADER ── */
+.brand-header{padding:64px 80px 0;display:flex;align-items:flex-start;gap:40px;flex-wrap:wrap}
+.bh-logo-wrap{flex-shrink:0}
+.bh-logo{width:88px;height:88px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:800;font-size:22px;color:#fff}
+.bh-logo.gmm{background-image:url('./images/logo-GMM-1024x722.jpg');background-size:cover;background-position:center}
+.bh-logo.semm{background:#fff;background-image:url('./images/semm.jpg');background-size:contain;background-repeat:no-repeat;background-position:center;border:1px solid var(--border)}
+.bh-logo.sems{background:#fff;background-image:url('./images/logo-SEMS.png');background-size:contain;background-repeat:no-repeat;background-position:center;border:1px solid var(--border)}
+.bh-info{flex:1;min-width:260px}
+.bh-info .tag{display:inline-block;margin-bottom:10px}
+.bh-info h2{font-size:clamp(1.6rem,3vw,2.4rem);color:var(--dark);margin-bottom:12px;line-height:1.1}
+.bh-info p{color:var(--muted);font-weight:300;line-height:1.8;font-size:15px;max-width:640px}
+.bh-stats{display:flex;gap:32px;margin-top:24px;flex-wrap:wrap}
+.bh-stat strong{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--blue);display:block;line-height:1}
+/* .bh-stat.orange strong{color:var(--orange)}
+.bh-stat.teal strong{color:#1A8060} */
+.bh-stat span{font-size:11px;color:var(--muted);letter-spacing:.5px;font-family:'Outfit',sans-serif;margin-top:3px;display:block}
+
+/* ── PRODUCTS GRID ── */
+.prod-section{padding:56px 80px 80px; background:var(--light)}
+.prod-section-title{display:flex;align-items:center;gap:16px;margin-bottom:32px}
+.prod-section-title h3{font-size:1.3rem;color:var(--dark)}
+.prod-divider{flex:1;height:1px;background:var(--border)}
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.prod-card{background:#fff;border:1px solid var(--border);border-radius:18px;overflow:hidden;cursor:pointer;transition:.25s;display:flex;flex-direction:column}
+.prod-card:hover{border-color:var(--blue);box-shadow:0 12px 40px rgba(27,79,138,.1);transform:translateY(-3px)}
+.pc-img{height:200px;background:var(--light);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.pc-img-icon{width:100%;height:100%;object-fit:fill;display:block}
+.pc-img-label{position:absolute;top:12px;left:12px;background:var(--blue);color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:50px;letter-spacing:.5px}
+.pc-img-label.orange{background:var(--orange)}
+.pc-img-label.teal{background:#1A8060}
+.pc-body{padding:22px 20px;flex:1;display:flex;flex-direction:column}
+.pc-name{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--dark);margin-bottom:6px}
+.pc-desc{font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;flex:1}
+.pc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px}
+.pc-tag{background:var(--light);color:var(--muted);font-size:10px;font-weight:600;padding:4px 10px;border-radius:50px;letter-spacing:.3px}
+
+/* ── INFO BAND ── */
+.info-band{background:var(--light);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:40px 80px;display:flex;gap:48px;align-items:center;flex-wrap:wrap}
+.ib-icon{font-size:32px;flex-shrink:0}
+.ib-text h4{font-size:1rem;color:var(--dark);margin-bottom:6px}
+.ib-text p{font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;max-width:500px}
+.ib-action{margin-left:auto;flex-shrink:0}
+.btn-outline{border:1.5px solid var(--blue);color:var(--blue);padding:10px 24px;border-radius:50px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;background:none;font-family:'Outfit',sans-serif}
+.btn-outline:hover{background:var(--blue);color:#fff}
+
+/* ── HERO SLIDER ── */
+.hs-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;pointer-events:none;display:flex;align-items:flex-end}
+.hs-slide.active{opacity:1;pointer-events:auto}
+.hs-slide .ph-bg img{transform:scale(1.07);transition:transform 7s ease}
+.hs-slide.active .ph-bg img{transform:scale(1)}
+.hs-slide.active .ph-inner{animation:phIn .65s ease .15s both}
+@keyframes phIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+.hs-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.22);color:#fff;width:46px;height:46px;border-radius:50%;font-size:28px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;padding-bottom:2px;line-height:1}
+.hs-arrow:hover{background:rgba(255,255,255,.26);border-color:rgba(255,255,255,.4)}
+.hs-prev{left:80px}
+.hs-next{right:80px}
+
+.hs-dots{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10;align-items:center}
+.hs-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);border:none;cursor:pointer;transition:.35s;padding:0;flex-shrink:0}
+.hs-dot.active{background:#fff;width:26px;border-radius:4px}
+
+.hs-counter{position:absolute;bottom:56px;right:80px;z-index:10;font-family:'Outfit',sans-serif;font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.5px;line-height:1}
+.hs-counter strong{color:#fff;font-size:15px;font-weight:700}
+
+.hs-progress{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.1);z-index:10;overflow:hidden}
+.hs-fill{height:100%;background:var(--orange);width:0}
+.hs-fill.run{animation:hsFill 5s linear forwards}
+@keyframes hsFill{to{width:100%}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1200px){
+  .ph-inner,.brand-header,.prod-section,.info-band{padding-left:48px;padding-right:48px}
+  .tabs-inner{padding:0 48px}
+  .hs-prev{left:48px}
+  .hs-next{right:48px}
+  .hs-counter{right:48px}
+}
+@media(max-width:900px){
+  .page-hero{height:300px}
+  .ph-inner{padding:0 24px 40px}
+  .ph-inner h1{font-size:1.8rem}
+  .tabs-inner{padding:0 16px}
+  .tab-btn{padding:14px 16px;font-size:13px}
+  .brand-header{padding:40px 24px 0;gap:20px}
+  .bh-logo{width:68px;height:68px;font-size:18px;border-radius:14px}
+  .prod-section{padding:36px 24px 56px}
+  .prod-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .info-band{padding:32px 24px;gap:24px}
+  .ib-action{margin-left:0;width:100%}
+  .hs-prev{left:16px}
+  .hs-next{right:16px}
+  .hs-counter{display:none}
+  .hs-dots{bottom:16px}
+}
+@media(max-width:640px){
+  .page-hero{height:260px}
+  .bh-stats{gap:20px}
+  .prod-grid{grid-template-columns:1fr}
+  .prod-section-title{flex-direction:column;align-items:flex-start;gap:8px}
+  .prod-divider{display:none}
+  .hs-arrow{width:38px;height:38px;font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav" class="transparent">
+  <div class="nav-logo">
+    <img src="./images/logo_GAMI.png" alt="Groupe AMI — GAMI" class="nav-logo-img"/>
+  </div>
+  <div class="nav-links">
+    <a class="nl" href="index.html">Accueil</a>
+    <a class="nl" href="groupe.html">Le Groupe</a>
+    <a class="nl" href="filiales.html">Filiales</a>
+    <div class="nav-dropdown">
+      <a class="nl active" href="nos-produits.html">Nos Produits</a>
+      <div class="nav-drop-menu">
+        <a class="ndm-item" href="nos-produits.html#gmm">
+          <div class="ndm-badge gmm">GMM</div>
+          <span>Grands Moulins du Mali</span>
+        </a>
+        <a class="ndm-item" href="nos-produits.html#semm">
+          <div class="ndm-badge semm">SEMM</div>
+          <span>Eaux Minérales du Mali</span>
+        </a>
+        <a class="ndm-item" href="nos-produits.html#sems">
+          <div class="ndm-badge sems">SEMS</div>
+          <span>Eaux Minérales du Sénégal</span>
+        </a>
+      </div>
+    </div>
+    <a class="nl" href="actualites.html">Actualités</a>
+    <a class="nl" href="recrutement.html">Recrutement</a>
+    <a class="nl" href="transporteurs.html">Transporteurs</a>
+    <a class="nl" href="contact.html">Contact</a>
+  </div>
+  <a class="nav-cta" href="backoffice.html">Espace DSI</a>
+</nav>
+
+<!-- PAGE HERO — SLIDER -->
+<div class="page-hero" id="heroSlider">
+
+  <!-- Slide 1 — Présentation générale -->
+  <div class="hs-slide">
+    <div class="ph-bg"><img src="./images/Bunafama.jpg" alt="Nos Produits GAMI"/></div>
+    <div class="ph-ov"></div><div class="ph-ov2"></div><div class="ph-grid"></div>
+    <div class="ph-inner">
+      <div class="ph-breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>Nos Produits</span></div>
+      <div class="ph-tag"><span class="ph-tag-dot"></span>Groupe AMI — GAMI</div>
+      <h1>Nos Produits</h1>
+      <p>Des produits agroalimentaires de qualité fabriqués par nos filiales GMM, SEMM et SEMS pour l'Afrique de l'Ouest.</p>
+    </div>
+  </div>
+
+  <!-- Slide 2 — GMM -->
+  <div class="hs-slide">
+    <div class="ph-bg"><img src="./images/GMM.jpg" alt="GMM — Grands Moulins du Mali"/></div>
+    <div class="ph-ov" style="background:linear-gradient(160deg,rgba(11,25,41,.82) 0%,rgba(27,79,138,.68) 100%)"></div>
+    <div class="ph-ov2"></div><div class="ph-grid"></div>
+    <div class="ph-inner">
+      <div class="ph-breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>Nos Produits</span></div>
+      <div class="ph-tag"><span class="ph-tag-dot"></span>Grands Moulins du Mali · GMM</div>
+      <h1>Farines &amp; Céréales du Mali</h1>
+      <p>120 000 tonnes de farine par an. Meunerie, rizerie, huilerie et confiserie depuis 1979 à Koulikoro.</p>
+    </div>
+  </div>
+
+  <!-- Slide 3 — SEMM & SEMS -->
+  <div class="hs-slide">
+    <div class="ph-bg"><img src="./images/slide-show-visuel.png" alt="Eaux Minérales — Diago"/></div>
+    <div class="ph-ov" style="background:linear-gradient(160deg,rgba(11,25,41,.82) 0%,rgba(26,128,96,.62) 100%)"></div>
+    <div class="ph-ov2"></div><div class="ph-grid"></div>
+    <div class="ph-inner">
+      <div class="ph-breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>Nos Produits</span></div>
+      <div class="ph-tag" style="background:rgba(26,128,96,.18);border-color:rgba(45,184,138,.35);color:#2db88a"><span class="ph-tag-dot" style="background:#1A8060"></span>Eaux Minérales · SEMM &amp; SEMS</div>
+      <h1>L'Eau Diago, N°1 au Mali</h1>
+      <p>Source naturelle des monts Mandingue, à 35 km de Bamako. Une eau minérale pure et équilibrée depuis 1996.</p>
+    </div>
+  </div>
+
+  <!-- Flèches -->
+  <button class="hs-arrow hs-prev" aria-label="Précédent">&#8249;</button>
+  <button class="hs-arrow hs-next" aria-label="Suivant">&#8250;</button>
+
+  <!-- Dots -->
+  <div class="hs-dots">
+    <button class="hs-dot" data-to="0" aria-label="Slide 1"></button>
+    <button class="hs-dot" data-to="1" aria-label="Slide 2"></button>
+    <button class="hs-dot" data-to="2" aria-label="Slide 3"></button>
+  </div>
+
+  <!-- Compteur -->
+  <div class="hs-counter"><strong>01</strong>&thinsp;/&thinsp;03</div>
+
+  <!-- Barre de progression -->
+  <div class="hs-progress"><div class="hs-fill"></div></div>
+
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs-inner">
+    <button class="tab-btn active" data-tab="gmm">
+      <img class="tab-badge gmm" src="./images/logo-GMM-1024x722.jpg" alt="GMM"/>
+      Grands Moulins du Mali
+    </button>
+    <button class="tab-btn" data-tab="semm">
+      <img class="tab-badge gmm" src="./images/semm.jpg" alt="GMM"/>
+      Eaux Minérales du Mali
+    </button>
+    <button class="tab-btn" data-tab="sems">
+      <img class="tab-badge gmm" src="./images/logo-SEMS.png" alt="GMM"/>
+      Eaux Minérales du Sénégal
+    </button>
+  </div>
+</div>
+
+<!-- ══════════ PANEL GMM ══════════ -->
+<div id="panel-gmm" class="panel active">
+
+  <div class="brand-header">
+    <div class="bh-logo-wrap">
+      <div class="bh-logo gmm"></div>
+    </div>
+    <div class="bh-info">
+      <span class="tag">Filiale du Groupe AMI</span>
+      <h2>Grands Moulins du Mali</h2>
+      <p>Créés en 1979 et représentant plus de 50 % du chiffre d'affaires du GIE AMI, les Grands Moulins du Mali sont l'une des industries agro-alimentaires les plus importantes du pays. Impliqués dans 5 secteurs — meunerie, station de mélange, rizerie, aliment bétail et huilerie — leurs usines sont situées à Koulikoro, à 55 km de Bamako.</p>
+      <div class="bh-stats">
+        <div class="bh-stat"><strong>50%+</strong><span>du CA du GIE AMI</span></div>
+        <div class="bh-stat"><strong>120 000 t</strong><span>de farine/an</span></div>
+        <div class="bh-stat"><strong>5</strong><span>secteurs agro-industriels</span></div>
+        <div class="bh-stat"><strong>4 Mds</strong><span>de capital CFA</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Farines & Céréales -->
+  <div class="prod-section">
+    <div class="prod-section-title">
+      <h3>Farines &amp; Céréales</h3>
+      <div class="prod-divider"></div>
+    </div>
+    <div class="prod-grid">
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#EBF3FF,#dbe9fa)">
+          <img class="pc-img-icon" src="./images/Farine-GMM-2.jpg" alt=""/>
+          <span class="pc-img-label">Meunerie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Farine GMM</div>
+          <div class="pc-desc">Avec 120 000 tonnes produites par an, les farines GMM assurent une distribution sur tout le territoire malien. Plusieurs types disponibles : farine blanche, farine complète, semoule.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Farine blanche</span>
+            <span class="pc-tag">Semoule</span>
+            <span class="pc-tag">Distribution nationale</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#fffaeb,#fef0c0)">
+          <img class="pc-img-icon" src="./images/Vanille.jpg" alt=""/>
+          <span class="pc-img-label">Aliment infantile</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Vitablé / Nutriblé</div>
+          <div class="pc-desc">Née de la station de mélange GMM, Vitablé est une farine infantile dédiée aux enfants à partir de 6 mois. Riche et équilibrée en vitamines et minéraux, disponible en plusieurs saveurs.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Dès 6 mois</span>
+            <span class="pc-tag">Vitamines &amp; minéraux</span>
+            <span class="pc-tag">Multi-saveurs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#f0f9f0,#d4edda)">
+          <img class="pc-img-icon" src="./images/Riz-malo-1.jpg" alt=""/>
+          <span class="pc-img-label">Rizerie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Riz Malo</div>
+          <div class="pc-desc">Riz de qualité produit par la rizerie GMM, disponible en différents conditionnements. Distribution assurée sur l'ensemble du territoire malien et en Afrique de l'Ouest.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Riz blanc</span>
+            <span class="pc-tag">Multi-formats</span>
+            <span class="pc-tag">Export CEDEAO</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#EBF3FF,#dbe9fa)">
+          <img class="pc-img-icon" src="./images/Farine-GMM-2.jpg" alt=""/>
+          <span class="pc-img-label">Meunerie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Farine GMM</div>
+          <div class="pc-desc">Avec 120 000 tonnes produites par an, les farines GMM assurent une distribution sur tout le territoire malien. Plusieurs types disponibles : farine blanche, farine complète, semoule.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Farine blanche</span>
+            <span class="pc-tag">Semoule</span>
+            <span class="pc-tag">Distribution nationale</span>
+          </div>
+        </div>
+      </div>
+      
+
+    </div>
+  </div>
+
+  <!-- Huiles & Corps gras -->
+  <div class="prod-section" style="padding-top:0">
+    <div class="prod-section-title">
+      <h3>Huiles &amp; Corps gras</h3>
+      <div class="prod-divider"></div>
+    </div>
+    <div class="prod-grid">
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#fffbeb,#fde68a)">
+          <img class="pc-img-icon" src="./images/AMI-TULU-2.png" alt=""/>
+          <span class="pc-img-label">Huilerie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Ami Tulu</div>
+          <div class="pc-desc">Fabriquée dans la seule usine de raffinerie d'huile du Mali. Huile pure et raffinée extraite des graines de coton. Bouteille opaque pour une meilleure conservation des vitamines.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Graine de coton</span>
+            <span class="pc-tag">Format 5L</span>
+            <span class="pc-tag">Sachet 250 ml</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#f5f3ff,#ddd6fe)">
+          <img class="pc-img-icon" src="./images/Bunafama2.jpg" alt=""/>
+          <span class="pc-img-label">Aliment bétail</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Bunafama</div>
+          <div class="pc-desc">Tourteau de coton destiné à l'alimentation animale — bovins, volailles et poissons. Produit riche en protéines, issu du processus d'extraction d'huile des graines de coton.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Bétail</span>
+            <span class="pc-tag">Volaille</span>
+            <span class="pc-tag">Pisciculture</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#fff1f0,#fecaca)">
+          <img class="pc-img-icon" src="./images/DOUBLE-GUM-VERT.jpg" alt=""/>
+          <span class="pc-img-label">Confiserie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Waraba Confiserie</div>
+          <div class="pc-desc">Les premiers bonbons et chewing-gums du Mali. Retrouvez les parfums Sogho-Sogho®, Black Ginger, ATT bonbon, Sweet milk, Aigle fort, Double Gum et plus encore.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Bonbons</span>
+            <span class="pc-tag">Chewing-gum</span>
+            <span class="pc-tag">Made in Mali</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#fffbeb,#fde68a)">
+          <img class="pc-img-icon" src="./images/AMI-TULU-2.png" alt=""/>
+          <span class="pc-img-label">Huilerie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Ami Tulu</div>
+          <div class="pc-desc">Fabriquée dans la seule usine de raffinerie d'huile du Mali. Huile pure et raffinée extraite des graines de coton. Bouteille opaque pour une meilleure conservation des vitamines.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Graine de coton</span>
+            <span class="pc-tag">Format 5L</span>
+            <span class="pc-tag">Sachet 250 ml</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Céréales spéciales -->
+  <div class="prod-section" style="padding-top:0">
+    <div class="prod-section-title">
+      <h3>Céréales spéciales</h3>
+      <div class="prod-divider"></div>
+    </div>
+    <div class="prod-grid">
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#ecfdf5,#bbf7d0)">
+          <img class="pc-img-icon" src="./images/albarka2-1.jpg" alt=""/>
+          <span class="pc-img-label">Céréale</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Albarka</div>
+          <div class="pc-desc">Céréale complète et nutritive, Albarka est pensée pour une consommation quotidienne. Produit issu de la station de mélange GMM, alliant tradition et nutrition moderne.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Nutrition</span>
+            <span class="pc-tag">Quotidien</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#fdf4ff,#f0abfc)">
+          <img class="pc-img-icon" src="./images/PASTA-PALLO-1.jpg" alt=""/>
+          <span class="pc-img-label">Pâtes</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Pasta GMM</div>
+          <div class="pc-desc">Pâtes alimentaires fabriquées à partir des farines GMM. Différentes formes disponibles : spaghetti, macaroni, fusilli. Qualité constante, prix accessible.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Spaghetti</span>
+            <span class="pc-tag">Macaroni</span>
+            <span class="pc-tag">Qualité constante</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#fefce8,#fef08a)">
+          <img class="pc-img-icon" src="./images/SUCRE-768x683-1.png" alt=""/>
+          <span class="pc-img-label">Condiment</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Sucre Vanilline</div>
+          <div class="pc-desc">Sucre aromatisé à la vanilline, idéal pour la pâtisserie et les préparations culinaires. Conditionné en sachets pratiques pour un dosage précis.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Pâtisserie</span>
+            <span class="pc-tag">Sachet doseur</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#ecfdf5,#bbf7d0)">
+          <img class="pc-img-icon" src="./images/albarka2-1.jpg" alt=""/>
+          <span class="pc-img-label">Céréale</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Albarka</div>
+          <div class="pc-desc">Céréale complète et nutritive, Albarka est pensée pour une consommation quotidienne. Produit issu de la station de mélange GMM, alliant tradition et nutrition moderne.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Nutrition</span>
+            <span class="pc-tag">Quotidien</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="info-band">
+    <div class="ib-icon">📍</div>
+    <div class="ib-text">
+      <h4>Usines GMM — Koulikoro, Mali</h4>
+      <p>Situées à 55 km de Bamako, les installations GMM intègrent meunerie, station de mélange, rizerie, huilerie et unité d'aliment bétail sous un même complexe industriel.</p>
+    </div>
+    <div class="ib-action">
+      <a href="filiales.html#gmm" class="btn-outline">En savoir plus sur GMM →</a>
+    </div>
+  </div>
+
+</div><!-- /panel GMM -->
+
+
+<!-- ══════════ PANEL SEMM ══════════ -->
+<div id="panel-semm" class="panel">
+
+  <div class="brand-header">
+    <div class="bh-logo-wrap">
+      <div class="bh-logo semm"></div>
+    </div>
+    <div class="bh-info">
+      <span class="tag">Filiale du Groupe AMI</span>
+      <h2>Société des Eaux Minérales du Mali</h2>
+      <p>La Société des Eaux Minérales du Mali a vu le jour en 1996 par le rachat auprès de l'État Malien de la source découverte et conseillée par Évian International. Située à 35 km de Bamako sur les collines des monts Mandingue, la source Diago offre une eau minérale naturelle d'exception, traitée à la pointe de la technologie.</p>
+      <div class="bh-stats">
+        <div class="bh-stat "><strong>1996</strong><span>Année de création</span></div>
+        <div class="bh-stat "><strong>35 km</strong><span>de Bamako</span></div>
+        <div class="bh-stat "><strong>N°1</strong><span>eau minérale au Mali</span></div>
+        <div class="bh-stat "><strong>4 formats</strong><span>Diago disponibles</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Eau minérale -->
+  <div class="prod-section">
+    <div class="prod-section-title">
+      <h3>Eau Minérale Naturelle — Diago</h3>
+      <div class="prod-divider"></div>
+    </div>
+    <div class="prod-grid">
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#eff6ff,#bfdbfe)">
+          <img class="pc-img-icon" src="./images/Diago-5.jpg" alt=""/>
+          <span class="pc-img-label orange">Eau minérale</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Diago 0,33 L</div>
+          <div class="pc-desc">Format individuel pratique pour la consommation à emporter. Eau minérale naturelle puisée dans les monts Mandingue, filtrée naturellement à travers les roches.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">33 cl</span>
+            <span class="pc-tag">On-the-go</span>
+            <span class="pc-tag">Naturelle</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#dbeafe,#93c5fd)">
+          <img class="pc-img-icon" src="./images/Diago-1-1.jpg" alt=""/>
+          <span class="pc-img-label orange">Eau minérale</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Diago 0,5 L</div>
+          <div class="pc-desc">La bouteille demi-litre, format le plus populaire. Idéale pour la journée, les repas et les activités sportives. Eau douce et légère aux vertus reconnues.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">50 cl</span>
+            <span class="pc-tag">Sport</span>
+            <span class="pc-tag">Best-seller</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#bfdbfe,#60a5fa)">
+          <img class="pc-img-icon" src="./images/Diago-4.jpg" alt=""/>
+          <span class="pc-img-label orange">Eau minérale</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Diago 1,5 L</div>
+          <div class="pc-desc">Grande bouteille familiale pour la maison et les restaurants. L'eau minérale naturelle Diago, numéro 1 sur le marché malien, disponible en format grande consommation.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">1,5 L</span>
+            <span class="pc-tag">Familial</span>
+            <span class="pc-tag">Restaurant</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#93c5fd,#3b82f6)">
+          <img class="pc-img-icon" src="./images/Diago-6.jpg" alt=""/>
+          <span class="pc-img-label orange">Eau minérale</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Diago 5 L / 10 L</div>
+          <div class="pc-desc">Grands formats économiques pour les foyers, bureaux et hôtels. Compatible avec les distributeurs d'eau. Format idéal pour une consommation régulière et économique.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">5 L</span>
+            <span class="pc-tag">10 L</span>
+            <span class="pc-tag">Bureau &amp; Hôtel</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#fef9c3,#fde047)">
+          <img class="pc-img-icon" src="./images/Ami-N2.jpg" alt=""/>
+          <span class="pc-img-label orange">Boisson aromatisée</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Ami Fruité — Orange</div>
+          <div class="pc-desc">Boisson aromatisée rafraîchissante à base d'eau Diago. Parfum orange, pleine de vitalité. Disponible en 0,33 L et 0,5 L. Zéro colorant artificiel.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Orange</span>
+            <span class="pc-tag">Eau Diago</span>
+            <span class="pc-tag">Rafraîchissant</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#f0fdf4,#86efac)">
+          <img class="pc-img-icon" src="./images/Ami-2.jpg" alt=""/>
+          <span class="pc-img-label orange">Boisson aromatisée</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Ami Fruité — Ananas Cocktail</div>
+          <div class="pc-desc">Boisson aromatisée ananas cocktail à base d'eau Diago. Saveur tropicale unique et désaltérante. Large gamme de parfums pour satisfaire tous les goûts.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Ananas</span>
+            <span class="pc-tag">Cocktail tropical</span>
+            <span class="pc-tag">Multi-parfums</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="info-band">
+    <div class="ib-icon">⛰️</div>
+    <div class="ib-text">
+      <h4>Source Diago — Monts Mandingue, Mali</h4>
+      <p>La source Diago est située dans une réserve foncière sur les collines des monts Mandingue, à quelques kilomètres du village de Diago. Qualité garantie par un dispositif de traitement à la pointe de la technologie.</p>
+    </div>
+    <div class="ib-action">
+      <a href="filiales.html#semm" class="btn-outline">En savoir plus sur SEMM →</a>
+    </div>
+  </div>
+
+</div><!-- /panel SEMM -->
+
+
+<!-- ══════════ PANEL SEMS ══════════ -->
+<div id="panel-sems" class="panel">
+
+  <div class="brand-header">
+    <div class="bh-logo-wrap">
+      <div class="bh-logo sems"></div>
+    </div>
+    <div class="bh-info">
+      <span class="tag">Filiale du Groupe AMI</span>
+      <h2>Société des Eaux Minérales du Sénégal</h2>
+      <p>La SEMS est la déclinaison sénégalaise du savoir-faire hydrique du Groupe AMI. Implantée au Sénégal, elle produit et distribue de l'eau minérale naturelle de haute qualité ainsi que des boissons aromatisées pour répondre à la demande croissante du marché ouest-africain.</p>
+      <div class="bh-stats">
+        <div class="bh-stat "><strong>SEMS</strong><span>Présence au Sénégal</span></div>
+        <div class="bh-stat "><strong>100%</strong><span>Naturelle</span></div>
+        <div class="bh-stat "><strong>UEMOA</strong><span>Distribution régionale</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Eau & Boissons -->
+  <div class="prod-section">
+    <div class="prod-section-title">
+      <h3>Eau Minérale &amp; Boissons</h3>
+      <div class="prod-divider"></div>
+    </div>
+    <div class="prod-grid">
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#ecfdf5,#a7f3d0)">
+          <img class="pc-img-icon" src="./images/samao.png" alt=""/>
+          <span class="pc-img-label teal">Eau minérale</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Eau Minérale SEMS — 0,5 L</div>
+          <div class="pc-desc">Eau minérale naturelle produite par la SEMS au Sénégal. Eau pure et équilibrée en minéraux essentiels, idéale pour une hydratation quotidienne optimale.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">50 cl</span>
+            <span class="pc-tag">Naturelle</span>
+            <span class="pc-tag">Sénégal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#d1fae5,#34d399)">
+          <img class="pc-img-icon" src="./images/samao.png" alt=""/>
+          <span class="pc-img-label teal">Eau minérale</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Eau Minérale SEMS — 1,5 L</div>
+          <div class="pc-desc">Format familial pour les foyers et restaurants sénégalais. Eau minérale naturelle de qualité constante, produite localement dans le respect des normes sanitaires internationales.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">1,5 L</span>
+            <span class="pc-tag">Familial</span>
+            <span class="pc-tag">Qualité certifiée</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#a7f3d0,#059669)">
+          <img class="pc-img-icon" src="./images/samao.png" alt=""/>
+          <span class="pc-img-label teal">Eau minérale</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Eau Minérale SEMS — 5 L</div>
+          <div class="pc-desc">Grand format économique pour les bureaux, hôtels et grandes surfaces. Distribution assurée sur l'ensemble du territoire sénégalais et vers les marchés de la sous-région.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">5 L</span>
+            <span class="pc-tag">Bureau</span>
+            <span class="pc-tag">Distribution UEMOA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#fef3c7,#f59e0b)">
+          <img class="pc-img-icon" src="./images/samao.png alt=""/>
+          <span class="pc-img-label teal">Boisson</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Boisson Aromatisée SEMS — Citron</div>
+          <div class="pc-desc">Boisson rafraîchissante aromatisée au citron à base d'eau minérale SEMS. Légère, désaltérante et pleine de vitalité pour toute la famille.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Citron</span>
+            <span class="pc-tag">Rafraîchissant</span>
+            <span class="pc-tag">Toute la famille</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#ffe4e6,#fb7185)">
+          <img class="pc-img-icon" src="./images/samao.png" alt=""/>
+          <span class="pc-img-label teal">Boisson</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Boisson Aromatisée SEMS — Fraise</div>
+          <div class="pc-desc">Saveur fraise, idéale pour les enfants et les jeunes adultes. À base d'eau minérale naturelle SEMS, sans colorants artificiels. Disponible en 0,33 L et 0,5 L.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Fraise</span>
+            <span class="pc-tag">Enfants</span>
+            <span class="pc-tag">Sans additifs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img" style="background:linear-gradient(135deg,#fce7f3,#ec4899)">
+          <img class="pc-img-icon" src="./images/samao.png" alt=""/>
+          <span class="pc-img-label teal">Boisson</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Boisson Bissap SEMS</div>
+          <div class="pc-desc">Alliance unique entre l'eau minérale SEMS et le bissap (hibiscus), fleur emblématique du Sénégal. Un hommage aux saveurs locales avec la qualité industrielle GAMI.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Bissap</span>
+            <span class="pc-tag">Hibiscus</span>
+            <span class="pc-tag">Saveurs locales</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="info-band">
+    <div class="ib-icon">🇸🇳</div>
+    <div class="ib-text">
+      <h4>SEMS — Présence au Sénégal</h4>
+      <p>La SEMS incarne l'expansion du Groupe AMI en Afrique de l'Ouest. Forte du savoir-faire acquis avec Diago au Mali, la filiale sénégalaise apporte la même rigueur industrielle et le même engagement qualité au marché sénégalais et de la sous-région UEMOA.</p>
+    </div>
+    <div class="ib-action">
+      <a href="filiales.html#sems" class="btn-outline">En savoir plus sur SEMS →</a>
+    </div>
+  </div>
+
+</div><!-- /panel SEMS -->
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="f-brand"><div class="f-logo"><div class="logo-sq">G</div><span style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#fff">Groupe AMI — GAMI</span></div><p>L'industrie au service du développement. GMM · SEMM · SEMS opèrent en Afrique de l'Ouest.</p><div class="f-socials"><div class="f-soc">f</div><div class="f-soc">𝕏</div><div class="f-soc">in</div></div></div>
+    <div class="f-col"><h4>À propos</h4><ul><li><a href="groupe.html">Notre histoire</a></li><li><a href="groupe.html">Vision & Mission</a></li><li><a href="actualites.html">Blog</a></li></ul></div>
+    <div class="f-col"><h4>Nos Produits</h4><ul><li><a href="nos-produits.html#gmm">GMM</a></li><li><a href="nos-produits.html#semm">SEMM</a></li><li><a href="nos-produits.html#sems">SEMS</a></li></ul></div>
+    <div class="f-col"><h4>Contact</h4><ul><li><a href="contact.html">contact@groupeami.sn</a></li><li><a href="#">+221 33 000 00 00</a></li><li><a href="recrutement.html">Recrutement</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>©2025 Groupe AMI — GAMI. Tous droits réservés.</span><span>Conçu &amp; développé par Python8080</span></div>
+</footer>
+
+<script src="shared.js"></script>
+<script>
+// ── TABS LOGIC ──
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+
+  function activateTab(tabId) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabId));
+    panels.forEach(p => p.classList.toggle('active', p.id === 'panel-' + tabId));
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => activateTab(tab.dataset.tab));
+  });
+
+  // Handle anchor links (#gmm, #semm, #sems)
+  const hash = location.hash.replace('#','');
+  if (['gmm','semm','sems'].includes(hash)) {
+    activateTab(hash);
+    setTimeout(() => {
+      document.querySelector('.tabs-wrap')?.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 100);
+  }
+});
+
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('transparent', window.scrollY < 60);
+});
+
+// ── HERO SLIDER ──
+(function () {
+  const slider  = document.getElementById('heroSlider');
+  if (!slider) return;
+  const slides  = slider.querySelectorAll('.hs-slide');
+  const dots    = slider.querySelectorAll('.hs-dot');
+  const fill    = slider.querySelector('.hs-fill');
+  const counter = slider.querySelector('.hs-counter');
+  const total   = slides.length;
+  const DUR     = 5000;
+  const pad     = n => String(n + 1).padStart(2, '0');
+  let cur = 0, timer;
+
+  function goTo(n) {
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur = ((n % total) + total) % total;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+    if (counter) counter.innerHTML = `<strong>${pad(cur)}</strong>&thinsp;/&thinsp;${pad(total - 1)}`;
+    if (fill) { fill.classList.remove('run'); void fill.offsetWidth; fill.classList.add('run'); }
+    clearTimeout(timer);
+    timer = setTimeout(() => goTo(cur + 1), DUR);
+  }
+
+  slider.querySelector('.hs-prev').addEventListener('click', () => goTo(cur - 1));
+  slider.querySelector('.hs-next').addEventListener('click', () => goTo(cur + 1));
+  dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.to)));
+
+  // Pause on hover
+  slider.addEventListener('mouseenter', () => clearTimeout(timer));
+  slider.addEventListener('mouseleave', () => { timer = setTimeout(() => goTo(cur + 1), DUR); });
+
+  goTo(0);
+})();
+</script>
+</body>
+</html>

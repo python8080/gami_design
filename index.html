@@ -31,30 +31,42 @@
 .hb-stat span{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.5px;margin-top:4px;display:block}
 
 /* ABOUT STRIP */
-.about-strip{ margin: 2em;display:grid;grid-template-columns:1.1fr 1fr;gap:0;min-height:520px;border-top:1px solid var(--border)}
-.as-img{position:relative;overflow:hidden;min-height:520px}
-.as-img img{width:100%;height:100%;object-fit:cover;transition:.6s ease}
-.as-img:hover img{transform:scale(1.04)}
-.as-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(11,25,41,.55) 0%,transparent 70%)}
-/* Image grid overlay — 3 mini photos */
-.as-img-grid{position:absolute;bottom:24px;right:24px;display:grid;grid-template-columns:1fr 1fr;gap:8px;width:180px}
-.as-ig-cell{border-radius:10px;overflow:hidden;height:80px;border:2px solid rgba(255,255,255,.2)}
-.as-ig-cell img{width:100%;height:100%;object-fit:cover}
-.as-img-badge{position:absolute;top:24px;left:24px;background:rgba(11,25,41,.7);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.15);border-radius:50px;padding:7px 16px;font-size:11px;font-weight:600;color:#fff;letter-spacing:.5px;display:flex;align-items:center;gap:7px}
+.about-strip{display:grid;grid-template-columns:1.1fr 1fr;gap:0;min-height:560px;border-top:1px solid var(--border);margin:64px}
+.as-img{position:relative;overflow:hidden;min-height:560px}
+.as-img>img:first-child{width:100%;height:100%;object-fit:cover;transition:.7s ease;filter:brightness(.88)}
+.as-img:hover>img:first-child{transform:scale(1.03)}
+.as-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(11,25,41,.22) 0%,transparent 70%)}
+/* Overlapping centered photo */
+.as-img-single{position:absolute;top:50%;left:50%;transform:translate(-32%,-50%);width:60%;height:60%;border-radius:24px;overflow:hidden;border:5px solid rgba(255,255,255,.9);box-shadow:0 28px 70px rgba(0,0,0,.3);z-index:3}
+.as-img-single img{width:100%;height:100%;object-fit:cover;transition:.7s ease}
+.as-img:hover .as-img-single img{transform:scale(1.05)}
+.as-img-badge{position:absolute;top:24px;left:24px;background:rgba(11,25,41,.72);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:50px;padding:7px 16px;font-size:11px;font-weight:600;color:#fff;letter-spacing:.6px;display:flex;align-items:center;gap:8px;z-index:4}
 .as-img-badge-dot{width:7px;height:7px;border-radius:50%;background:#E8861A}
-.as-content{padding:72px 68px;display:flex;flex-direction:column;justify-content:center;background:#fff}
-.as-content .tag{margin-bottom:12px}
-.as-content h2{font-size:clamp(1.9rem,2.8vw,2.4rem);color:var(--dark);margin-bottom:16px;line-height:1.18}
-.as-content p{color:var(--muted);line-height:1.85;font-weight:300;margin-bottom:32px;font-size:15px}
-.as-feats{display:flex;flex-direction:column;gap:14px;margin-bottom:36px}
-.af{display:flex;align-items:center;gap:13px}
-.af-dot{width:38px;height:38px;border-radius:11px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 4px 14px rgba(27,79,138,.2)}
-.af p{font-size:14px;font-weight:500;color:var(--text);margin:0;line-height:1.4}
-/* Stat row dans l'about */
-.as-stats{display:flex;gap:28px;padding-top:28px;border-top:1px solid var(--border);margin-top:4px}
-.as-stat-v{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;color:var(--blue);line-height:1}
-.as-stat-l{font-size:11px;color:var(--muted);margin-top:3px;font-weight:500;letter-spacing:.3px}
-@media(max-width:900px){.about-strip{grid-template-columns:1fr}.as-img{min-height:320px}.as-content{padding:48px 32px}}
+.as-content{padding:72px 60px;display:flex;flex-direction:column;justify-content:center;background:#fff}
+.as-content h2{font-size:clamp(2.4rem,3.4vw,3.2rem);color:var(--dark);margin-bottom:20px;line-height:1.1;font-weight:800}
+.as-content>p{color:#5a6472;line-height:1.9;font-weight:400;margin-bottom:36px;font-size:15px}
+.as-feats{display:flex;flex-direction:column;gap:22px}
+.af{display:flex;align-items:center;gap:16px}
+.af-ico{flex-shrink:0;color:#4a7c59;display:flex}
+.af p{font-size:15px;font-weight:600;color:var(--dark);margin:0;line-height:1.4}
+
+/* NOS PRODUITS */
+.produits{padding:90px 80px;background:var(--light)}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.prod-card{background:#fff;border-radius:22px;overflow:hidden;border:1.5px solid var(--border);cursor:pointer;transition:.3s;display:flex;flex-direction:column}
+.prod-card:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(27,79,138,.13);border-color:transparent}
+.prod-img{height:240px;position:relative;overflow:hidden}
+.prod-img img{width:100%;height:100%;object-fit:fill;object-position:center;transition:.5s ease}
+.prod-card:hover .prod-img img{transform:scale(1.08)}
+.prod-fil{position:absolute;top:14px;left:14px;font-size:10px;font-weight:700;padding:5px 13px;border-radius:50px;letter-spacing:.6px;text-transform:uppercase}
+.prod-fil.gmm{background:#EBF3FF;color:#1B4F8A}
+.prod-fil.semm{background:#FFF3E8;color:#C4700E}
+.prod-fil.sems{background:#E8F7EF;color:#1A7A55}
+.prod-body{padding:22px 24px;flex:1;display:flex;flex-direction:column;gap:8px}
+.prod-name{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;color:var(--dark);line-height:1.25}
+.prod-desc{font-size:13px;color:var(--muted);line-height:1.65;font-weight:300;flex:1}
+.prod-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--blue);margin-top:10px;padding:7px 0;transition:.2s}
+.prod-link:hover{color:var(--orange);gap:9px}
 
 /* SERVICES */
 .services{padding:90px 80px;background:#fff}
@@ -135,14 +147,81 @@
 .nl-btn{background:var(--blue);color:#fff;border:none;padding:14px 28px;border-radius:50px;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;font-family:'Outfit',sans-serif;white-space:nowrap}
 .nl-btn:hover{background:var(--orange)}
 
-/* ── INDEX PAGE RESPONSIVE ── */
+/* ══ INDEX — RESPONSIVE COMPLET ══ */
+
+/* ── Large tablet ≤1200px ── */
+@media(max-width:1200px){
+  .about-strip{margin:48px}
+  .produits{padding:72px 48px}
+}
+
+/* ── Tablet ≤900px ── */
 @media(max-width:900px){
   .hero{min-height:600px}
-  .about-strip .as-img-grid{width:120px}
+  /* About */
+  .about-strip{grid-template-columns:1fr;margin:24px 0}
+  .as-img{min-height:300px;max-height:360px}
+  .as-img-single{width:52%;height:48%;transform:translate(-25%,-50%)}
+  .as-content{padding:44px 28px}
+  .as-content h2{font-size:clamp(1.9rem,4vw,2.6rem)}
+  /* Products */
+  .produits{padding:64px 24px}
+  .prod-grid{grid-template-columns:1fr 1fr;gap:16px;margin-top:32px}
+  .prod-img{height:200px}
 }
+
+/* ── Mobile ≤640px ── */
 @media(max-width:640px){
-  .hero{min-height:560px}
-  .hero-search-bar .hs-field{padding-bottom:8px;margin-bottom:4px}
+  /* Hero */
+  .hero{min-height:100svh}
+  .hero-content{padding:0 18px}
+  .hero h1{font-size:2rem}
+  .hero-sub{font-size:.93rem;margin-bottom:28px}
+  .hero-badge{font-size:11px;padding:6px 14px;margin-bottom:18px}
+  .hero-search-bar{flex-direction:column;gap:0;padding:14px;border-radius:14px}
+  .hs-field{border-right:none;border-bottom:1px solid var(--border);padding:10px 0}
+  .hs-field:last-of-type{border-bottom:none}
+  .hero-cta{margin-left:0;width:100%;justify-content:center;padding:13px;margin-top:10px;border-radius:10px}
+  /* About */
+  .about-strip{margin:0}
+  .as-img{min-height:240px;max-height:280px}
+  .as-img-single{display:none}
+  .as-content{padding:30px 18px}
+  .as-content h2{font-size:1.7rem;margin-bottom:14px}
+  .as-content>p{font-size:14px;margin-bottom:24px}
+  .as-feats{gap:14px}
+  .af p{font-size:13.5px}
+  /* Products — carrousel horizontal swipeable */
+  .produits{padding:48px 0 48px 18px}
+  .produits .flex-between{padding-right:18px;margin-bottom:24px}
+  .prod-grid{
+    display:flex;flex-wrap:nowrap;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    gap:14px;
+    margin-top:0;
+    padding-right:18px
+  }
+  .prod-grid::-webkit-scrollbar{display:none}
+  .prod-card{flex:0 0 76%;min-width:0;scroll-snap-align:start}
+  .prod-img{height:190px}
+  /* Services */
+  .services{padding:52px 18px}
+  .srv-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .srv-card{height:240px}
+  /* News & partenaires */
+  .partenaires{padding:40px 18px}
+  .part-logos{gap:24px}
+}
+
+/* ── Small mobile ≤400px ── */
+@media(max-width:400px){
+  .hero h1{font-size:1.75rem}
+  .prod-card{flex:0 0 86%}
+  .srv-grid{grid-template-columns:1fr}
+  .srv-card{height:220px}
 }
 </style>
 </head>
@@ -157,13 +236,29 @@
 <!-- NAV -->
 <nav id="nav" class="transparent">
   <div class="nav-logo">
-    <div class="logo-sq">G</div>
-    <div><div class="logo-name">Groupe AMI</div><div class="logo-sub">GMM · SEMM · SEMS</div></div>
+    <img src="./images/logo_GAMI.png" alt="Groupe AMI — GAMI" class="nav-logo-img"/>
   </div>
   <div class="nav-links">
-    <a class="nl active" href="index.html">Accueil</a>
+    <a class="nl" href="index.html">Accueil</a>
     <a class="nl" href="groupe.html">Le Groupe</a>
     <a class="nl" href="filiales.html">Filiales</a>
+    <div class="nav-dropdown">
+      <a class="nl" href="nos-produits.html">Nos Produits</a>
+      <div class="nav-drop-menu">
+        <a class="ndm-item" href="nos-produits.html#gmm">
+          <div class="ndm-badge gmm">GMM</div>
+          <span>Grands Moulins du Mali</span>
+        </a>
+        <a class="ndm-item" href="nos-produits.html#semm">
+          <div class="ndm-badge semm">SEMM</div>
+          <span>Eaux Minérales du Mali</span>
+        </a>
+        <a class="ndm-item" href="nos-produits.html#sems">
+          <div class="ndm-badge sems">SEMS</div>
+          <span>Eaux Minérales du Sénégal</span>
+        </a>
+      </div>
+    </div>
     <a class="nl" href="actualites.html">Actualités</a>
     <a class="nl" href="recrutement.html">Recrutement</a>
     <a class="nl" href="transporteurs.html">Transporteurs</a>
@@ -202,30 +297,122 @@
     <img src="./images/WEBTest.jpg" alt="Équipe GAMI"/>
     <div class="as-img-overlay"></div>
     <div class="as-img-badge"><span class="as-img-badge-dot"></span>Groupe AMI — GAMI</div>
-    <div class="as-img-grid">
-      <div class="as-ig-cell"><img src="./images/Farine-GMM-2.jpg" alt="GMM"/></div>
-      <div class="as-ig-cell"><img src="./images/PASTA-PALLO-1.jpg" alt="SEMM"/></div>
-      <div class="as-ig-cell"><img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=300&q=80&fit=crop" alt="SEMS"/></div>
-      <div class="as-ig-cell"><img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=300&q=80&fit=crop" alt="Transport"/></div>
+    <div class="as-img-single">
+      <img src="./images/Farine-GMM-2.jpg" alt="Production GMM"/>
     </div>
   </div>
   <div class="as-content">
-    <span class="tag">À PROPOS DU GROUPE</span>
-    <h2>Né avant l'indépendance<br><em style="color:var(--blue);font-style:normal">bâtisseur du Mali</em></h2>
-    <p>Le Groupement AMI est né avant l'indépendance du Mali. Son activité industrielle a débuté en 1950 avec la création de sa confiserie — ancêtre de la GCM. En 1954, rachat du Complexe de Magnambougou. Siège social : Zone Industrielle Sotuba, Rue 839, Bamako.</p>
+    <h2>Notre Mission</h2>
+    <p>Fournir des produits industriels et agroalimentaires de qualité qui dépassent les attentes de nos partenaires, grâce à l'innovation et à un engagement fort envers le développement durable. Nous bâtissons des relations durables et créons des espaces qui renforcent les économies locales. Notre dévouement à l'intégrité et à l'excellence nous guide depuis 1950.</p>
     <div class="as-feats">
-      <div class="af"><div class="af-dot">🏭</div><p>Production agro-industrielle : farine, eau minérale, confiserie, huile</p></div>
-      <div class="af"><div class="af-dot" style="background:var(--orange);box-shadow:0 4px 14px rgba(232,134,26,.25)">🚛</div><p>Transit international via Kouremale, Diboli, Zegoua — import/export</p></div>
-      <div class="af"><div class="af-dot" style="background:#16a34a;box-shadow:0 4px 14px rgba(22,163,74,.2)">💧</div><p>Eau minérale Diago — source naturelle dans les monts Mandingue, 35 km de Bamako</p></div>
-    </div>
-    <a class="btn-main" href="groupe.html">Découvrir le Groupe →</a>
-    <div class="as-stats">
-      <div><div class="as-stat-v">20+</div><div class="as-stat-l">Ans d'expérience</div></div>
-      <div><div class="as-stat-v">500+</div><div class="as-stat-l">Collaborateurs</div></div>
-      <div><div class="as-stat-v">5</div><div class="as-stat-l">Pays couverts</div></div>
+      <div class="af">
+        <span class="af-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <p>Développement industriel durable et croissance verte</p>
+      </div>
+      <div class="af">
+        <span class="af-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <p>Innovation au service de l'autosuffisance alimentaire</p>
+      </div>
+      <div class="af">
+        <span class="af-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <p>Approche centrée sur le partenariat &amp; le client</p>
+      </div>
+      <div class="af">
+        <span class="af-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <p>Renforcement des communautés d'Afrique de l'Ouest</p>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- NOS PRODUITS -->
+<section class="produits">
+  <div class="flex-between">
+    <div>
+      <span class="tag">NOS PRODUITS</span>
+      <h2 class="section-title" style="margin-top:8px">Une gamme pensée pour l'Afrique</h2>
+    </div>
+    <a class="btn-outline" href="nos-produits.html">Voir tout →</a>
+  </div>
+  <div class="prod-grid">
+
+    <!-- GMM -->
+    <div class="prod-card" onclick="window.location='nos-produits.html#gmm'">
+      <div class="prod-img">
+        <img src="./images/Farine-GMM-2.jpg" alt="Farine de Blé GMM"/>
+        <span class="prod-fil gmm">GMM</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-name">Farine de Blé</div>
+        <div class="prod-desc">Farine premium issue de blé sélectionné, produite à 120 000 T/an. Référence de la boulangerie et pâtisserie au Mali et en Afrique de l'Ouest.</div>
+        <span class="prod-link">Découvrir →</span>
+      </div>
+    </div>
+
+    <div class="prod-card" onclick="window.location='nos-produits.html#gmm'">
+      <div class="prod-img">
+        <img src="./images/Riz-malo-1.jpg" alt="Riz Malo"/>
+        <span class="prod-fil gmm">GMM</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-name">Riz Malo</div>
+        <div class="prod-desc">Riz de qualité supérieure cultivé et distribué à grande échelle. Le grain préféré des familles maliennes depuis des décennies.</div>
+        <span class="prod-link">Découvrir →</span>
+      </div>
+    </div>
+
+    <!-- SEMM -->
+    <div class="prod-card" onclick="window.location='nos-produits.html#semm'">
+      <div class="prod-img">
+        <img src="./images/Diago-1-1.jpg" alt="Eau Diago"/>
+        <span class="prod-fil semm">SEMM</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-name">Eau Minérale Diago</div>
+        <div class="prod-desc">Eau naturelle puisée dans les monts Mandingue, à 35 km de Bamako. Source certifiée, N°1 de l'eau minérale au Mali.</div>
+        <span class="prod-link">Découvrir →</span>
+      </div>
+    </div>
+
+    <div class="prod-card" onclick="window.location='nos-produits.html#semm'">
+      <div class="prod-img">
+        <img src="./images/Ami-2.jpg" alt="Ami Fruité"/>
+        <span class="prod-fil semm">SEMM</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-name">Ami Fruité</div>
+        <div class="prod-desc">Boisson fruitée rafraîchissante produite localement avec des arômes naturels. Disponible en plusieurs saveurs appréciées de tous.</div>
+        <span class="prod-link">Découvrir →</span>
+      </div>
+    </div>
+
+    <!-- SEMS -->
+    <div class="prod-card" onclick="window.location='nos-produits.html#sems'">
+      <div class="prod-img">
+        <img src="./images/PASTA-WARABA4 (1).jpg" alt="Waraba"/>
+        <span class="prod-fil sems">SEMS</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-name">Waraba</div>
+        <div class="prod-desc">Confiserie emblématique du Groupe AMI, appréciée par les familles à travers toute l'Afrique. Un produit phare depuis plus de 70 ans.</div>
+        <span class="prod-link">Découvrir →</span>
+      </div>
+    </div>
+
+    <div class="prod-card" onclick="window.location='nos-produits.html#sems'">
+      <div class="prod-img">
+        <img src="./images/DOUBLE-GUM-VERT.jpg" alt="Double Gum Vert"/>
+        <span class="prod-fil sems">SEMS</span>
+      </div>
+      <div class="prod-body">
+        <div class="prod-name">Double Gum Vert</div>
+        <div class="prod-desc">Chewing-gum à la menthe verte, produit localement par SEMS. Fraîcheur longue durée, populaire auprès des jeunes consommateurs.</div>
+        <span class="prod-link">Découvrir →</span>
+      </div>
+    </div>
+
+  </div>
+</section>
 
 <!-- SERVICES -->
 <section class="services">
@@ -276,15 +463,15 @@
   </div>
   <div class="fil-strip">
     <div class="fil-card" onclick="window.location='filiales.html'">
-      <div class="fil-img"><img src="./images/Farine-GMM-2.jpg" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Koulikoro</div></div>
+      <div class="fil-img"><img src="./images/logo-GMM-1024x722.jpg" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Koulikoro</div></div>
       <div class="fil-body"><div class="fil-abbr">GMM</div><div class="fil-name">Grands Moulins du Mali — 1979, capital 4 Mds FCFA. DG : Cyril ACHCAR</div><div class="fil-tags"><span class="flt">Riz Malo</span><span class="flt">Farine</span><span class="flt">Vitablé</span></div></div>
     </div>
     <div class="fil-card" onclick="window.location='filiales.html'">
-      <div class="fil-img"><img src="./images/Diago-3-1.jpg" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Bamako · Conakry</div></div>
+      <div class="fil-img"><img src="./images/semm.jpg" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Bamako · Conakry</div></div>
       <div class="fil-body"><div class="fil-abbr">SEMM</div><div class="fil-name">Société des Eaux Minérales du Mali — rachetée en 1996 auprès de l'État Malien</div><div class="fil-tags"><span class="flt">Diago</span><span class="flt">Ami Fruité</span><span class="flt">Eau.</span></div></div>
     </div>
     <div class="fil-card" onclick="window.location='filiales.html'">
-      <div class="fil-img"><img src="https://images.unsplash.com/photo-1590247813693-5541d1c609fd?w=700&q=80&fit=crop" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Dakar · Abidjan</div></div>
+      <div class="fil-img"><img src="./images/logo-SEMS.png" alt=""/><div class="fil-img-ov"></div><div class="fil-badge">Dakar · Abidjan</div></div>
       <div class="fil-body"><div class="fil-abbr">SEMS</div><div class="fil-name">Expertises & Services Spécialisés</div><div class="fil-tags"><span class="flt">Expertise</span><span class="flt">Conseil</span><span class="flt">Services</span></div></div>
     </div>
   </div>
