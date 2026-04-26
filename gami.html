@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>GAMI — Groupe AMI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="shared.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<style>
+/* ═══ GAMI SUB-NAV ═══ */
+.gami-subnav{position:sticky;top:72px;z-index:150;background:#fff;border-bottom:2px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.gsn-inner{max-width:1280px;margin:0 auto;padding:0 80px;display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.gsn-inner::-webkit-scrollbar{display:none}
+.gsn-item{display:flex;align-items:center;gap:8px;padding:16px 28px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;font-family:'Outfit',sans-serif;text-decoration:none;white-space:nowrap}
+.gsn-item:hover{color:var(--blue);background:var(--light)}
+.gsn-item.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
+.gsn-icon{font-size:15px}
+/* ═══ TAB PANELS ═══ */
+.gami-panel{display:none}
+.gami-panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ GROUPE TAB ═══ */
+.vision-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:56px}
+.vision-card{border-radius:20px;padding:36px;border:1px solid var(--border);transition:.25s}
+.vision-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.07)}
+.vision-card.blue-accent{border-left:4px solid var(--blue)}
+.vision-card.orange-accent{border-left:4px solid var(--orange)}
+.vc-icon{font-size:28px;margin-bottom:18px}
+.vc-tag{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.vc-title{font-size:1.2rem;color:var(--dark);margin-bottom:12px}
+.vc-text{font-size:14px;color:var(--muted);line-height:1.75;font-weight:300}
+.g-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:48px;overflow-x:auto;scrollbar-width:none}
+.g-tabs::-webkit-scrollbar{display:none}
+.g-tab{padding:14px 28px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s;font-family:'Outfit',sans-serif;white-space:nowrap}
+.g-tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:700}
+.g-tab-content{display:none;animation:fadeIn .3s ease}
+.g-tab-content.active{display:block}
+.orga-table{width:100%;border-collapse:collapse;border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.orga-table thead{background:var(--blue)}
+.orga-table th{padding:16px 24px;text-align:left;font-size:12px;font-weight:600;color:#fff;letter-spacing:.5px;font-family:'Outfit',sans-serif;text-transform:uppercase}
+.orga-table tbody tr{border-top:1px solid var(--border);transition:.15s}
+.orga-table tbody tr:hover{background:var(--light)}
+.orga-table td{padding:18px 24px;font-size:14px;color:var(--text);font-family:'Outfit',sans-serif}
+.orga-table td:first-child{font-weight:600;color:var(--blue)}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.val-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px;text-align:center;transition:.25s}
+.val-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 12px 32px rgba(27,79,138,.07)}
+.val-icon{width:60px;height:60px;border-radius:16px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 18px}
+.val-card h3{font-size:1.05rem;margin-bottom:10px;color:var(--dark)}
+.val-card p{font-size:13px;color:var(--muted);line-height:1.65;font-family:'Outfit',sans-serif;font-weight:300}
+.history-line{position:relative;padding-left:32px}
+.history-line::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--border)}
+.hl-item{position:relative;margin-bottom:36px}
+.hl-dot{position:absolute;left:-28px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--blue);border:3px solid #fff;box-shadow:0 0 0 2px var(--blue)}
+.hl-year{font-size:12px;font-weight:700;color:var(--orange);margin-bottom:4px;font-family:'Outfit',sans-serif;letter-spacing:.5px}
+.hl-title{font-size:15px;font-weight:600;color:var(--dark);margin-bottom:6px}
+.hl-text{font-size:13px;color:var(--muted);line-height:1.6;font-weight:300;font-family:'Outfit',sans-serif}
+.about-img-band{background:var(--light);padding:56px 80px;border-top:1px solid var(--border)}
+.aib-inner{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;max-width:1280px;margin:0 auto}
+.aib-main{position:relative;border-radius:20px;overflow:hidden;height:360px;cursor:pointer}
+.aib-main img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.aib-main:hover img{transform:scale(1.04)}
+.aib-main-caption{position:absolute;bottom:0;left:0;right:0;padding:20px 24px;background:linear-gradient(to top,rgba(11,25,41,.85),transparent)}
+.aib-cap-tag{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#f5a030;display:block;margin-bottom:6px}
+.aib-main-caption p{font-size:14px;color:rgba(255,255,255,.85);font-family:'Outfit',sans-serif;font-weight:400;line-height:1.5;margin:0}
+.aib-side{display:flex;flex-direction:column;gap:16px}
+.aib-sm{position:relative;border-radius:16px;overflow:hidden;flex:1;min-height:160px;cursor:pointer}
+.aib-sm img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.aib-sm:hover img{transform:scale(1.06)}
+.aib-sm-caption{position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:linear-gradient(to top,rgba(11,25,41,.75),transparent)}
+.aib-sm-caption span{font-size:12px;color:rgba(255,255,255,.8);font-family:'Outfit',sans-serif;font-weight:500}
+.stats-band{background:linear-gradient(135deg,var(--blue),var(--blue3));padding:64px 80px;display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.sb-stat{text-align:center;padding:20px;border-right:1px solid rgba(255,255,255,.15)}
+.sb-stat:last-child{border-right:none}
+.sb-stat strong{font-family:'Playfair Display',serif;font-size:2.6rem;color:#fff;display:block;line-height:1}
+.sb-stat span{font-size:12px;color:rgba(255,255,255,.55);display:block;margin-top:6px;letter-spacing:.5px}
+
+/* ═══ FILIALES TAB ═══ */
+.map-section{background:var(--dark);padding:80px;position:relative;overflow:hidden}
+.map-section::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.map-section-header{text-align:center;margin-bottom:48px;position:relative;z-index:2}
+.map-section-header .tag{color:var(--orange2);display:block;margin-bottom:10px}
+.map-section-header h2{color:#fff;font-size:clamp(1.8rem,3vw,2.6rem);margin-bottom:12px}
+.map-section-header p{color:rgba(255,255,255,.5);font-size:15px;font-weight:300;font-family:'Outfit',sans-serif;max-width:520px;margin:0 auto}
+.map-layout{display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start;position:relative;z-index:2}
+#leaflet-map{height:520px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.leaflet-popup-content-wrapper{background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.25);border:none;padding:0;overflow:hidden}
+.leaflet-popup-tip{background:#fff}
+.leaflet-popup-content{margin:0 !important;width:230px !important}
+.gami-popup{padding:18px 20px}
+.gami-popup-badge{display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:10px;padding:4px 8px;margin-bottom:10px;border:1px solid #e5e9f0}
+.gami-popup-badge img{height:30px;max-width:90px;object-fit:contain;display:block}
+.gami-popup h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:#0F1923;margin-bottom:6px}
+.gami-popup-country{font-size:12px;color:#7F8C9A;font-family:'Outfit',sans-serif;margin-bottom:8px}
+.gami-popup p{font-size:12px;color:#7F8C9A;font-family:'Outfit',sans-serif;line-height:1.6;margin:0}
+.gami-popup-footer{background:#F4F7FC;padding:10px 20px;font-size:11px;font-weight:700;font-family:'Outfit',sans-serif;color:#E8861A;letter-spacing:.5px;cursor:pointer;text-align:center;transition:.2s}
+.gami-popup-footer:hover{background:#E0E8F0}
+.fil-sidebar{display:flex;flex-direction:column;gap:12px}
+.fil-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;cursor:pointer;transition:all .3s ease;position:relative;overflow:hidden}
+.fil-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:.3s;border-radius:3px 0 0 3px}
+.fil-card.active,.fil-card:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);transform:translateX(4px)}
+.fil-card.gmm.active::before,.fil-card.gmm:hover::before{background:#1B4F8A}
+.fil-card.semm.active::before,.fil-card.semm:hover::before{background:var(--orange)}
+.fil-card.sems.active::before,.fil-card.sems:hover::before{background:#1A8060}
+.fc-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.fc-badge{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fc-badge.gmm{background:#fff;border:1px solid rgba(27,79,138,.3)}
+.fc-badge.semm{background:#fff;border:1px solid rgba(232,134,26,.3)}
+.fc-badge.sems{background:#fff;border:1px solid rgba(26,128,96,.3)}
+.fc-badge img{width:100%;height:100%;object-fit:contain;border-radius:8px;padding:3px}
+.fc-head{flex:1}
+.fc-name{font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;color:#fff;margin-bottom:2px;line-height:1.2}
+.fc-fullname{font-size:11px;color:rgba(255,255,255,.45);font-family:'Outfit',sans-serif}
+.fc-country{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;margin-bottom:10px;width:fit-content}
+.fc-flag{width:20px;height:14px;border-radius:2px;object-fit:cover;vertical-align:middle;flex-shrink:0}
+.fc-country-name{font-size:11px;font-weight:600;color:rgba(255,255,255,.7);font-family:'Outfit',sans-serif}
+.fc-tags{display:flex;gap:5px;flex-wrap:wrap}
+.fc-tag{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;font-family:'Outfit',sans-serif}
+.fc-tag.gmm{background:rgba(27,79,138,.2);color:#5B9FE0}
+.fc-tag.semm{background:rgba(232,134,26,.15);color:#F5A030}
+.fc-tag.sems{background:rgba(26,128,96,.2);color:#2ECC9E}
+.fil-detail-section{padding:80px;background:var(--light);border-top:1px solid var(--border)}
+.fds-header{text-align:center;margin-bottom:56px}
+.fds-header .tag{display:block;margin-bottom:10px}
+.fds-header h2{font-size:clamp(1.6rem,2.5vw,2.2rem);color:var(--dark);margin-bottom:8px}
+.fds-header p{font-size:14px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300}
+.fd-block{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:100px;padding-bottom:80px;border-bottom:1px solid var(--border)}
+.fd-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.fd-block.reverse{direction:rtl}
+.fd-block.reverse>*{direction:ltr}
+.fd-img{border-radius:24px;overflow:hidden;height:420px;position:relative}
+.fd-img img{width:100%;height:100%;object-fit:cover}
+.fd-img-badge{position:absolute;top:20px;left:20px;background:var(--blue);color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:50px;letter-spacing:.5px}
+.fd-img-badge.orange{background:var(--orange)}
+.fd-img-badge.teal{background:#1ABC9C}
+.fd-country-pill{display:inline-flex;align-items:center;gap:8px;background:#E6F1FB;border:1px solid #C3D9F5;border-radius:20px;padding:6px 14px;margin-bottom:14px}
+.fd-country-pill.mali{background:#FFF3E8;border-color:#F5D5A5}
+.fd-country-pill.sn{background:#EAF7EF;border-color:#A5D9BC}
+.fd-country-pill .pflag{font-size:16px}
+.fd-country-pill .pname{font-size:12px;font-weight:700;color:var(--text);font-family:'Outfit',sans-serif;letter-spacing:.3px}
+.fd-content .tag{display:block;margin-bottom:12px}
+.fd-content h2{font-size:2rem;color:var(--dark);margin-bottom:16px;line-height:1.2}
+.fd-content p{color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:28px;font-size:15px}
+.fd-services{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
+.fd-srv{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:10px;transition:.2s}
+.fd-srv:hover{border-color:var(--blue);background:#F4F7FC}
+.fd-srv-icon{font-size:18px}
+.fd-srv-text{font-size:13px;font-weight:600;color:var(--text);font-family:'Outfit',sans-serif}
+.fd-stat-row{display:flex;gap:24px;padding-top:24px;border-top:1px solid var(--border);margin-top:8px}
+.fd-stat strong{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--blue);display:block}
+.fd-stat span{font-size:11px;color:var(--muted);letter-spacing:.5px;font-family:'Outfit',sans-serif}
+.fd-cta{display:inline-flex;align-items:center;gap:8px;margin-top:24px;padding:11px 22px;border-radius:50px;font-size:13px;font-weight:700;font-family:'Outfit',sans-serif;letter-spacing:.3px;text-decoration:none;transition:all .25s ease;border:2px solid var(--blue);color:var(--blue)}
+.fd-cta:hover{background:var(--blue);color:#fff}
+.fd-cta.orange{border-color:var(--orange);color:var(--orange)}
+.fd-cta.orange:hover{background:var(--orange);color:#fff}
+.fd-cta.teal{border-color:#1A8060;color:#1A8060}
+.fd-cta.teal:hover{background:#1A8060;color:#fff}
+.zones-band{background:var(--dark);padding:72px 80px;color:#fff}
+.zones-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.zone-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px;text-align:center;cursor:pointer;transition:.2s}
+.zone-card:hover{border-color:var(--orange);background:rgba(232,134,26,.1)}
+.zone-flag{margin-bottom:12px;display:flex;justify-content:center;font-size:28px}
+.zone-name{font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;font-family:'Outfit',sans-serif}
+.zone-cities{font-size:11px;color:rgba(255,255,255,.45)}
+.zone-fil{font-size:10px;color:var(--orange2);font-weight:600;margin-top:6px;font-family:'Outfit',sans-serif;letter-spacing:.5px}
+
+/* ═══ PRÉSENTATION TAB ═══ */
+.pres-section{padding:80px}
+.pres-lead{font-size:1.1rem;color:var(--text);line-height:1.9;font-weight:400;max-width:760px;margin-bottom:56px}
+.pres-cols{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.pres-img{border-radius:24px;overflow:hidden;height:500px}
+.pres-img img{width:100%;height:100%;object-fit:cover}
+.pres-block{margin-bottom:36px}
+.pres-block h3{font-size:1.15rem;color:var(--dark);margin-bottom:12px}
+.pres-block p{font-size:14px;color:var(--muted);line-height:1.75;font-weight:300}
+.pres-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px}
+.pres-stat{background:var(--light);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;transition:.2s}
+.pres-stat:hover{border-color:var(--blue)}
+.pres-stat strong{font-family:'Playfair Display',serif;font-size:2rem;color:var(--blue);display:block;margin-bottom:4px}
+.pres-stat span{font-size:12px;color:var(--muted);font-family:'Outfit',sans-serif}
+.gov-section{padding:80px;background:var(--dark)}
+.gov-header{text-align:center;margin-bottom:56px}
+.gov-header h2{color:#fff;font-size:clamp(1.8rem,3vw,2.4rem);margin-bottom:12px}
+.gov-header p{color:rgba(255,255,255,.5);font-size:15px;font-family:'Outfit',sans-serif;font-weight:300}
+.gov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.gov-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:32px;transition:.25s}
+.gov-card:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2);transform:translateY(-4px)}
+.gov-avatar{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue3));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;font-weight:700;margin-bottom:20px}
+.gov-name{font-family:'Playfair Display',serif;font-size:1.05rem;color:#fff;margin-bottom:4px}
+.gov-title{font-size:11px;color:var(--orange2);font-family:'Outfit',sans-serif;font-weight:700;letter-spacing:.5px;margin-bottom:12px;text-transform:uppercase}
+.gov-desc{font-size:13px;color:rgba(255,255,255,.55);font-family:'Outfit',sans-serif;font-weight:300;line-height:1.65}
+.pres-timeline{padding:80px;background:var(--light);border-top:1px solid var(--border)}
+.pt-header{text-align:center;margin-bottom:56px}
+.pt-header h2{font-size:clamp(1.8rem,3vw,2.4rem);color:var(--dark);margin-bottom:12px}
+.pt-header p{font-size:15px;color:var(--muted);font-weight:300}
+.pt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.pt-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:28px;transition:.2s;position:relative;overflow:hidden}
+.pt-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--blue)}
+.pt-card.orange::after{background:var(--orange)}
+.pt-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(0,0,0,.08)}
+.pt-year{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--blue);font-weight:700;margin-bottom:8px}
+.pt-card.orange .pt-year{color:var(--orange)}
+.pt-card h4{font-size:1rem;color:var(--dark);margin-bottom:10px}
+.pt-card p{font-size:13px;color:var(--muted);line-height:1.65;font-weight:300}
+
+/* ═══ VISION TAB ═══ */
+.vision-page{padding:80px}
+.vp-head{max-width:720px;margin-bottom:64px}
+.vp-headline{font-size:clamp(2rem,3vw,2.8rem);color:var(--dark);margin-bottom:20px;line-height:1.2}
+.vp-sub{font-size:1.05rem;color:var(--muted);line-height:1.8;font-weight:300}
+.vp-cards{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:64px}
+.vp-card{border-radius:20px;padding:40px;border:1px solid var(--border);transition:.25s;position:relative;overflow:hidden}
+.vp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--blue)}
+.vp-card.orange::before{background:var(--orange)}
+.vp-card.teal::before{background:#1A8060}
+.vp-card:hover{transform:translateY(-5px);box-shadow:0 20px 56px rgba(0,0,0,.09)}
+.vp-card-icon{font-size:36px;margin-bottom:20px}
+.vp-card-tag{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.vp-card h3{font-size:1.25rem;color:var(--dark);margin-bottom:14px}
+.vp-card p{font-size:14px;color:var(--muted);line-height:1.75;font-weight:300}
+.pillars-section{background:var(--dark);padding:80px}
+.pillars-header{text-align:center;margin-bottom:56px}
+.pillars-header h2{color:#fff;font-size:clamp(1.8rem,3vw,2.4rem);margin-bottom:12px}
+.pillars-header p{color:rgba(255,255,255,.5);font-size:15px;font-family:'Outfit',sans-serif;font-weight:300;max-width:520px;margin:0 auto}
+.pillars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.pillar-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:36px;transition:.25s;text-align:center}
+.pillar-card:hover{background:rgba(255,255,255,.09);transform:translateY(-4px)}
+.pillar-num{font-family:'Playfair Display',serif;font-size:3rem;color:rgba(255,255,255,.1);line-height:1;margin-bottom:16px}
+.pillar-icon{font-size:32px;margin-bottom:16px}
+.pillar-card h3{color:#fff;font-size:1.1rem;margin-bottom:12px}
+.pillar-card p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.7;font-weight:300;font-family:'Outfit',sans-serif}
+.vp-engagements{padding:80px;background:var(--light);border-top:1px solid var(--border)}
+.vpe-header{text-align:center;margin-bottom:56px}
+.vpe-header h2{font-size:clamp(1.8rem,3vw,2.4rem);color:var(--dark);margin-bottom:12px}
+.vpe-header p{font-size:15px;color:var(--muted);font-weight:300}
+.vpe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.vpe-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px;transition:.2s}
+.vpe-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 12px 32px rgba(27,79,138,.07)}
+.vpe-icon{width:56px;height:56px;border-radius:14px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:20px}
+.vpe-card h3{font-size:1rem;color:var(--dark);margin-bottom:10px}
+.vpe-card p{font-size:13px;color:var(--muted);line-height:1.65;font-weight:300}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:1200px){
+  .gami-subnav{top:72px}
+  .gsn-inner,.pres-section,.gov-section,.pres-timeline,.vision-page,.pillars-section,.vp-engagements{padding-left:48px;padding-right:48px}
+  .map-section,.fil-detail-section,.zones-band{padding-left:48px;padding-right:48px}
+  .about-img-band,.stats-band{padding-left:48px;padding-right:48px}
+  .section-pad{padding:72px 48px}
+}
+@media(max-width:900px){
+  .gami-subnav{top:64px}
+  .gsn-inner,.pres-section,.gov-section,.pres-timeline,.vision-page,.pillars-section,.vp-engagements{padding:56px 24px}
+  .about-img-band{padding:40px 24px}
+  .aib-inner{grid-template-columns:1fr}
+  .aib-main{height:260px}
+  .stats-band{padding:48px 24px;grid-template-columns:1fr 1fr}
+  .sb-stat{border-right:none;border-bottom:1px solid rgba(255,255,255,.12);padding:16px}
+  .sb-stat:nth-child(2n){border-right:none}
+  .sb-stat:last-child,.sb-stat:nth-last-child(-n+2){border-bottom:none}
+  .map-section,.fil-detail-section,.zones-band{padding:56px 24px}
+  .map-layout{grid-template-columns:1fr}
+  .fil-sidebar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  #leaflet-map{height:420px}
+  .fd-block{grid-template-columns:1fr;gap:28px;margin-bottom:56px;padding-bottom:48px}
+  .fd-block.reverse{direction:ltr}
+  .fd-block.reverse>*{direction:ltr}
+  .fd-img{height:280px}
+  .fd-services{grid-template-columns:1fr}
+  .zones-grid{grid-template-columns:repeat(3,1fr)}
+  .pres-cols{grid-template-columns:1fr}
+  .pres-img{height:300px}
+  .gov-grid{grid-template-columns:1fr 1fr}
+  .pt-grid{grid-template-columns:1fr 1fr}
+  .vp-cards{grid-template-columns:1fr}
+  .pillars-grid{grid-template-columns:1fr 1fr}
+  .vpe-grid{grid-template-columns:1fr 1fr}
+  .section-pad{padding:56px 24px}
+}
+@media(max-width:768px){
+  .map-section{padding:40px 18px}
+  .fil-sidebar{grid-template-columns:1fr}
+  #leaflet-map{height:320px}
+}
+@media(max-width:640px){
+  .gsn-item{padding:12px 14px;font-size:12px}
+  .gsn-icon{display:none}
+  .vision-grid,.vp-cards{grid-template-columns:1fr}
+  .values-grid,.pillars-grid,.vpe-grid,.gov-grid{grid-template-columns:1fr}
+  .pres-stats,.pt-grid{grid-template-columns:1fr 1fr}
+  .zones-grid{grid-template-columns:1fr 1fr}
+  .stats-band{grid-template-columns:1fr 1fr;padding:36px 18px}
+  .fd-stat-row{flex-wrap:wrap;gap:12px}
+  .orga-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .section-pad{padding:44px 18px}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<nav id="nav">
+  <div class="nav-logo"><img src="./images/logo_GAMI.png" alt="Groupe AMI — GAMI" class="nav-logo-img"/></div>
+  <div class="nav-links">
+    <a class="nl" href="index.html">Accueil</a>
+    <div class="nav-dropdown">
+      <a class="nl" href="gami.html">GAMI</a>
+      <div class="nav-drop-menu">
+        <a class="ndm-item" href="gami.html#groupe"><div class="ndm-badge" style="background:#EBF3FF;color:#1B4F8A;font-weight:800">G</div><span>Le Groupe</span></a>
+        <a class="ndm-item" href="gami.html#presentation"><div class="ndm-badge" style="background:#FFF3E8;color:#E8861A;font-weight:800">P</div><span>Présentation du Groupe</span></a>
+        <a class="ndm-item" href="gami.html#filiales"><div class="ndm-badge" style="background:#E8F7EF;color:#1A8060;font-weight:800">F</div><span>Filiales</span></a>
+        <a class="ndm-item" href="gami.html#vision"><div class="ndm-badge" style="background:#EBF3FF;color:#1B4F8A;font-weight:800">V</div><span>Vision</span></a>
+      </div>
+    </div>
+    <div class="nav-dropdown">
+      <a class="nl" href="nos-produits.html">Nos Produits</a>
+      <div class="nav-drop-menu">
+        <a class="ndm-item" href="nos-produits.html#gmm"><div class="ndm-badge gmm">GMM</div><span>Grands Moulins du Mali</span></a>
+        <a class="ndm-item" href="nos-produits.html#semm"><div class="ndm-badge semm">SEMM</div><span>Eaux Minérales du Mali</span></a>
+        <a class="ndm-item" href="nos-produits.html#sems"><div class="ndm-badge sems">SEMS</div><span>Eaux Minérales du Sénégal</span></a>
+      </div>
+    </div>
+    <a class="nl" href="actualites.html">Actualités</a>
+    <a class="nl" href="galerie.html">Galerie</a>
+    <a class="nl" href="recrutement.html">Recrutement</a>
+    <a class="nl" href="transporteurs.html">Transporteurs</a>
+    <a class="nl" href="contact.html">Contact</a>
+  </div>
+  <a class="nav-cta" href="backoffice.html">Espace DSI</a>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="ph-bg" style="background-image:url('https://images.unsplash.com/photo-1604328698692-f76ea9498e76?q=80&w=1170&auto=format&fit=crop')"></div>
+  <div class="ph-ov"></div><div class="ph-ov2"></div><div class="ph-grid"></div><div class="ph-geo"></div>
+  <div class="ph-inner">
+    <div class="ph-breadcrumb"><a href="index.html">Accueil</a><span>/</span><span>GAMI</span></div>
+    <div class="ph-tag"><span class="ph-tag-dot"></span>Groupement AMI — GAMI</div>
+    <h1>Le <em>Groupe AMI</em></h1>
+    <p>Découvrez l'histoire, la présentation, les filiales et la vision du Groupement AMI — acteur industriel de référence en Afrique de l'Ouest.</p>
+    <div class="ph-stats">
+      <div class="ph-stat"><div class="ph-stat-v">20+</div><div class="ph-stat-l">Ans d'existence</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">3</div><div class="ph-stat-l">Filiales industrielles</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">500+</div><div class="ph-stat-l">Collaborateurs</div></div>
+      <div class="ph-stat"><div class="ph-stat-v">5</div><div class="ph-stat-l">Pays couverts</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- GAMI SUB-NAV -->
+<div class="gami-subnav" id="gamiSubnav">
+  <div class="gsn-inner">
+    <a class="gsn-item active" data-tab="groupe" href="#groupe" onclick="switchGamiTab(event,'groupe')"><span class="gsn-icon">🏢</span>Groupe</a>
+    <a class="gsn-item" data-tab="presentation" href="#presentation" onclick="switchGamiTab(event,'presentation')"><span class="gsn-icon">📋</span>Présentation du Groupe</a>
+    <a class="gsn-item" data-tab="filiales" href="#filiales" onclick="switchGamiTab(event,'filiales')"><span class="gsn-icon">🌍</span>Filiales</a>
+    <a class="gsn-item" data-tab="vision" href="#vision" onclick="switchGamiTab(event,'vision')"><span class="gsn-icon">🎯</span>Vision</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB : GROUPE
+══════════════════════════════════════ -->
+<div id="tab-groupe" class="gami-panel active">
+
+  <div class="about-img-band">
+    <div class="aib-inner">
+      <div class="aib-main">
+        <img src="https://images.unsplash.com/photo-1573164574511-73c773193279?q=80&w=1169&auto=format&fit=crop" alt="Équipe GAMI"/>
+        <div class="aib-main-caption">
+          <span class="aib-cap-tag">Expertise terrain</span>
+          <p>Nos équipes sur le terrain, au cœur des opérations industrielles</p>
+        </div>
+      </div>
+      <div class="aib-side">
+        <div class="aib-sm">
+          <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=700&q=80&fit=crop" alt="Innovation GAMI"/>
+          <div class="aib-sm-caption"><span>Innovation & digital</span></div>
+        </div>
+        <div class="aib-sm">
+          <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=300&q=80&fit=crop" alt="Operations GAMI"/>
+          <div class="aib-sm-caption"><span>Opérations de terrain</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section-pad" style="padding-top:64px">
+    <div class="g-tabs">
+      <div class="g-tab active" onclick="switchInnerTab(this,'gt1')">Vision & Mission</div>
+      <div class="g-tab" onclick="switchInnerTab(this,'gt2')">Organisation</div>
+      <div class="g-tab" onclick="switchInnerTab(this,'gt3')">Nos Valeurs</div>
+      <div class="g-tab" onclick="switchInnerTab(this,'gt4')">Notre Histoire</div>
+    </div>
+
+    <div class="g-tab-content active" id="gt1">
+      <div class="vision-grid">
+        <div class="vision-card blue-accent">
+          <div class="vc-icon">🎯</div>
+          <div class="vc-tag">Notre Vision</div>
+          <h3 class="vc-title">Être le groupe industriel de référence en Afrique de l'Ouest</h3>
+          <p class="vc-text">Reconnu pour son excellence opérationnelle, son innovation permanente et son engagement envers un développement industriel durable, inclusif et créateur de valeur pour les communautés africaines.</p>
+        </div>
+        <div class="vision-card orange-accent">
+          <div class="vc-icon">🚀</div>
+          <div class="vc-tag">Notre Mission</div>
+          <h3 class="vc-title">Fournir des services industriels d'excellence à nos clients</h3>
+          <p class="vc-text">Contribuer au développement économique des pays où nous opérons, en valorisant les talents locaux, en adoptant les meilleures technologies et en maintenant les plus hauts standards de qualité et de sécurité.</p>
+        </div>
+      </div>
+      <div class="stats-band">
+        <div class="sb-stat"><strong>3</strong><span>FILIALES SPÉCIALISÉES</span></div>
+        <div class="sb-stat"><strong>20+</strong><span>ANS D'EXISTENCE</span></div>
+        <div class="sb-stat"><strong>500+</strong><span>COLLABORATEURS</span></div>
+        <div class="sb-stat"><strong>5</strong><span>PAYS COUVERTS</span></div>
+      </div>
+    </div>
+
+    <div class="g-tab-content" id="gt2">
+      <table class="orga-table">
+        <thead><tr><th>Entité</th><th>Nom complet</th><th>Siège</th><th>Capital FCFA</th><th>Responsable</th></tr></thead>
+        <tbody>
+          <tr><td>GCM</td><td>Grande Confiserie du Mali</td><td>ZI Sotuba, Bamako</td><td>1 000 000 000</td><td>Roger ACHCAR (DG)</td></tr>
+          <tr><td>GMM</td><td>Grands Moulins du Mali</td><td>Koulikoro (55 km Bamako)</td><td>4 000 000 000</td><td>Cyril ACHCAR (DG)</td></tr>
+          <tr><td>SEMM</td><td>Société des Eaux Minérales du Mali</td><td>Monts Mandingue, 35 km Bamako</td><td>—</td><td>Conseil d'administration</td></tr>
+          <tr><td>GAM Transit</td><td>GAM Transit SARL</td><td>ZI Sotuba / Frontières Mali</td><td>8 500 000</td><td>Cyril ACHCAR (Gérant)</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:20px;font-size:14px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300">La DSI et le service Communication assureront l'exploitation du site après livraison.</p>
+    </div>
+
+    <div class="g-tab-content" id="gt3">
+      <div class="values-grid">
+        <div class="val-card"><div class="val-icon">🤝</div><h3>Intégrité</h3><p>Nous agissons avec honnêteté et transparence dans toutes nos relations professionnelles, avec nos clients, partenaires et collaborateurs.</p></div>
+        <div class="val-card"><div class="val-icon">💡</div><h3>Innovation</h3><p>Nous adoptons continuellement les technologies modernes pour améliorer nos services et nos processus opérationnels.</p></div>
+        <div class="val-card"><div class="val-icon">🌍</div><h3>Engagement local</h3><p>Nous investissons dans les communautés locales et favorisons l'emploi, la formation et le développement des talents africains.</p></div>
+        <div class="val-card"><div class="val-icon">🏆</div><h3>Excellence</h3><p>Nous maintenons les plus hauts standards de qualité dans chacune de nos interventions, quel que soit le secteur ou le pays.</p></div>
+        <div class="val-card"><div class="val-icon">🔒</div><h3>Sécurité</h3><p>La sécurité de nos équipes et de nos installations est une priorité absolue dans toutes nos opérations industrielles.</p></div>
+        <div class="val-card"><div class="val-icon">♻️</div><h3>Durabilité</h3><p>Nous intégrons les enjeux environnementaux et sociaux dans notre stratégie de développement à long terme.</p></div>
+      </div>
+    </div>
+
+    <div class="g-tab-content" id="gt4">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start" data-history-grid>
+        <div class="history-line">
+          <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2002</div><div class="hl-title">Création du GIE AMI</div><div class="hl-text">Fondation du Groupement d'Intérêt Économique AMI, premier pas dans le secteur industriel en Afrique de l'Ouest.</div></div>
+          <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2008</div><div class="hl-title">Expansion au Mali</div><div class="hl-text">Ouverture des premières opérations au Mali, début de la couverture régionale pour les contrats miniers.</div></div>
+          <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2015</div><div class="hl-title">Création de GMM & SEMM</div><div class="hl-text">Structuration du groupe avec deux filiales spécialisées, répondant à la croissance des activités industrielles et minières.</div></div>
+          <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2020</div><div class="hl-title">Lancement de SEMS</div><div class="hl-text">Troisième filiale dédiée aux expertises et services spécialisés, élargissant l'offre du groupe au Sénégal.</div></div>
+          <div class="hl-item"><div class="hl-dot" style="background:var(--orange)"></div><div class="hl-year">2024</div><div class="hl-title">Passage de GIE AMI vers GAMI</div><div class="hl-text">Nouvelle identité visuelle, nouvelle organisation, intégration de nouvelles entités et lancement du site institutionnel moderne.</div></div>
+        </div>
+        <div>
+          <div style="border-radius:20px;overflow:hidden;height:320px;margin-bottom:20px"><img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80&fit=crop" alt="" style="width:100%;height:100%;object-fit:cover"/></div>
+          <div style="border-radius:16px;overflow:hidden;height:200px"><img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80&fit=crop" alt="" style="width:100%;height:100%;object-fit:cover"/></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB : PRÉSENTATION DU GROUPE
+══════════════════════════════════════ -->
+<div id="tab-presentation" class="gami-panel">
+
+  <section class="pres-section">
+    <span class="tag" style="display:block;margin-bottom:12px">PRÉSENTATION</span>
+    <h2 class="section-title" style="margin-bottom:20px">Le Groupement AMI — <em style="color:var(--orange);font-style:normal">GAMI</em></h2>
+    <p class="pres-lead">Né de la vision entrepreneuriale de ses fondateurs, le Groupement AMI (GAMI) s'est imposé comme un acteur industriel majeur en Afrique de l'Ouest. Depuis sa création sous forme de GIE en 2002, le groupe a su se transformer, se diversifier et s'ancrer durablement dans les économies malienne et sénégalaise.</p>
+    <div class="pres-cols">
+      <div class="pres-img">
+        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1170&auto=format&fit=crop" alt="Direction GAMI"/>
+      </div>
+      <div>
+        <div class="pres-block">
+          <h3>Un groupe industriel intégré</h3>
+          <p>GAMI regroupe trois filiales complémentaires — GMM, SEMM et SEMS — couvrant l'agro-industrie, la production d'eau minérale et la distribution. Cette diversification maîtrisée offre une résilience économique et une capacité d'innovation permanente.</p>
+        </div>
+        <div class="pres-block">
+          <h3>Ancrage territorial fort</h3>
+          <p>Présent au Mali depuis 2002 et au Sénégal depuis 2015, GAMI emploie plus de 500 collaborateurs locaux. Le groupe s'engage activement dans la formation professionnelle, le développement des compétences locales et le soutien aux économies régionales.</p>
+        </div>
+        <div class="pres-block">
+          <h3>Gouvernance moderne</h3>
+          <p>GAMI applique des standards de gouvernance élevés : conseil d'administration actif, direction générale par filiale, contrôle interne renforcé et reporting financier régulier. Cette rigueur garantit la confiance des partenaires institutionnels et financiers.</p>
+        </div>
+        <div class="pres-stats">
+          <div class="pres-stat"><strong>4 Mds</strong><span>Capital GMM (FCFA)</span></div>
+          <div class="pres-stat"><strong>1979</strong><span>Création de GMM</span></div>
+          <div class="pres-stat"><strong>N°1</strong><span>Eau minérale au Mali</span></div>
+          <div class="pres-stat"><strong>5</strong><span>Pays d'opération</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gov-section">
+    <div class="gov-header">
+      <span class="tag" style="color:var(--orange2);display:block;margin-bottom:10px">GOUVERNANCE</span>
+      <h2>Direction du Groupe</h2>
+      <p>Une équipe dirigeante expérimentée au service du développement industriel africain</p>
+    </div>
+    <div class="gov-grid">
+      <div class="gov-card">
+        <div class="gov-avatar">R</div>
+        <div class="gov-name">Roger ACHCAR</div>
+        <div class="gov-title">Directeur Général — GCM</div>
+        <p class="gov-desc">À la tête de la Grande Confiserie du Mali, Roger ACHCAR supervise l'ensemble des activités confiserie du groupe avec une vision stratégique axée sur la qualité et l'innovation produit.</p>
+      </div>
+      <div class="gov-card">
+        <div class="gov-avatar">C</div>
+        <div class="gov-name">Cyril ACHCAR</div>
+        <div class="gov-title">Directeur Général — GMM · GAM Transit</div>
+        <p class="gov-desc">Directeur des Grands Moulins du Mali et gérant de GAM Transit, Cyril ACHCAR pilote les activités agro-industrielles et logistiques, contribuant à plus de 50% du CA du groupe.</p>
+      </div>
+      <div class="gov-card">
+        <div class="gov-avatar">CA</div>
+        <div class="gov-name">Conseil d'Administration</div>
+        <div class="gov-title">Direction — SEMM</div>
+        <p class="gov-desc">La SEMM est pilotée par son conseil d'administration qui assure la supervision stratégique des activités liées à l'eau minérale Diago, leader incontesté sur le marché malien.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pres-timeline">
+    <div class="pt-header">
+      <span class="tag" style="display:block;margin-bottom:10px">JALONS CLÉS</span>
+      <h2>Moments fondateurs</h2>
+      <p>Les étapes qui ont forgé l'identité industrielle de GAMI</p>
+    </div>
+    <div class="pt-grid">
+      <div class="pt-card">
+        <div class="pt-year">1979</div>
+        <h4>Naissance de GMM</h4>
+        <p>Création des Grands Moulins du Mali à Koulikoro, première implantation agro-industrielle majeure du groupe fondateur.</p>
+      </div>
+      <div class="pt-card orange">
+        <div class="pt-year" style="color:var(--orange)">1996</div>
+        <h4>Acquisition de SEMM</h4>
+        <p>Rachat auprès de l'État malien de la source Diago, conseillée par EVIAN International. Naissance de la filiale hydrique.</p>
+      </div>
+      <div class="pt-card">
+        <div class="pt-year">2002</div>
+        <h4>Fondation du GIE AMI</h4>
+        <p>Structuration formelle du groupe sous forme de Groupement d'Intérêt Économique AMI, marquant le début de l'expansion régionale.</p>
+      </div>
+      <div class="pt-card orange">
+        <div class="pt-year" style="color:var(--orange)">2024</div>
+        <h4>GAMI — Nouvelle ère</h4>
+        <p>Transformation en GAMI avec une nouvelle identité de marque, un site institutionnel moderne et une ambition panafricaine renforcée.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB : FILIALES
+══════════════════════════════════════ -->
+<div id="tab-filiales" class="gami-panel">
+
+  <section class="map-section">
+    <div class="map-section-header">
+      <span class="tag">CARTE INTERACTIVE</span>
+      <h2>Implantation géographique</h2>
+      <p>Cliquez sur un pays ou une filiale pour explorer son implantation en Afrique de l'Ouest.</p>
+    </div>
+    <div class="map-layout">
+      <div id="leaflet-map"></div>
+      <div class="fil-sidebar">
+        <div class="fil-card gmm active" id="card-gmm" onclick="focusFiliale('gmm')">
+          <div class="fc-top">
+            <div class="fc-badge gmm"><img src="./images/logo-GMM-1024x722.jpg" alt="GMM"/></div>
+            <div class="fc-head"><div class="fc-name">Grands Moulins du Mali</div><div class="fc-fullname">Filiale agro-industrielle</div></div>
+          </div>
+          <div class="fc-country"><img class="fc-flag" src="https://flagcdn.com/w20/ml.png" alt="Mali"/><span class="fc-country-name">Mali — Koulikoro</span></div>
+          <div class="fc-tags"><span class="fc-tag gmm">Farine</span><span class="fc-tag gmm">Riz Malo</span><span class="fc-tag gmm">Vitablé</span><span class="fc-tag gmm">Huilerie</span></div>
+        </div>
+        <div class="fil-card semm" id="card-semm" onclick="focusFiliale('semm')">
+          <div class="fc-top">
+            <div class="fc-badge semm"><img src="./images/semm.jpg" alt="SEMM"/></div>
+            <div class="fc-head"><div class="fc-name">Eaux Minérales du Mali</div><div class="fc-fullname">Filiale hydrique — N°1 au Mali</div></div>
+          </div>
+          <div class="fc-country"><img class="fc-flag" src="https://flagcdn.com/w20/ml.png" alt="Mali"/><span class="fc-country-name">Mali — Monts Mandingue</span></div>
+          <div class="fc-tags"><span class="fc-tag semm">Diago</span><span class="fc-tag semm">Ami Fruité</span><span class="fc-tag semm">Source naturelle</span></div>
+        </div>
+        <div class="fil-card sems" id="card-sems" onclick="focusFiliale('sems')">
+          <div class="fc-top">
+            <div class="fc-badge sems"><img src="./images/logo-SEMS.png" alt="SEMS"/></div>
+            <div class="fc-head"><div class="fc-name">Eaux Minérales du Sénégal</div><div class="fc-fullname">Filiale hydrique — Sénégal</div></div>
+          </div>
+          <div class="fc-country"><img class="fc-flag" src="https://flagcdn.com/w20/sn.png" alt="Sénégal"/><span class="fc-country-name">Sénégal — Dakar</span></div>
+          <div class="fc-tags"><span class="fc-tag sems">Samao</span><span class="fc-tag sems">Ami Fruité</span><span class="fc-tag sems">Distribution</span></div>
+        </div>
+        <a href="#fd-gmm" class="btn-main" style="justify-content:center;text-align:center;margin-top:4px" onclick="smoothToDetail(event)">Voir le détail <span>↓</span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="fil-detail-section" id="fil-detail">
+    <div class="fds-header">
+      <span class="tag">NOS FILIALES</span>
+      <h2>Trois entités, <em style="color:var(--orange);font-style:normal">une vision commune</em></h2>
+      <p>Découvrez l'histoire, les activités et les chiffres clés de chaque filiale.</p>
+    </div>
+
+    <div class="fd-block" id="fd-gmm">
+      <div class="fd-img">
+        <img src="./images/logo-GMM-1024x722.jpg" alt="GMM"/>
+        <div class="fd-img-badge">FILIALE GMM</div>
+      </div>
+      <div class="fd-content">
+        <span class="tag">GMM</span>
+        <div class="fd-country-pill mali"><span class="pflag">🇲🇱</span><span class="pname">Mali — Koulikoro, à 55 km de Bamako</span></div>
+        <h2>Grands Moulins<br>du Mali</h2>
+        <p>Créés en 1979, les GMM représentent plus de <strong>50% du chiffre d'affaires</strong> du GIE AMI et constituent l'une des industries les plus importantes du pays. Capital de <strong>4 milliards FCFA</strong>, Directeur Général : <strong>Cyril ACHCAR</strong>.</p>
+        <div class="fd-services">
+          <div class="fd-srv"><div class="fd-srv-icon">🌾</div><div class="fd-srv-text">Moulins à farine — 120 000 T/an</div></div>
+          <div class="fd-srv"><div class="fd-srv-icon">🍚</div><div class="fd-srv-text">Rizerie — Riz Malo 15 000 T/an</div></div>
+          <div class="fd-srv"><div class="fd-srv-icon">👶</div><div class="fd-srv-text">Vitablé / Nutriblé — farine infantile</div></div>
+          <div class="fd-srv"><div class="fd-srv-icon">🫒</div><div class="fd-srv-text">Huilerie — Ami Tulu (huile de coton)</div></div>
+        </div>
+        <div class="fd-stat-row">
+          <div class="fd-stat"><strong>120k T</strong><span>FARINE / AN</span></div>
+          <div class="fd-stat"><strong>15k T</strong><span>RIZ MALO / AN</span></div>
+          <div class="fd-stat"><strong>4 Mds</strong><span>CAPITAL FCFA</span></div>
+        </div>
+        <a href="#" class="fd-cta" target="_blank">Visiter le site GMM <span>→</span></a>
+      </div>
+    </div>
+
+    <div class="fd-block reverse" id="fd-semm">
+      <div class="fd-img">
+        <img src="./images/semm.jpg" alt="SEMM"/>
+        <div class="fd-img-badge orange">FILIALE SEMM</div>
+      </div>
+      <div class="fd-content">
+        <span class="tag">SEMM</span>
+        <div class="fd-country-pill mali"><span class="pflag">🇲🇱</span><span class="pname">Mali — Monts Mandingue, 35 km de Bamako</span></div>
+        <h2>Société des Eaux<br>Minérales du Mali</h2>
+        <p>La SEMM a vu le jour en <strong>1996</strong> par rachat auprès de l'État Malien de la source découverte et conseillée par <strong>EVIAN International</strong>. Diago est le <strong>N°1 de l'eau minérale au Mali</strong>.</p>
+        <div class="fd-services">
+          <div class="fd-srv"><div class="fd-srv-icon">💧</div><div class="fd-srv-text">Diago — eau minérale 4 formats</div></div>
+          <div class="fd-srv"><div class="fd-srv-icon">🍹</div><div class="fd-srv-text">Ami Fruité — 0,25L · 0,38L · 0,5L</div></div>
+          <div class="fd-srv"><div class="fd-srv-icon">🏔️</div><div class="fd-srv-text">Source monts Mandingue naturelle</div></div>
+          <div class="fd-srv"><div class="fd-srv-icon">🧪</div><div class="fd-srv-text">Traitement pointe technologique</div></div>
+        </div>
+        <div class="fd-stat-row">
+          <div class="fd-stat"><strong>1996</strong><span>FONDATION</span></div>
+          <div class="fd-stat"><strong>N°1</strong><span>EAU MINÉRALE MALI</span></div>
+          <div class="fd-stat"><strong>4</strong><span>FORMATS DIAGO</span></div>
+        </div>
+        <a href="https://sites.google.com/view/rmgmm/accueil?authuser=0" class="fd-cta orange" target="_blank">Visiter le site SEMM <span>→</span></a>
+      </div>
+    </div>
+
+    <div class="fd-block" id="fd-sems">
+      <div class="fd-img">
+        <img src="./images/logo-SEMS.png" alt="SEMS"/>
+        <div class="fd-img-badge teal">FILIALE SEMS</div>
+      </div>
+      <div class="fd-content">
+        <span class="tag">SEMS</span>
+        <div class="fd-country-pill sn"><span class="pflag">🇸🇳</span><span class="pname">Sénégal — Dakar</span></div>
+        <h2>Société des Eaux<br>Minérales du Sénégal</h2>
+        <p>La SEMS est la déclinaison sénégalaise du savoir-faire hydrique du Groupe AMI. Elle produit et distribue de l'eau minérale naturelle de haute qualité ainsi que des boissons aromatisées pour le marché ouest-africain.</p>
+        <div class="fd-services">
+          <div class="fd-srv"><div class="fd-srv-icon">💧</div><div class="fd-srv-text">Samao — eau minérale 4 formats</div></div>
+          <div class="fd-srv"><div class="fd-srv-icon">🍹</div><div class="fd-srv-text">Ami Fruité — boissons aromatisées</div></div>
+          <div class="fd-srv"><div class="fd-srv-icon">🌍</div><div class="fd-srv-text">Distribution Afrique de l'Ouest</div></div>
+          <div class="fd-srv"><div class="fd-srv-icon">🧪</div><div class="fd-srv-text">Haute qualité certifiée</div></div>
+        </div>
+        <div class="fd-stat-row">
+          <div class="fd-stat"><strong>Dakar</strong><span>SIÈGE SÉNÉGAL</span></div>
+          <div class="fd-stat"><strong>N°1</strong><span>EAU MINÉRALE SÉNÉGAL</span></div>
+          <div class="fd-stat"><strong>4</strong><span>FORMATS SAMAO</span></div>
+        </div>
+        <a href="https://samao.sn/" class="fd-cta teal" target="_blank">Visiter le site SEMS <span>→</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="zones-band">
+    <span class="tag" style="color:var(--orange2);display:block;text-align:center;margin-bottom:10px">COUVERTURE GÉOGRAPHIQUE</span>
+    <h2 class="section-title" style="text-align:center;color:#fff;margin-bottom:12px">Nos zones d'opération</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto 48px;color:rgba(255,255,255,.5)">GAMI et ses filiales interviennent dans 5 pays d'Afrique de l'Ouest avec des équipes locales et des partenaires établis.</p>
+    <div class="zones-grid">
+      <div class="zone-card"><div class="zone-flag">🇲🇱</div><div class="zone-name">Mali</div><div class="zone-cities">Bamako · Koulikoro · Sikasso</div><div class="zone-fil">GMM · SEMM</div></div>
+      <div class="zone-card"><div class="zone-flag">🇸🇳</div><div class="zone-name">Sénégal</div><div class="zone-cities">Dakar · Thiès · Ziguinchor</div><div class="zone-fil">SEMS</div></div>
+      <div class="zone-card"><div class="zone-flag">🇬🇳</div><div class="zone-name">Guinée</div><div class="zone-cities">Conakry · Labé · Kankan</div><div class="zone-fil">Distribution</div></div>
+      <div class="zone-card"><div class="zone-flag">🇨🇮</div><div class="zone-name">Côte d'Ivoire</div><div class="zone-cities">Abidjan · Bouaké</div><div class="zone-fil">Partenaires</div></div>
+      <div class="zone-card"><div class="zone-flag">🇲🇷</div><div class="zone-name">Mauritanie</div><div class="zone-cities">Nouakchott · Zouerate</div><div class="zone-fil">Distribution</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB : VISION
+══════════════════════════════════════ -->
+<div id="tab-vision" class="gami-panel">
+
+  <section class="vision-page">
+    <div class="vp-head">
+      <span class="tag" style="display:block;margin-bottom:12px">NOTRE VISION</span>
+      <h2 class="vp-headline">Bâtir l'industrie africaine <em style="color:var(--orange);font-style:normal">de demain</em></h2>
+      <p class="vp-sub">GAMI se projette dans l'avenir avec une ambition claire : être le groupe industriel de référence en Afrique de l'Ouest, reconnu pour son excellence, son ancrage local et son impact positif sur les communautés.</p>
+    </div>
+    <div class="vp-cards">
+      <div class="vp-card">
+        <div class="vp-card-icon">🎯</div>
+        <div class="vp-card-tag">Vision stratégique</div>
+        <h3>Être le groupe industriel de référence en Afrique de l'Ouest</h3>
+        <p>Reconnu pour son excellence opérationnelle, son innovation permanente et son engagement envers un développement industriel durable, inclusif et créateur de valeur pour les communautés africaines.</p>
+      </div>
+      <div class="vp-card orange">
+        <div class="vp-card-icon">🚀</div>
+        <div class="vp-card-tag">Mission</div>
+        <h3>Fournir des services industriels d'excellence à nos clients</h3>
+        <p>Contribuer au développement économique des pays où nous opérons, en valorisant les talents locaux, en adoptant les meilleures technologies et en maintenant les plus hauts standards de qualité.</p>
+      </div>
+      <div class="vp-card teal">
+        <div class="vp-card-icon">🌱</div>
+        <div class="vp-card-tag">Ambition 2030</div>
+        <h3>Étendre l'empreinte industrielle de GAMI sur 10 pays</h3>
+        <p>D'ici 2030, GAMI vise une présence consolidée dans dix pays d'Afrique de l'Ouest, avec de nouvelles filiales, des partenariats stratégiques et des investissements dans les énergies propres.</p>
+      </div>
+      <div class="vp-card">
+        <div class="vp-card-icon">🤝</div>
+        <div class="vp-card-tag">Impact social</div>
+        <h3>Créer 2 000 emplois directs et indirects d'ici 2028</h3>
+        <p>GAMI s'engage à multiplier ses effectifs, à investir dans la formation professionnelle et à soutenir l'entrepreneuriat local à travers des programmes de mentorat et de sous-traitance.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pillars-section">
+    <div class="pillars-header">
+      <span class="tag" style="color:var(--orange2);display:block;margin-bottom:10px">AXES STRATÉGIQUES</span>
+      <h2>Les piliers de notre croissance</h2>
+      <p>Trois axes fondamentaux guident notre développement à long terme</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-num">01</div>
+        <div class="pillar-icon">⚙️</div>
+        <h3>Excellence opérationnelle</h3>
+        <p>Optimisation continue des processus industriels, adoption des meilleures technologies disponibles, certification qualité internationale et formation permanente des équipes terrain.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">02</div>
+        <div class="pillar-icon">🌍</div>
+        <h3>Expansion panafricaine</h3>
+        <p>Croissance maîtrisée vers de nouveaux marchés : Guinée, Côte d'Ivoire, Burkina Faso. Partenariats stratégiques avec des acteurs locaux pour une intégration durable dans chaque territoire.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-num">03</div>
+        <div class="pillar-icon">♻️</div>
+        <h3>Développement durable</h3>
+        <p>Réduction de l'empreinte carbone, économie circulaire dans nos usines, préservation des ressources hydriques et engagement RSE renforcé auprès des communautés locales.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="vp-engagements">
+    <div class="vpe-header">
+      <span class="tag" style="display:block;margin-bottom:10px">NOS ENGAGEMENTS</span>
+      <h2>Valeurs qui nous définissent</h2>
+      <p>Les principes fondamentaux qui guident chaque décision au sein du groupe</p>
+    </div>
+    <div class="vpe-grid">
+      <div class="vpe-card"><div class="vpe-icon">🤝</div><h3>Intégrité</h3><p>Honnêteté et transparence dans toutes nos relations professionnelles, avec nos clients, partenaires et collaborateurs.</p></div>
+      <div class="vpe-card"><div class="vpe-icon">💡</div><h3>Innovation</h3><p>Adoption continue des technologies modernes pour améliorer nos services et nos processus opérationnels.</p></div>
+      <div class="vpe-card"><div class="vpe-icon">🌍</div><h3>Engagement local</h3><p>Investissement dans les communautés locales, l'emploi, la formation et le développement des talents africains.</p></div>
+      <div class="vpe-card"><div class="vpe-icon">🏆</div><h3>Excellence</h3><p>Les plus hauts standards de qualité dans chacune de nos interventions, quel que soit le secteur ou le pays.</p></div>
+      <div class="vpe-card"><div class="vpe-icon">🔒</div><h3>Sécurité</h3><p>La sécurité de nos équipes et de nos installations, une priorité absolue dans toutes nos opérations.</p></div>
+      <div class="vpe-card"><div class="vpe-icon">♻️</div><h3>Durabilité</h3><p>Intégration des enjeux environnementaux et sociaux dans notre stratégie de développement à long terme.</p></div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="f-brand">
+      <div class="f-logo"><div class="logo-sq">G</div><span style="font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#fff">Groupe AMI — GAMI</span></div>
+      <p>L'industrie au service du développement. GMM · SEMM · SEMS.</p>
+      <div class="f-socials"><div class="f-soc">f</div><div class="f-soc">𝕏</div><div class="f-soc">in</div></div>
+    </div>
+    <div class="f-col"><h4>GAMI</h4><ul>
+      <li><a href="gami.html#groupe">Le Groupe</a></li>
+      <li><a href="gami.html#presentation">Présentation</a></li>
+      <li><a href="gami.html#filiales">Filiales</a></li>
+      <li><a href="gami.html#vision">Vision</a></li>
+    </ul></div>
+    <div class="f-col"><h4>Filiales</h4><ul>
+      <li><a href="gami.html#fd-gmm">GMM</a></li>
+      <li><a href="gami.html#fd-semm">SEMM</a></li>
+      <li><a href="gami.html#fd-sems">SEMS</a></li>
+      <li><a href="transporteurs.html">Transporteurs</a></li>
+    </ul></div>
+    <div class="f-col"><h4>Contact</h4><ul>
+      <li><a href="contact.html">contact@groupeami.sn</a></li>
+      <li><a href="#">+221 33 000 00 00</a></li>
+      <li><a href="#">Dakar, Sénégal</a></li>
+      <li><a href="recrutement.html">Recrutement</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom"><span>©2025 Groupe AMI — GAMI.</span><span>Python8080</span></div>
+</footer>
+
+<script src="shared.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+// ═══ GAMI TAB SWITCHING ═══
+let leafletInitialized = false;
+let gamiMap = null;
+let gamiMarkers = {};
+let currentFiliale = 'gmm';
+let geoLayer = null;
+
+function switchGamiTab(e, tabId) {
+  e.preventDefault();
+  document.querySelectorAll('.gsn-item').forEach(el => el.classList.remove('active'));
+  e.currentTarget.classList.add('active');
+  document.querySelectorAll('.gami-panel').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  history.pushState(null, '', '#' + tabId);
+  window.scrollTo({ top: document.getElementById('gamiSubnav').offsetTop - 72, behavior: 'smooth' });
+  if (tabId === 'filiales') {
+    if (!leafletInitialized) {
+      setTimeout(initLeafletMap, 150);
+    } else if (gamiMap) {
+      setTimeout(() => gamiMap.invalidateSize(), 150);
+    }
+  }
+}
+
+function switchInnerTab(el, id) {
+  el.closest('#tab-groupe').querySelectorAll('.g-tab').forEach(t => t.classList.remove('active'));
+  el.closest('#tab-groupe').querySelectorAll('.g-tab-content').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const hash = location.hash.slice(1);
+  const validTabs = ['groupe', 'presentation', 'filiales', 'vision'];
+  if (hash && validTabs.includes(hash)) {
+    document.querySelectorAll('.gsn-item').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.gami-panel').forEach(el => el.classList.remove('active'));
+    const tabEl = document.querySelector('[data-tab="' + hash + '"]');
+    if (tabEl) tabEl.classList.add('active');
+    const panel = document.getElementById('tab-' + hash);
+    if (panel) panel.classList.add('active');
+    if (hash === 'filiales') setTimeout(initLeafletMap, 300);
+  }
+});
+
+function smoothToDetail(e) {
+  e.preventDefault();
+  const el = document.getElementById(currentFiliale === 'sems' ? 'fd-sems' : currentFiliale === 'semm' ? 'fd-semm' : 'fd-gmm');
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ═══ LEAFLET MAP ═══
+const FILIALES_DATA = {
+  gmm:  { lat:12.86, lng:-6.1,  color:'#1B4F8A', name:'Grands Moulins du Mali',     short:'<img src="./images/logo-GMM-1024x722.jpg" alt="GMM"/>', ville:'Koulikoro, Mali',  desc:'Leader de la farine au Mali depuis 1979. 120 000 T/an.',  detail:'fd-gmm' },
+  semm: { lat:12.60, lng:-8.0,  color:'#E8861A', name:'Eaux Minérales du Mali',      short:'<img src="./images/semm.jpg" alt="SEMM"/>',              ville:'Bamako, Mali',     desc:"Source Diago, N°1 de l'eau minérale au Mali.",            detail:'fd-semm' },
+  sems: { lat:14.72, lng:-17.46,color:'#1A8060', name:'Eaux Minérales du Sénégal',  short:'<img src="./images/logo-SEMS.png" alt="SEMS"/>',          ville:'Dakar, Sénégal',   desc:'Marque Samao, eau minérale naturelle de haute qualité.',  detail:'fd-sems' },
+};
+
+function styleCountry(f){const iso=f.properties.ISO_A2||f.properties.iso_a2||'';if(iso==='ML')return{fillColor:'#1B4F8A',fillOpacity:.55,color:'#fff',weight:1.5};if(iso==='SN')return{fillColor:'#1A8060',fillOpacity:.55,color:'#fff',weight:1.5};return{fillColor:'#1e3248',fillOpacity:.8,color:'#2c4a6a',weight:.8}}
+function hlCountry(f){const iso=f.properties.ISO_A2||f.properties.iso_a2||'';if(iso==='ML')return{fillColor:'#2a6fc0',fillOpacity:.75,color:'#fff',weight:2};if(iso==='SN')return{fillColor:'#22a07a',fillOpacity:.75,color:'#fff',weight:2};return{fillColor:'#2a4d6a',fillOpacity:.9,color:'#4a7a9a',weight:1}}
+function makeIcon(color){const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="40" viewBox="0 0 32 40"><path d="M16 0C9.37 0 4 5.37 4 12c0 9 12 28 12 28s12-19 12-28C28 5.37 22.63 0 16 0z" fill="${color}" stroke="#fff" stroke-width="2"/><circle cx="16" cy="12" r="5" fill="#fff" fill-opacity=".9"/></svg>`;return L.divIcon({html:svg,className:'',iconSize:[32,40],iconAnchor:[16,40],popupAnchor:[0,-42]})}
+
+function initLeafletMap() {
+  if (leafletInitialized) return;
+  leafletInitialized = true;
+  gamiMap = L.map('leaflet-map', { center:[12,-5], zoom:4, zoomControl:true, scrollWheelZoom:false, attributionControl:false, minZoom:3, maxZoom:7 });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', { maxZoom:19 }).addTo(gamiMap);
+
+  fetch('https://cdn.jsdelivr.net/npm/@geo-maps/countries-land-10km@1.0.0/map.geo.json')
+    .then(r => r.json())
+    .then(geojson => {
+      const AC = ['DZ','AO','BJ','BW','BF','BI','CM','CV','CF','TD','KM','CD','CG','CI','DJ','EG','GQ','ER','SZ','ET','GA','GM','GH','GN','GW','KE','LS','LR','LY','MG','MW','ML','MR','MU','MA','MZ','NA','NE','NG','RW','ST','SN','SL','SO','ZA','SS','SD','TZ','TG','TN','UG','ZM','ZW','EH'];
+      const features = geojson.features.filter(f => AC.includes(f.properties.A3||f.properties.ISO_A2||''));
+      geoLayer = L.geoJSON({ type:'FeatureCollection', features }, {
+        style: f => styleCountry(f),
+        onEachFeature(feature, layer) {
+          const iso = feature.properties.ISO_A2||feature.properties.A3||'';
+          layer.on({ mouseover(e){e.target.setStyle(hlCountry(feature))}, mouseout(e){geoLayer.resetStyle(e.target)}, click(){if(iso==='ML')focusFiliale('gmm');else if(iso==='SN')focusFiliale('sems')} });
+        }
+      }).addTo(gamiMap);
+    }).catch(()=>{});
+
+  Object.entries(FILIALES_DATA).forEach(([id, f]) => {
+    const marker = L.marker([f.lat, f.lng], { icon: makeIcon(f.color) });
+    const html = `<div class="gami-popup"><span class="gami-popup-badge">${f.short}</span><h3>${f.name}</h3><div class="gami-popup-country">${f.ville}</div><p>${f.desc}</p></div><div class="gami-popup-footer" onclick="scrollToFd('${f.detail}')">Voir le détail →</div>`;
+    marker.bindPopup(html, { maxWidth:240, minWidth:220, closeButton:false });
+    marker.on('click', () => setActiveCard(id));
+    marker.addTo(gamiMap);
+    gamiMarkers[id] = marker;
+  });
+  setActiveCard('gmm');
+  setTimeout(() => gamiMarkers['gmm'].openPopup(), 800);
+}
+
+function focusFiliale(id) {
+  setActiveCard(id);
+  const f = FILIALES_DATA[id];
+  gamiMap.flyTo([f.lat, f.lng], 5.5, { duration:1 });
+  setTimeout(() => gamiMarkers[id].openPopup(), 1100);
+}
+
+function setActiveCard(id) {
+  currentFiliale = id;
+  document.querySelectorAll('.fil-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.add('active');
+}
+
+function scrollToFd(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+</script>
+</body>
+</html>
