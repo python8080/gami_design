@@ -17,7 +17,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 80px;height:72px;d
 nav.transparent{background:transparent;border-bottom-color:transparent}
 .nav-logo{display:flex;align-items:center;gap:12px}
 .nav-logo-img{height:44px;width:auto;object-fit:contain;display:block;transition:filter .35s}
-nav.transparent .nav-logo-img{filter:brightness(0) invert(1)}
+nav.transparent .nav-logo-img{filter:none}
 /* fallback texte si pas d'image */
 .logo-sq{width:42px;height:42px;background:var(--orange);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:800;color:#fff;font-size:16px;flex-shrink:0}
 .logo-name{font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:var(--blue);line-height:1}

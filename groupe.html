@@ -47,6 +47,32 @@
 .hl-text{font-size:13px;color:var(--muted);line-height:1.6;font-weight:300;font-family:'Outfit',sans-serif}
 
 .about-img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:48px}
+
+/* ── Documents à télécharger ── */
+.docs-section{background:var(--light);border-top:1px solid var(--border);padding:64px 80px}
+.docs-section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px}
+.docs-section-header h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--dark)}
+.docs-section-header p{font-size:13px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300;max-width:320px;text-align:right;line-height:1.6}
+.docs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.doc-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:28px 24px;display:flex;flex-direction:column;gap:16px;transition:.25s;position:relative;overflow:hidden}
+.doc-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--blue)}
+.doc-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(27,79,138,.1);border-color:var(--blue)}
+.doc-card-top{display:flex;align-items:center;gap:16px}
+.doc-icon-wrap{width:52px;height:52px;border-radius:14px;background:#EBF3FF;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.doc-icon-wrap svg{width:26px;height:26px;fill:none;stroke:var(--blue);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.doc-meta h4{font-size:15px;font-weight:600;color:var(--dark);margin-bottom:4px;font-family:'Outfit',sans-serif}
+.doc-meta span{font-size:12px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300}
+.doc-desc{font-size:13px;color:var(--muted);line-height:1.65;font-family:'Outfit',sans-serif;font-weight:300;flex:1}
+.doc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.doc-badge{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);background:#FFF4E5;padding:4px 10px;border-radius:20px}
+.doc-dl-btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--blue);background:#EBF3FF;border:none;border-radius:10px;padding:9px 16px;cursor:pointer;text-decoration:none;transition:.2s;font-family:'Outfit',sans-serif}
+.doc-dl-btn:hover{background:var(--blue);color:#fff}
+.doc-dl-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:900px){.docs-section{padding:48px 24px}.docs-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.docs-grid{grid-template-columns:1fr}.docs-section-header{flex-direction:column;align-items:flex-start;gap:8px}.docs-section-header p{text-align:left;max-width:100%}}
+.doc-card.doc-soon{opacity:.6}
+.doc-card.doc-soon::before{background:var(--muted)}
+.doc-soon-badge{font-size:11px;font-weight:600;color:var(--muted);background:#f0f0f0;border-radius:10px;padding:9px 16px;font-family:'Outfit',sans-serif}
 /* ── Image band ── */
 .about-img-band{background:var(--light);padding:56px 80px;border-top:1px solid var(--border)}
 .aib-inner{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;max-width:1280px;margin:0 auto}
@@ -101,28 +127,11 @@
       <a class="nl" href="gami.html">GAMI</a>
       <div class="nav-drop-menu">
         <a class="ndm-item" href="gami.html#groupe"><div class="ndm-badge" style="background:#EBF3FF;color:#1B4F8A;font-weight:800">G</div><span>Le Groupe</span></a>
-        <a class="ndm-item" href="gami.html#presentation"><div class="ndm-badge" style="background:#FFF3E8;color:#E8861A;font-weight:800">P</div><span>Présentation du Groupe</span></a>
         <a class="ndm-item" href="gami.html#filiales"><div class="ndm-badge" style="background:#E8F7EF;color:#1A8060;font-weight:800">F</div><span>Filiales</span></a>
         <a class="ndm-item" href="gami.html#vision"><div class="ndm-badge" style="background:#EBF3FF;color:#1B4F8A;font-weight:800">V</div><span>Vision</span></a>
       </div>
     </div>
-    <div class="nav-dropdown">
-      <a class="nl" href="nos-produits.html">Nos Produits</a>
-      <div class="nav-drop-menu">
-        <a class="ndm-item" href="nos-produits.html#gmm">
-          <div class="ndm-badge gmm">GMM</div>
-          <span>Grands Moulins du Mali</span>
-        </a>
-        <a class="ndm-item" href="nos-produits.html#semm">
-          <div class="ndm-badge semm">SEMM</div>
-          <span>Eaux Minérales du Mali</span>
-        </a>
-        <a class="ndm-item" href="nos-produits.html#sems">
-          <div class="ndm-badge sems">SEMS</div>
-          <span>Eaux Minérales du Sénégal</span>
-        </a>
-      </div>
-    </div>
+    <a class="nl" href="nos-produits.html">Nos Produits</a>
     <a class="nl" href="actualites.html">Actualités</a>
     <a class="nl" href="galerie.html">Galerie</a>
     <a class="nl" href="recrutement.html">Recrutement</a>
@@ -238,6 +247,75 @@
         <div style="border-radius:20px;overflow:hidden;height:320px;margin-bottom:20px"><img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80&fit=crop" alt="" style="width:100%;height:100%"/></div>
         <div style="border-radius:16px;overflow:hidden;height:200px"><img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80&fit=crop" alt="" style="width:100%;height:100%"/></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="docs-section">
+  <div style="max-width:1280px;margin:0 auto">
+    <div class="docs-section-header">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--orange);text-transform:uppercase;margin-bottom:10px;font-family:'Outfit',sans-serif">Ressources</div>
+        <h2>Documents à télécharger</h2>
+      </div>
+      <p>Retrouvez ici nos publications institutionnelles, présentations et rapports disponibles en téléchargement libre.</p>
+    </div>
+    <div class="docs-grid">
+
+      <div class="doc-card">
+        <div class="doc-card-top">
+          <div class="doc-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="doc-meta">
+            <h4>Plaquette institutionnelle GAMI</h4>
+            <span>PDF · 22 Mo · 2024</span>
+          </div>
+        </div>
+        <p class="doc-desc">Présentation complète du Groupe AMI — son histoire, ses filiales, ses valeurs et ses activités en Afrique de l'Ouest.</p>
+        <div class="doc-footer">
+          <span class="doc-badge">Institutionnel</span>
+          <a href="./documents/Plaquette gie ami 2023 5a.pdf" class="doc-dl-btn" download>
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Télécharger
+          </a>
+        </div>
+      </div>
+
+      <div class="doc-card doc-soon">
+        <div class="doc-card-top">
+          <div class="doc-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="doc-meta">
+            <h4>Rapport annuel 2024</h4>
+            <span>PDF · 8,5 Mo · 2025</span>
+          </div>
+        </div>
+        <p class="doc-desc">Bilan des activités, résultats financiers et perspectives stratégiques du groupe pour l'exercice 2024.</p>
+        <div class="doc-footer">
+          <span class="doc-badge">Rapport</span>
+          <span class="doc-soon-badge">À venir</span>
+        </div>
+      </div>
+
+      <div class="doc-card doc-soon">
+        <div class="doc-card-top">
+          <div class="doc-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="doc-meta">
+            <h4>Présentation filiales</h4>
+            <span>PDF · 5,2 Mo · 2024</span>
+          </div>
+        </div>
+        <p class="doc-desc">Fiche détaillée de chacune des filiales du groupe : GMM, SEMM et SEMS — capacités, activités et zones d'intervention.</p>
+        <div class="doc-footer">
+          <span class="doc-badge">Filiales</span>
+          <span class="doc-soon-badge">À venir</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>

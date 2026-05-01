@@ -241,6 +241,32 @@
 .vpe-card h3{font-size:1rem;color:var(--dark);margin-bottom:10px}
 .vpe-card p{font-size:13px;color:var(--muted);line-height:1.65;font-weight:300}
 
+/* ═══ DOCUMENTS À TÉLÉCHARGER ═══ */
+.docs-section{background:var(--light);border-top:1px solid var(--border);padding:64px 80px}
+.docs-section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px}
+.docs-section-header h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--dark)}
+.docs-section-header p{font-size:13px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300;max-width:320px;text-align:right;line-height:1.6}
+.docs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.doc-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:28px 24px;display:flex;flex-direction:column;gap:16px;transition:.25s;position:relative;overflow:hidden}
+.doc-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--blue)}
+.doc-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(27,79,138,.1);border-color:var(--blue)}
+.doc-card.doc-soon{opacity:.6}
+.doc-card.doc-soon::before{background:var(--muted)}
+.doc-card-top{display:flex;align-items:center;gap:16px}
+.doc-icon-wrap{width:52px;height:52px;border-radius:14px;background:#EBF3FF;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.doc-icon-wrap svg{width:26px;height:26px;fill:none;stroke:var(--blue);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.doc-meta h4{font-size:15px;font-weight:600;color:var(--dark);margin-bottom:4px;font-family:'Outfit',sans-serif}
+.doc-meta span{font-size:12px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:300}
+.doc-desc{font-size:13px;color:var(--muted);line-height:1.65;font-family:'Outfit',sans-serif;font-weight:300;flex:1}
+.doc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.doc-badge{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);background:#FFF4E5;padding:4px 10px;border-radius:20px}
+.doc-dl-btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--blue);background:#EBF3FF;border:none;border-radius:10px;padding:9px 16px;cursor:pointer;text-decoration:none;transition:.2s;font-family:'Outfit',sans-serif}
+.doc-dl-btn:hover{background:var(--blue);color:#fff}
+.doc-dl-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.doc-soon-badge{font-size:11px;font-weight:600;color:var(--muted);background:#f0f0f0;border-radius:10px;padding:9px 16px;font-family:'Outfit',sans-serif}
+@media(max-width:900px){.docs-section{padding:48px 24px}.docs-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.docs-grid{grid-template-columns:1fr}.docs-section-header{flex-direction:column;align-items:flex-start;gap:8px}.docs-section-header p{text-align:left;max-width:100%}}
+
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:1200px){
   .gami-subnav{top:72px}
@@ -307,19 +333,11 @@
       <a class="nl" href="gami.html">GAMI</a>
       <div class="nav-drop-menu">
         <a class="ndm-item" href="gami.html#groupe"><div class="ndm-badge" style="background:#EBF3FF;color:#1B4F8A;font-weight:800">G</div><span>Le Groupe</span></a>
-        <a class="ndm-item" href="gami.html#presentation"><div class="ndm-badge" style="background:#FFF3E8;color:#E8861A;font-weight:800">P</div><span>Présentation du Groupe</span></a>
         <a class="ndm-item" href="gami.html#filiales"><div class="ndm-badge" style="background:#E8F7EF;color:#1A8060;font-weight:800">F</div><span>Filiales</span></a>
         <a class="ndm-item" href="gami.html#vision"><div class="ndm-badge" style="background:#EBF3FF;color:#1B4F8A;font-weight:800">V</div><span>Vision</span></a>
       </div>
     </div>
-    <div class="nav-dropdown">
-      <a class="nl" href="nos-produits.html">Nos Produits</a>
-      <div class="nav-drop-menu">
-        <a class="ndm-item" href="nos-produits.html#gmm"><div class="ndm-badge gmm">GMM</div><span>Grands Moulins du Mali</span></a>
-        <a class="ndm-item" href="nos-produits.html#semm"><div class="ndm-badge semm">SEMM</div><span>Eaux Minérales du Mali</span></a>
-        <a class="ndm-item" href="nos-produits.html#sems"><div class="ndm-badge sems">SEMS</div><span>Eaux Minérales du Sénégal</span></a>
-      </div>
-    </div>
+    <a class="nl" href="nos-produits.html">Nos Produits</a>
     <a class="nl" href="actualites.html">Actualités</a>
     <a class="nl" href="galerie.html">Galerie</a>
     <a class="nl" href="recrutement.html">Recrutement</a>
@@ -350,8 +368,7 @@
 <!-- GAMI SUB-NAV -->
 <div class="gami-subnav" id="gamiSubnav">
   <div class="gsn-inner">
-    <a class="gsn-item active" data-tab="groupe" href="#groupe" onclick="switchGamiTab(event,'groupe')"><span class="gsn-icon">🏢</span>Groupe</a>
-    <a class="gsn-item" data-tab="presentation" href="#presentation" onclick="switchGamiTab(event,'presentation')"><span class="gsn-icon">📋</span>Présentation du Groupe</a>
+    <a class="gsn-item active" data-tab="groupe" href="#groupe" onclick="switchGamiTab(event,'groupe')"><span class="gsn-icon">🏢</span>Le Groupe</a>
     <a class="gsn-item" data-tab="filiales" href="#filiales" onclick="switchGamiTab(event,'filiales')"><span class="gsn-icon">🌍</span>Filiales</a>
     <a class="gsn-item" data-tab="vision" href="#vision" onclick="switchGamiTab(event,'vision')"><span class="gsn-icon">🎯</span>Vision</a>
   </div>
@@ -374,7 +391,7 @@
       <div class="aib-side">
         <div class="aib-sm">
           <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=700&q=80&fit=crop" alt="Innovation GAMI"/>
-          <div class="aib-sm-caption"><span>Innovation & digital</span></div>
+          <div class="aib-sm-caption"><span>Innovation &amp; digital</span></div>
         </div>
         <div class="aib-sm">
           <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=300&q=80&fit=crop" alt="Operations GAMI"/>
@@ -386,7 +403,7 @@
 
   <section class="section-pad" style="padding-top:64px">
     <div class="g-tabs">
-      <div class="g-tab active" onclick="switchInnerTab(this,'gt1')">Vision & Mission</div>
+      <div class="g-tab active" onclick="switchInnerTab(this,'gt1')">Vision &amp; Mission</div>
       <div class="g-tab" onclick="switchInnerTab(this,'gt2')">Organisation</div>
       <div class="g-tab" onclick="switchInnerTab(this,'gt3')">Nos Valeurs</div>
       <div class="g-tab" onclick="switchInnerTab(this,'gt4')">Notre Histoire</div>
@@ -444,7 +461,7 @@
         <div class="history-line">
           <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2002</div><div class="hl-title">Création du GIE AMI</div><div class="hl-text">Fondation du Groupement d'Intérêt Économique AMI, premier pas dans le secteur industriel en Afrique de l'Ouest.</div></div>
           <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2008</div><div class="hl-title">Expansion au Mali</div><div class="hl-text">Ouverture des premières opérations au Mali, début de la couverture régionale pour les contrats miniers.</div></div>
-          <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2015</div><div class="hl-title">Création de GMM & SEMM</div><div class="hl-text">Structuration du groupe avec deux filiales spécialisées, répondant à la croissance des activités industrielles et minières.</div></div>
+          <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2015</div><div class="hl-title">Création de GMM &amp; SEMM</div><div class="hl-text">Structuration du groupe avec deux filiales spécialisées, répondant à la croissance des activités industrielles et minières.</div></div>
           <div class="hl-item"><div class="hl-dot"></div><div class="hl-year">2020</div><div class="hl-title">Lancement de SEMS</div><div class="hl-text">Troisième filiale dédiée aux expertises et services spécialisés, élargissant l'offre du groupe au Sénégal.</div></div>
           <div class="hl-item"><div class="hl-dot" style="background:var(--orange)"></div><div class="hl-year">2024</div><div class="hl-title">Passage de GIE AMI vers GAMI</div><div class="hl-text">Nouvelle identité visuelle, nouvelle organisation, intégration de nouvelles entités et lancement du site institutionnel moderne.</div></div>
         </div>
@@ -455,12 +472,6 @@
       </div>
     </div>
   </section>
-</div>
-
-<!-- ══════════════════════════════════════
-     TAB : PRÉSENTATION DU GROUPE
-══════════════════════════════════════ -->
-<div id="tab-presentation" class="gami-panel">
 
   <section class="pres-section">
     <span class="tag" style="display:block;margin-bottom:12px">PRÉSENTATION</span>
@@ -776,6 +787,76 @@
   </section>
 </div>
 
+<!-- DOCUMENTS À TÉLÉCHARGER -->
+<section class="docs-section">
+  <div style="max-width:1280px;margin:0 auto">
+    <div class="docs-section-header">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--orange);text-transform:uppercase;margin-bottom:10px;font-family:'Outfit',sans-serif">Ressources</div>
+        <h2>Documents à télécharger</h2>
+      </div>
+      <p>Retrouvez ici nos publications institutionnelles, présentations et rapports disponibles en téléchargement libre.</p>
+    </div>
+    <div class="docs-grid">
+
+      <div class="doc-card">
+        <div class="doc-card-top">
+          <div class="doc-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="doc-meta">
+            <h4>Plaquette institutionnelle GAMI</h4>
+            <span>PDF · 22 Mo · 2023</span>
+          </div>
+        </div>
+        <p class="doc-desc">Présentation complète du Groupe AMI — son histoire, ses filiales, ses valeurs et ses activités en Afrique de l'Ouest.</p>
+        <div class="doc-footer">
+          <span class="doc-badge">Institutionnel</span>
+          <a href="documents/Plaquette gie ami 2023 5a.pdf" class="doc-dl-btn" download>
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Télécharger
+          </a>
+        </div>
+      </div>
+
+      <div class="doc-card doc-soon">
+        <div class="doc-card-top">
+          <div class="doc-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="doc-meta">
+            <h4>Rapport annuel 2024</h4>
+            <span>PDF · 8,5 Mo · 2025</span>
+          </div>
+        </div>
+        <p class="doc-desc">Bilan des activités, résultats financiers et perspectives stratégiques du groupe pour l'exercice 2024.</p>
+        <div class="doc-footer">
+          <span class="doc-badge">Rapport</span>
+          <span class="doc-soon-badge">À venir</span>
+        </div>
+      </div>
+
+      <div class="doc-card doc-soon">
+        <div class="doc-card-top">
+          <div class="doc-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div class="doc-meta">
+            <h4>Présentation filiales</h4>
+            <span>PDF · 5,2 Mo · 2024</span>
+          </div>
+        </div>
+        <p class="doc-desc">Fiche détaillée de chacune des filiales du groupe : GMM, SEMM et SEMS — capacités, activités et zones d'intervention.</p>
+        <div class="doc-footer">
+          <span class="doc-badge">Filiales</span>
+          <span class="doc-soon-badge">À venir</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-top">
@@ -786,7 +867,6 @@
     </div>
     <div class="f-col"><h4>GAMI</h4><ul>
       <li><a href="gami.html#groupe">Le Groupe</a></li>
-      <li><a href="gami.html#presentation">Présentation</a></li>
       <li><a href="gami.html#filiales">Filiales</a></li>
       <li><a href="gami.html#vision">Vision</a></li>
     </ul></div>
@@ -842,7 +922,7 @@ function switchInnerTab(el, id) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const hash = location.hash.slice(1);
-  const validTabs = ['groupe', 'presentation', 'filiales', 'vision'];
+  const validTabs = ['groupe', 'filiales', 'vision'];
   if (hash && validTabs.includes(hash)) {
     document.querySelectorAll('.gsn-item').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.gami-panel').forEach(el => el.classList.remove('active'));

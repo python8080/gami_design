@@ -34,9 +34,10 @@
 .tab-badge.gmm{background:none;padding:0;width:32px;height:22px;border-radius:6px;overflow:hidden;object-fit:cover}
 .tab-badge.semm{background:#FFF3E8;color:#E8861A}
 .tab-badge.sems{background:#E8F7EF;color:#1A8060}
+.tab-badge.bagami{background:none;padding:0;width:32px;height:22px;border-radius:6px;overflow:hidden;object-fit:cover}
 
 /* ── PANELS ── */
-.panel{display:none;animation:fadeUp .35s ease}
+.panel{display:none;animation:fadeUp .35s ease;padding-bottom:64px}
 .panel.active{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
@@ -47,11 +48,12 @@
 .bh-logo.gmm{background-image:url('./images/logo-GMM-1024x722.jpg');background-size:cover;background-position:center}
 .bh-logo.semm{background:#fff;background-image:url('./images/semm.jpg');background-size:contain;background-repeat:no-repeat;background-position:center;border:1px solid var(--border)}
 .bh-logo.sems{background:#fff;background-image:url('./images/logo-SEMS.png');background-size:contain;background-repeat:no-repeat;background-position:center;border:1px solid var(--border)}
+.bh-logo.bagami{background:#fff;background-image:url('./images/bagami-logo.jpeg');background-size:contain;background-repeat:no-repeat;background-position:center;border:1px solid var(--border)}
 .bh-info{flex:1;min-width:260px}
 .bh-info .tag{display:inline-block;margin-bottom:10px}
 .bh-info h2{font-size:clamp(1.6rem,3vw,2.4rem);color:var(--dark);margin-bottom:12px;line-height:1.1}
 .bh-info p{color:var(--muted);font-weight:300;line-height:1.8;font-size:15px;max-width:640px}
-.bh-stats{display:flex;gap:32px;margin-top:24px;flex-wrap:wrap}
+.bh-stats{display:flex;gap:32px;margin-top:24px;flex-wrap:wrap;padding-bottom:64px}
 .bh-stat strong{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--blue);display:block;line-height:1}
 /* .bh-stat.orange strong{color:var(--orange)}
 .bh-stat.teal strong{color:#1A8060} */
@@ -158,28 +160,11 @@
       <a class="nl" href="gami.html">GAMI</a>
       <div class="nav-drop-menu">
         <a class="ndm-item" href="gami.html#groupe"><div class="ndm-badge" style="background:#EBF3FF;color:#1B4F8A;font-weight:800">G</div><span>Le Groupe</span></a>
-        <a class="ndm-item" href="gami.html#presentation"><div class="ndm-badge" style="background:#FFF3E8;color:#E8861A;font-weight:800">P</div><span>Présentation du Groupe</span></a>
         <a class="ndm-item" href="gami.html#filiales"><div class="ndm-badge" style="background:#E8F7EF;color:#1A8060;font-weight:800">F</div><span>Filiales</span></a>
         <a class="ndm-item" href="gami.html#vision"><div class="ndm-badge" style="background:#EBF3FF;color:#1B4F8A;font-weight:800">V</div><span>Vision</span></a>
       </div>
     </div>
-    <div class="nav-dropdown">
-      <a class="nl active" href="nos-produits.html">Nos Produits</a>
-      <div class="nav-drop-menu">
-        <a class="ndm-item" href="nos-produits.html#gmm">
-          <div class="ndm-badge gmm">GMM</div>
-          <span>Grands Moulins du Mali</span>
-        </a>
-        <a class="ndm-item" href="nos-produits.html#semm">
-          <div class="ndm-badge semm">SEMM</div>
-          <span>Eaux Minérales du Mali</span>
-        </a>
-        <a class="ndm-item" href="nos-produits.html#sems">
-          <div class="ndm-badge sems">SEMS</div>
-          <span>Eaux Minérales du Sénégal</span>
-        </a>
-      </div>
-    </div>
+    <a class="nl active" href="nos-produits.html">Nos Produits</a>
     <a class="nl" href="actualites.html">Actualités</a>
     <a class="nl" href="galerie.html">Galerie</a>
     <a class="nl" href="recrutement.html">Recrutement</a>
@@ -261,8 +246,12 @@
       Eaux Minérales du Mali
     </button>
     <button class="tab-btn" data-tab="sems">
-      <img class="tab-badge gmm" src="./images/logo-SEMS.png" alt="GMM"/>
+      <img class="tab-badge gmm" src="./images/logo-SEMS.png" alt="SEMS"/>
       Eaux Minérales du Sénégal
+    </button>
+    <button class="tab-btn" data-tab="bagami">
+      <img class="tab-badge bagami" src="./images/bagami-logo.jpeg" alt="BAGAMI"/>
+      BAGAMI
     </button>
   </div>
 </div>
@@ -290,7 +279,7 @@
   <!-- Farines & Céréales -->
   <div class="prod-section">
     <div class="prod-section-title">
-      <h3>Farines &amp; Céréales</h3>
+      <h3>Farines</h3>
       <div class="prod-divider"></div>
     </div>
     <div class="prod-grid">
@@ -405,22 +394,6 @@
 
       <div class="prod-card">
         <div class="pc-img">
-          <img class="pc-img-icon" src="./images/DOUBLE-GUM-VERT.jpg" alt=""/>
-          <span class="pc-img-label">Confiserie</span>
-        </div>
-        <div class="pc-body">
-          <div class="pc-name">Waraba Confiserie</div>
-          <div class="pc-desc">Les premiers bonbons et chewing-gums du Mali. Retrouvez les parfums Sogho-Sogho®, Black Ginger, ATT bonbon, Sweet milk, Aigle fort, Double Gum et plus encore.</div>
-          <div class="pc-tags">
-            <span class="pc-tag">Bonbons</span>
-            <span class="pc-tag">Chewing-gum</span>
-            <span class="pc-tag">Made in Mali</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="prod-card">
-        <div class="pc-img">
           <img class="pc-img-icon" src="./images/AMI-TULU-2.png" alt=""/>
           <span class="pc-img-label">Huilerie</span>
         </div>
@@ -461,7 +434,7 @@
         </div>
       </div>
 
-      <div class="prod-card">
+      <!-- <div class="prod-card">
         <div class="pc-img">
           <img class="pc-img-icon" src="./images/PASTA-PALLO-1.jpg" alt=""/>
           <span class="pc-img-label">Pâtes</span>
@@ -475,9 +448,9 @@
             <span class="pc-tag">Qualité constante</span>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="prod-card">
+      <!-- <div class="prod-card">
         <div class="pc-img">
           <img class="pc-img-icon" src="./images/SUCRE-768x683-1.png" alt=""/>
           <span class="pc-img-label">Condiment</span>
@@ -490,7 +463,7 @@
             <span class="pc-tag">Sachet doseur</span>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div class="prod-card">
         <div class="pc-img">
@@ -805,6 +778,265 @@
 </div><!-- /panel SEMS -->
 
 
+<!-- ══════════ PANEL BAGAMI ══════════ -->
+<div id="panel-bagami" class="panel">
+
+  <div class="brand-header">
+    <div class="bh-logo-wrap">
+      <div class="bh-logo bagami"></div>
+    </div>
+    <div class="bh-info">
+      <span class="tag">Filiale du Groupe AMI</span>
+      <h2>BAGAMI — Boulangerie, Pâtisserie &amp; Restaurant</h2>
+      <p>Établissement incontournable de Bamako, BAGAMI réunit sous un même toit une boulangerie artisanale, une pâtisserie fine et un restaurant gastronomique. Fort du savoir-faire du Groupe AMI dans l'agro-industrie, BAGAMI propose des produits frais fabriqués chaque jour à partir des farines GMM et d'ingrédients soigneusement sélectionnés.</p>
+      <div class="bh-stats">
+        <div class="bh-stat"><strong>Bamako</strong><span>Mali</span></div>
+        <div class="bh-stat"><strong>3</strong><span>activités réunies</span></div>
+        <div class="bh-stat"><strong>GMM</strong><span>Farines locales</span></div>
+        <div class="bh-stat"><strong>100%</strong><span>Fait maison</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boulangerie -->
+  <div class="prod-section">
+    <div class="prod-section-title">
+      <h3>Boulangerie</h3>
+      <div class="prod-divider"></div>
+    </div>
+    <div class="prod-grid">
+
+      <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/baguette.jpg" alt=""/>
+          <span class="pc-img-label" style="background:#C0392B">Boulangerie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Pain Baguette</div>
+          <div class="pc-desc">Baguette croustillante façonnée à la main, cuite au four chaque matin. Fabriquée à partir des farines GMM, elle allie tradition française et ingrédients locaux de qualité.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Farine GMM</span>
+            <span class="pc-tag">Artisanal</span>
+            <span class="pc-tag">Frais chaque jour</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/baguette1.jpg" alt=""/>
+          <span class="pc-img-label" style="background:#C0392B">Boulangerie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Pain de mie &amp; Sandwich</div>
+          <div class="pc-desc">Pain de mie moelleux disponible en tranches ou en formats entiers. Idéal pour les sandwichs et petits-déjeuners. Décliné en nature, complet et aux graines.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Nature</span>
+            <span class="pc-tag">Complet</span>
+            <span class="pc-tag">Sandwich</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/Croissant_frais.jpg" alt=""/>
+          <span class="pc-img-label" style="background:#C0392B">Boulangerie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Viennoiseries</div>
+          <div class="pc-desc">Croissants au beurre, pains au chocolat, brioches et pains aux raisins. Des viennoiseries feuilletées et dorées, réalisées selon les règles de l'art pâtissier.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Croissant</span>
+            <span class="pc-tag">Brioche</span>
+            <span class="pc-tag">Feuilleté</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/Croissant_frais1.jpg" alt=""/>
+          <span class="pc-img-label" style="background:#C0392B">Boulangerie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Pains spéciaux</div>
+          <div class="pc-desc">Pain complet, pain aux céréales, pain de seigle et focaccia. Une gamme de pains spéciaux pour les amateurs de saveurs authentiques et de nutrition équilibrée.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Céréales</span>
+            <span class="pc-tag">Seigle</span>
+            <span class="pc-tag">Focaccia</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Pâtisserie -->
+  <div class="prod-section" style="padding-top:0">
+    <div class="prod-section-title">
+      <h3>Pâtisserie</h3>
+      <div class="prod-divider"></div>
+    </div>
+    <div class="prod-grid">
+
+      <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/gateaux.jpg" alt=""/>
+          <span class="pc-img-label orange">Pâtisserie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Gâteaux d'anniversaire</div>
+          <div class="pc-desc">Gâteaux sur commande pour toutes occasions : anniversaires, mariages, cérémonies. Personnalisables en saveurs, décors et tailles. Réalisés par nos pâtissiers.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Sur commande</span>
+            <span class="pc-tag">Personnalisé</span>
+            <span class="pc-tag">Toutes occasions</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/Vanille.jpg" alt=""/>
+          <span class="pc-img-label orange">Pâtisserie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Tartes &amp; Entremets</div>
+          <div class="pc-desc">Tartes aux fruits, entremets chocolat-praliné, cheesecakes et mille-feuilles. Une sélection raffinée pour les amateurs de douceurs fines et de desserts élaborés.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Tartes</span>
+            <span class="pc-tag">Entremets</span>
+            <span class="pc-tag">Cheesecake</span>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/SUCRE-768x683-1.png" alt=""/>
+          <span class="pc-img-label orange">Pâtisserie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Petits Gâteaux &amp; Cookies</div>
+          <div class="pc-desc">Macarons, financiers, madeleines, cookies et sablés. Des petites douceurs parfaites pour accompagner le café ou offrir en plateau lors de réunions et événements.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Macarons</span>
+            <span class="pc-tag">Cookies</span>
+            <span class="pc-tag">Plateau événement</span>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/Vanille.jpg" alt=""/>
+          <span class="pc-img-label orange">Pâtisserie</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Pâtisserie africaine</div>
+          <div class="pc-desc">Revisitation des desserts traditionnels west-africains : beignets au sucre vanilline, gâteau mil, cake coco-mangue. Un hommage aux saveurs locales sublimées par l'art pâtissier.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Beignets</span>
+            <span class="pc-tag">Coco-mangue</span>
+            <span class="pc-tag">Saveurs locales</span>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+  </div>
+
+  <!-- Restaurant -->
+  <div class="prod-section" style="padding-top:0">
+    <div class="prod-section-title">
+      <h3>Restaurant</h3>
+      <div class="prod-divider"></div>
+    </div>
+    <div class="prod-grid">
+
+      <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/dej.jpg" alt=""/>
+          <span class="pc-img-label teal">Restaurant</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Menu du jour</div>
+          <div class="pc-desc">Entrée, plat et dessert renouvelés chaque jour selon les arrivages. Cuisine malienne et internationale élaborée avec des produits frais et des ingrédients GAMI.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Midi &amp; Soir</span>
+            <span class="pc-tag">Cuisine locale</span>
+            <span class="pc-tag">Produits frais</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/Diago-1-1.jpg" alt=""/>
+          <span class="pc-img-label teal">Restaurant</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Petits-déjeuners</div>
+          <div class="pc-desc">Formules petit-déjeuner avec viennoiseries fraîches, café, jus Ami Fruité et eau Diago. Un réveil gourmand dans un cadre agréable en plein cœur de Bamako.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Viennoiseries</span>
+            <span class="pc-tag">Café</span>
+            <span class="pc-tag">Eau Diago</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/Riz-malo-1.jpg" alt=""/>
+          <span class="pc-img-label teal">Restaurant</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Traiteur &amp; Événements</div>
+          <div class="pc-desc">Service traiteur pour séminaires, réceptions, mariages et événements d'entreprise. Buffets personnalisés, plateaux repas et cocktails dînatoires sur mesure à Bamako.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Traiteur</span>
+            <span class="pc-tag">Buffet</span>
+            <span class="pc-tag">Événements</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prod-card">
+        <div class="pc-img">
+          <img class="pc-img-icon" src="./images/Ami-2.jpg" alt=""/>
+          <span class="pc-img-label teal">Restaurant</span>
+        </div>
+        <div class="pc-body">
+          <div class="pc-name">Boissons &amp; Snacking</div>
+          <div class="pc-desc">Jus Ami Fruité, eau Diago, smoothies et boissons chaudes. Sandwichs, salades et plats rapides disponibles toute la journée pour les pauses gourmandes.</div>
+          <div class="pc-tags">
+            <span class="pc-tag">Ami Fruité</span>
+            <span class="pc-tag">Snacking</span>
+            <span class="pc-tag">Toute la journée</span>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+  </div>
+
+  <div class="info-band">
+    <div class="ib-icon">🥐</div>
+    <div class="ib-text">
+      <h4>BAGAMI — Bamako, Mali</h4>
+      <p>Situé au cœur de Bamako, BAGAMI incarne l'art de vivre à la malienne avec une touche française. Boulangerie, pâtisserie et restaurant sous un même toit, entièrement intégré à l'écosystème du Groupe AMI grâce aux farines GMM et aux eaux Diago SEMM.</p>
+    </div>
+    <div class="ib-action">
+      <a href="contact.html" class="btn-outline">Nous contacter →</a>
+    </div>
+  </div>
+
+</div><!-- /panel BAGAMI -->
+
+
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-top">
@@ -834,7 +1066,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Handle anchor links (#gmm, #semm, #sems)
   const hash = location.hash.replace('#','');
-  if (['gmm','semm','sems'].includes(hash)) {
+  if (['gmm','semm','sems','bagami'].includes(hash)) {
     activateTab(hash);
     setTimeout(() => {
       document.querySelector('.tabs-wrap')?.scrollIntoView({behavior:'smooth', block:'start'});
