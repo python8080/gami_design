@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <style>
 /* ═══ GAMI SUB-NAV ═══ */
-.gami-subnav{position:sticky;top:72px;z-index:150;background:#fff;border-bottom:2px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.gami-subnav{position:sticky;top:72px;z-index:150;background:#fff;border-bottom:2px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.06);transition:transform .35s ease}
 .gsn-inner{max-width:1280px;margin:0 auto;padding:0 80px;display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
 .gsn-inner::-webkit-scrollbar{display:none}
 .gsn-item{display:flex;align-items:center;gap:8px;padding:16px 28px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;font-family:'Outfit',sans-serif;text-decoration:none;white-space:nowrap}
@@ -277,6 +277,7 @@
 }
 @media(max-width:900px){
   .gami-subnav{top:64px}
+  .gami-subnav.gsn-hidden{transform:translateY(-200px)}
   .gsn-inner,.pres-section,.gov-section,.pres-timeline,.vision-page,.pillars-section,.vp-engagements{padding:56px 24px}
   .about-img-band{padding:40px 24px}
   .aib-inner{grid-template-columns:1fr}
@@ -896,6 +897,50 @@ let gamiMarkers = {};
 let currentFiliale = 'gmm';
 let geoLayer = null;
 
+let _subnavTop = null;
+
+(function(){
+  var MOBILE_BP = 900;
+  var DELTA = 4;
+  var lastSubY = 0;
+  var ticking2 = false;
+
+  function applySubnavScroll(){
+    if(window.innerWidth > MOBILE_BP) return;
+    var subnav = document.getElementById('gamiSubnav');
+    if(!subnav) return;
+    var y = window.scrollY;
+    if(y > lastSubY + DELTA){
+      subnav.classList.add('gsn-hidden');
+    } else if(lastSubY > y + DELTA){
+      subnav.classList.remove('gsn-hidden');
+    }
+    lastSubY = y;
+  }
+
+  window.addEventListener('scroll', function(){
+    if(!ticking2){
+      requestAnimationFrame(function(){ applySubnavScroll(); ticking2 = false; });
+      ticking2 = true;
+    }
+  }, {passive:true});
+
+  window.addEventListener('resize', function(){
+    if(window.innerWidth > MOBILE_BP){
+      var subnav = document.getElementById('gamiSubnav');
+      if(subnav) subnav.classList.remove('gsn-hidden');
+    }
+    _subnavTop = null;
+  });
+})();
+
+function scrollToSubnav(behavior) {
+  if (_subnavTop === null) {
+    _subnavTop = document.getElementById('gamiSubnav').getBoundingClientRect().top + window.pageYOffset;
+  }
+  window.scrollTo({ top: _subnavTop - 72, behavior: behavior || 'smooth' });
+}
+
 function switchGamiTab(e, tabId) {
   e.preventDefault();
   document.querySelectorAll('.gsn-item').forEach(el => el.classList.remove('active'));
@@ -903,7 +948,7 @@ function switchGamiTab(e, tabId) {
   document.querySelectorAll('.gami-panel').forEach(el => el.classList.remove('active'));
   document.getElementById('tab-' + tabId).classList.add('active');
   history.pushState(null, '', '#' + tabId);
-  window.scrollTo({ top: document.getElementById('gamiSubnav').offsetTop - 72, behavior: 'smooth' });
+  scrollToSubnav('smooth');
   if (tabId === 'filiales') {
     if (!leafletInitialized) {
       setTimeout(initLeafletMap, 150);
@@ -921,6 +966,7 @@ function switchInnerTab(el, id) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  _subnavTop = document.getElementById('gamiSubnav').getBoundingClientRect().top + window.pageYOffset;
   const hash = location.hash.slice(1);
   const validTabs = ['groupe', 'filiales', 'vision'];
   if (hash && validTabs.includes(hash)) {
@@ -931,6 +977,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const panel = document.getElementById('tab-' + hash);
     if (panel) panel.classList.add('active');
     if (hash === 'filiales') setTimeout(initLeafletMap, 300);
+    setTimeout(() => scrollToSubnav('auto'), 50);
   }
 });
 

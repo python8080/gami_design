@@ -477,6 +477,15 @@ nav.transparent .nav-hamburger span{background:#fff}
   .rg-row{grid-template-columns:1fr !important}
 }
 
+/* ── RETRACTABLE NAV — hide on scroll-down, show on scroll-up (mobile only) ── */
+@media(max-width:900px){
+  nav{will-change:transform;transition:transform .32s ease, background .35s, border-color .35s}
+  nav.nav-hidden{transform:translateY(-100%)}
+  /* Drawer follows the nav off-screen when nav hides */
+  .nav-drawer{transition:top .32s ease, opacity .25s ease}
+  .nav-drawer.nav-hidden-drawer{opacity:0;pointer-events:none}
+}
+
 /* ── SMALL MOBILE (≤400px) ── */
 @media(max-width:400px){
   .hero h1,.page-hero h1{font-size:1.65rem}
