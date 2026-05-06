@@ -129,11 +129,16 @@
 .np-read:hover{background:var(--blue);color:#fff}
 
 /* ─── PARTENAIRES ─── */
-.partenaires{padding:60px 80px;background:#fff;border-top:1px solid var(--border)}
+.partenaires{padding:60px 0;background:#fff;border-top:1px solid var(--border);overflow:hidden;width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw}
 .partenaires h3{text-align:center;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:36px}
-.part-logos{display:flex;gap:52px;align-items:center;justify-content:center;flex-wrap:wrap}
-.part-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--muted);opacity:.4;transition:.2s;cursor:default}
+.part-marquee-wrap{width:100%;overflow:hidden;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%)}
+.part-track{display:flex;align-items:center;gap:64px;width:max-content;animation:marquee 22s linear infinite}
+.part-track:hover{animation-play-state:paused}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.part-logo{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--muted);opacity:.4;transition:.2s;cursor:default;white-space:nowrap}
 .part-logo:hover{opacity:.7;color:var(--blue)}
+.part-logo-img{height:36px;width:auto;object-fit:contain;opacity:.45;filter:grayscale(1);transition:.2s;flex-shrink:0}
+.part-logo-img:hover{opacity:.8;filter:grayscale(0)}
 
 
 /* NEWSLETTER */
@@ -194,7 +199,7 @@
   .hs-field:last-of-type{border-bottom:none}
   .hero-cta{margin-left:0;width:100%;justify-content:center;padding:13px;margin-top:10px;border-radius:10px}
   /* About */
-  .about-strip{margin:0}
+  .about-strip{margin:32px 0 0}
   .as-img{min-height:240px;max-height:280px}
   .as-img-single{display:none}
   .as-content{padding:30px 18px}
@@ -248,8 +253,8 @@
   .nl-form{flex-direction:column;gap:10px}
   .nl-btn{width:100%;border-radius:12px}
   /* Partenaires */
-  .partenaires{padding:40px 18px}
-  .part-logos{gap:24px}
+  .partenaires{padding:40px 0}
+  .part-track{gap:40px;animation-duration:16s}
 }
 
 /* ── Small mobile ≤400px ── */
@@ -543,13 +548,23 @@
 <!-- PARTENAIRES -->
 <section class="partenaires">
   <h3>Nos partenaires</h3>
-  <div class="part-logos">
-    <img src="https://gieami.net/wp-content/uploads/2019/03/MANE.png" alt="MANE" style="height:36px;width:auto;object-fit:contain;opacity:.45;filter:grayscale(1);transition:.2s" onmouseover="this.style.opacity='.8';this.style.filter='grayscale(0)'" onmouseout="this.style.opacity='.45';this.style.filter='grayscale(1)'"/>
-    <img src="https://gieami.net/wp-content/uploads/2019/03/FMBB.jpg" alt="FMBB" style="height:36px;width:auto;object-fit:contain;opacity:.45;filter:grayscale(1);transition:.2s" onmouseover="this.style.opacity='.8';this.style.filter='grayscale(0)'" onmouseout="this.style.opacity='.45';this.style.filter='grayscale(1)'"/>
-    <span class="part-logo">EVIAN International</span>
-    <span class="part-logo">BAGAMI</span>
-    <span class="part-logo">CMDB</span>
-    <span class="part-logo">CFBP</span>
+  <div class="part-marquee-wrap">
+    <div class="part-track">
+      <!-- Set 1 -->
+      <img class="part-logo-img" src="https://gieami.net/wp-content/uploads/2019/03/MANE.png" alt="MANE"/>
+      <img class="part-logo-img" src="https://gieami.net/wp-content/uploads/2019/03/FMBB.jpg" alt="FMBB"/>
+      <span class="part-logo">EVIAN International</span>
+      <span class="part-logo">BAGAMI</span>
+      <span class="part-logo">CMDB</span>
+      <span class="part-logo">CFBP</span>
+      <!-- Set 2 (duplicate for seamless loop) -->
+      <img class="part-logo-img" src="https://gieami.net/wp-content/uploads/2019/03/MANE.png" alt="MANE"/>
+      <img class="part-logo-img" src="https://gieami.net/wp-content/uploads/2019/03/FMBB.jpg" alt="FMBB"/>
+      <span class="part-logo">EVIAN International</span>
+      <span class="part-logo">BAGAMI</span>
+      <span class="part-logo">CMDB</span>
+      <span class="part-logo">CFBP</span>
+    </div>
   </div>
 </section>
 

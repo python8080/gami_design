@@ -39,7 +39,9 @@
 .hs-l{font-size:11px;color:#8b9eb8;margin-top:2px}
 
 /* ══ TABS ══ */
-.tabs-bar{background:#fff;border-bottom:1px solid var(--border);padding:0 80px;display:flex;align-items:center;gap:0;position:sticky;top:72px;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.05);}
+.tabs-bar-outer{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:72px;z-index:100;transition:transform .35s ease;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.tabs-bar{display:flex;align-items:center;gap:0;padding:0 80px;overflow-x:auto;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
 .tab{display:flex;align-items:center;gap:7px;padding:15px 18px;font-size:13.5px;font-weight:500;color:var(--muted);cursor:pointer;transition:.15s;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;font-family:'Outfit',sans-serif;}
 .tab:hover{color:var(--text)}
 .tab.active{color:var(--blue);border-bottom-color:var(--orange);font-weight:600}
@@ -200,16 +202,18 @@
   .reg-card{position:relative;top:auto}
 }
 @media(max-width:900px){
+  .tabs-bar-outer.tabs-hidden{transform:translateY(-200px)}
+  .tabs-bar{padding:0 16px !important}
+  .tabs-bar .tab{white-space:nowrap}
   .hero-inner{padding:0 24px 88px !important}
   .hero-stats .hs{padding:12px 16px}
-  .tabs-bar{padding:0 16px !important;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
-  .tabs-bar .tab{white-space:nowrap}
   .page-wrap{padding:16px 20px !important}
   .hiw{padding:64px 24px !important}
   .hiw-grid{grid-template-columns:1fr 1fr}
   .vtrans-section{padding:56px 24px !important}
 }
 @media(max-width:640px){
+  .tabs-bar-outer{top:64px}
   .hero{height:auto;min-height:520px}
   .hero-inner{padding:72px 18px 90px !important}
   .hero h1{font-size:2rem !important}
@@ -303,14 +307,16 @@
 </section>
 
 <!-- ══ TABS ══ -->
-<div class="tabs-bar">
-  <button class="tab active" onclick="swTab(this,'t-offers')">📋 Offres du jour <span class="tab-badge" id="tb-count">5</span></button>
-  <!-- <button class="tab" onclick="swTab(this,'t-heatmap')">🌡️ Capacité réseau</button> -->
-  <button class="tab" onclick="swTab(this,'t-trans')">🚛 Transporteurs vérifiés <span class="tab-badge" style="background:rgba(22,163,74,.12);color:#16a34a">45</span></button>
-  <div class="tab-spacer"></div>
-  <div class="tab-searchbox">
-    <span style="color:var(--muted);font-size:13px">⌕</span>
-    <input placeholder="Rechercher trajet, marchandise..." id="gf" oninput="gFilter(this.value)"/>
+<div class="tabs-bar-outer">
+  <div class="tabs-bar">
+    <button class="tab active" onclick="swTab(this,'t-offers')">📋 Offres du jour <span class="tab-badge" id="tb-count">5</span></button>
+    <!-- <button class="tab" onclick="swTab(this,'t-heatmap')">🌡️ Capacité réseau</button> -->
+    <button class="tab" onclick="swTab(this,'t-trans')">🚛 Transporteurs vérifiés <span class="tab-badge" style="background:rgba(22,163,74,.12);color:#16a34a">45</span></button>
+    <div class="tab-spacer"></div>
+    <div class="tab-searchbox">
+      <span style="color:var(--muted);font-size:13px">⌕</span>
+      <input placeholder="Rechercher trajet, marchandise..." id="gf" oninput="gFilter(this.value)"/>
+    </div>
   </div>
 </div>
 
@@ -502,7 +508,30 @@ function renderTabTrans(list){document.getElementById('tab-trans-grid').innerHTM
 function renderPubTrans(){document.getElementById('pub-trans-grid').innerHTML=TRANS.slice(0,4).map(tCard).join('')}
 function fTrans(code,btn){document.querySelectorAll('#t-trans .chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderTabTrans(code==='all'?TRANS:TRANS.filter(t=>t.code===code));}
 
-function swTab(btn,id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');['t-offers','t-heatmap','t-trans'].forEach(tid=>{const e=document.getElementById(tid);if(e)e.style.display=tid===id?'block':'none'});}
+(function(){
+  var MOBILE_BP=900,DELTA=4,lastSubY=0,ticking2=false;
+  function applyTabsScroll(){
+    if(window.innerWidth>MOBILE_BP)return;
+    var tw=document.querySelector('.tabs-bar-outer');
+    if(!tw)return;
+    var y=window.scrollY;
+    if(y>lastSubY+DELTA){tw.classList.add('tabs-hidden');}
+    else if(lastSubY>y+DELTA){tw.classList.remove('tabs-hidden');}
+    lastSubY=y;
+  }
+  window.addEventListener('scroll',function(){
+    if(!ticking2){requestAnimationFrame(function(){applyTabsScroll();ticking2=false;});ticking2=true;}
+  },{passive:true});
+  window.addEventListener('resize',function(){
+    if(window.innerWidth>MOBILE_BP){var tw=document.querySelector('.tabs-bar-outer');if(tw)tw.classList.remove('tabs-hidden');}
+  });
+})();
+
+function swTab(btn,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  ['t-offers','t-heatmap','t-trans'].forEach(tid=>{const e=document.getElementById(tid);if(e)e.style.display=tid===id?'block':'none'});
+}
 
 function submitReg(){
   if(!document.getElementById('fn').value.trim()||!document.getElementById('fc').value||!document.getElementById('fr').value.trim()||!document.getElementById('fw').value.trim()){toast('⚠️ Veuillez remplir tous les champs obligatoires (*)','warning');return;}

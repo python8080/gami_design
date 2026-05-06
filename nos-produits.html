@@ -24,7 +24,7 @@
 .ph-inner p{color:rgba(255,255,255,.65);font-family:'Outfit',sans-serif;font-weight:300;font-size:15px;max-width:560px;line-height:1.7}
 
 /* ── TABS ── */
-.tabs-wrap{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:72px;z-index:100;transition:transform .35s ease}
+.tabs-wrap{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:72px;z-index:100;transition:transform .35s ease;margin-top:72px}
 .tabs-inner{display:flex;gap:0;padding:0 80px;overflow-x:auto;scrollbar-width:none}
 .tabs-inner::-webkit-scrollbar{display:none}
 .tab-btn{display:flex;align-items:center;gap:10px;padding:18px 28px;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;transition:.2s;white-space:nowrap;flex-shrink:0}
@@ -139,6 +139,7 @@
   .hs-dots{bottom:16px}
 }
 @media(max-width:640px){
+  .tabs-wrap{margin-top:64px}
   .page-hero{height:260px}
   .bh-stats{gap:20px}
   .prod-grid{grid-template-columns:1fr}
@@ -151,7 +152,7 @@
 <body>
 
 <!-- NAV -->
-<nav id="nav" class="transparent">
+<nav id="nav">
   <div class="nav-logo">
     <img src="./images/logo_GAMI.png" alt="Groupe AMI — GAMI" class="nav-logo-img"/>
   </div>
@@ -174,6 +175,28 @@
   </div>
   <a class="nav-cta" href="backoffice.html">Espace DSI</a>
 </nav>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs-inner">
+    <button class="tab-btn active" data-tab="gmm">
+      <img class="tab-badge gmm" src="./images/logo-GMM-1024x722.jpg" alt="GMM"/>
+      Grands Moulins du Mali
+    </button>
+    <button class="tab-btn" data-tab="semm">
+      <img class="tab-badge gmm" src="./images/semm.jpg" alt="GMM"/>
+      Eaux Minérales du Mali
+    </button>
+    <button class="tab-btn" data-tab="sems">
+      <img class="tab-badge gmm" src="./images/logo-SEMS.png" alt="SEMS"/>
+      Eaux Minérales du Sénégal
+    </button>
+    <button class="tab-btn" data-tab="bagami">
+      <img class="tab-badge bagami" src="./images/bagami-logo.jpeg" alt="BAGAMI"/>
+      BAGAMI
+    </button>
+  </div>
+</div>
 
 <!-- PAGE HERO — SLIDER -->
 <div class="page-hero" id="heroSlider">
@@ -233,28 +256,6 @@
   <!-- Barre de progression -->
   <div class="hs-progress"><div class="hs-fill"></div></div>
 
-</div>
-
-<!-- TABS -->
-<div class="tabs-wrap">
-  <div class="tabs-inner">
-    <button class="tab-btn active" data-tab="gmm">
-      <img class="tab-badge gmm" src="./images/logo-GMM-1024x722.jpg" alt="GMM"/>
-      Grands Moulins du Mali
-    </button>
-    <button class="tab-btn" data-tab="semm">
-      <img class="tab-badge gmm" src="./images/semm.jpg" alt="GMM"/>
-      Eaux Minérales du Mali
-    </button>
-    <button class="tab-btn" data-tab="sems">
-      <img class="tab-badge gmm" src="./images/logo-SEMS.png" alt="SEMS"/>
-      Eaux Minérales du Sénégal
-    </button>
-    <button class="tab-btn" data-tab="bagami">
-      <img class="tab-badge bagami" src="./images/bagami-logo.jpeg" alt="BAGAMI"/>
-      BAGAMI
-    </button>
-  </div>
 </div>
 
 <!-- ══════════ PANEL GMM ══════════ -->
@@ -1122,10 +1123,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Nav scroll
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('transparent', window.scrollY < 60);
-});
 
 // ── HERO SLIDER ──
 (function () {
