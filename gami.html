@@ -965,8 +965,7 @@ function switchInnerTab(el, id) {
   document.getElementById(id).classList.add('active');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  _subnavTop = document.getElementById('gamiSubnav').getBoundingClientRect().top + window.pageYOffset;
+function applyHashTab(behavior) {
   const hash = location.hash.slice(1);
   const validTabs = ['groupe', 'filiales', 'vision'];
   if (hash && validTabs.includes(hash)) {
@@ -976,10 +975,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (tabEl) tabEl.classList.add('active');
     const panel = document.getElementById('tab-' + hash);
     if (panel) panel.classList.add('active');
-    if (hash === 'filiales') setTimeout(initLeafletMap, 300);
-    setTimeout(() => scrollToSubnav('auto'), 50);
+    if (hash === 'filiales') {
+      if (!leafletInitialized) setTimeout(initLeafletMap, 300);
+      else if (gamiMap) setTimeout(() => gamiMap.invalidateSize(), 150);
+    }
+    setTimeout(() => scrollToSubnav(behavior || 'auto'), 50);
   }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  _subnavTop = document.getElementById('gamiSubnav').getBoundingClientRect().top + window.pageYOffset;
+  applyHashTab('auto');
 });
+
+window.addEventListener('hashchange', () => applyHashTab('smooth'));
 
 function smoothToDetail(e) {
   e.preventDefault();
