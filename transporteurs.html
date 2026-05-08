@@ -57,8 +57,9 @@
 .page-wrap{display:grid;grid-template-columns:1fr 360px;gap:24px;padding:32px 80px;max-width:1440px;margin:0 auto;align-items:start;background:var(--light);}
 
 /* ══ CHIPS ══ */
-.chips-bar{display:flex;gap:6px;padding:10px 80px;border-top:1px solid var(--border);overflow-x:auto;scrollbar-width:none;background:#fafbfc;}
+.chips-bar{display:flex;gap:6px;padding:10px 80px;border-top:1px solid var(--border);overflow-x:auto;scrollbar-width:none;background:#fafbfc;transition:max-height .28s ease,padding .28s ease,opacity .22s ease,border-color .22s ease;}
 .chips-bar::-webkit-scrollbar{display:none}
+.chips-toggle{display:none}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
 .chip{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;border-radius:20px;font-size:12.5px;font-weight:500;cursor:pointer;transition:.15s;border:1.5px solid var(--border);color:var(--muted);background:#fff;font-family:'Outfit',sans-serif;}
 .chip:hover{border-color:var(--blue);color:var(--blue)}
@@ -234,21 +235,22 @@
   .tabs-bar-outer.tabs-hidden{transform:translateY(-100%)}
 }
 @media(max-width:640px){
+  body{padding-top:64px}
   .tabs-bar-outer{top:64px;}
-  .hero{height:auto;min-height:520px}
-  .hero-inner{padding:72px 18px 90px !important}
-  .hero h1{font-size:2rem !important}
-  .hero-desc{font-size:14px}
-  .hero-btns{flex-direction:column;width:100%}
-  .hbtn-primary,.hbtn-ghost{width:100%;justify-content:center}
-  .hero-badges{flex-wrap:wrap}
-  .hero-stats{flex-wrap:wrap}
-  .hero-stats .hs{flex:1 1 50%;border-right:none;border-bottom:1px solid rgba(255,255,255,.07)}
-  .hero-stats .hs-v{font-size:16px}
-  .tabs-bar{padding:0 10px !important}
-  .tabs-bar .tab{font-size:12px;padding:12px 10px;gap:4px}
+  .hero{display:none !important}
+  .tabs-bar{padding:0 !important;overflow-x:visible !important}
+  .tabs-bar .tab{flex:1;justify-content:center;font-size:12px;padding:13px 8px;gap:4px;white-space:nowrap}
+  .tab-spacer{display:none}
   .tab-searchbox{display:none !important}
-  .page-wrap{padding:12px 14px !important}
+  .chips-bar{padding:8px 12px;flex-wrap:nowrap;max-height:56px;overflow:hidden;opacity:1}
+  .chips-bar.chips-retracted{max-height:0 !important;padding-top:0 !important;padding-bottom:0 !important;border-top-color:transparent;opacity:0}
+  .chips-bar .chip{flex-shrink:0;white-space:nowrap;font-size:12px;padding:6px 11px}
+  .chips-toggle{display:flex;align-items:center;justify-content:center;width:100%;height:20px;background:#fafbfc;border:none;border-top:1px solid var(--border);cursor:pointer;outline:none;padding:0;color:var(--muted);transition:background .15s,border-color .22s}
+  .chips-toggle:active{background:#eef0f4}
+  .chips-toggle svg{transition:transform .28s ease}
+  .chips-toggle.retracted svg{transform:rotate(180deg)}
+  .chips-toggle.retracted{border-top-color:transparent}
+  .page-wrap{padding:20px 14px 12px !important}
   .hiw{padding:48px 18px !important}
   .hiw-grid{grid-template-columns:1fr}
   .vtrans-section{padding:44px 18px !important}
@@ -352,6 +354,9 @@
     <button class="chip" onclick="fTrans('gn',this)">🇬🇳 Guinée</button>
     <button class="chip" onclick="fTrans('ci',this)">🇨🇮 Côte d'Ivoire</button>
   </div>
+  <button class="chips-toggle" id="chips-toggle" onclick="toggleChips()" aria-label="Masquer les filtres">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
 </div>
 
 <!-- ══ PAGE WRAP ══ -->
@@ -533,8 +538,20 @@ function swTab(btn,id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
   ['t-offers','t-heatmap','t-trans'].forEach(tid=>{const e=document.getElementById(tid);if(e)e.style.display=tid===id?'block':'none'});
-  document.getElementById('chips-offers').style.display=id==='t-offers'?'flex':'none';
-  document.getElementById('chips-trans').style.display=id==='t-trans'?'flex':'none';
+  var retracted=document.getElementById('chips-toggle')&&document.getElementById('chips-toggle').classList.contains('retracted');
+  var co=document.getElementById('chips-offers');
+  var ct=document.getElementById('chips-trans');
+  co.style.display=id==='t-offers'?'flex':'none';
+  ct.style.display=id==='t-trans'?'flex':'none';
+  if(retracted){co.classList.add('chips-retracted');ct.classList.add('chips-retracted');}
+}
+
+function toggleChips(){
+  var btn=document.getElementById('chips-toggle');
+  var retracted=btn.classList.toggle('retracted');
+  document.querySelectorAll('.chips-bar').forEach(function(b){
+    retracted?b.classList.add('chips-retracted'):b.classList.remove('chips-retracted');
+  });
 }
 
 function submitReg(){
@@ -548,17 +565,22 @@ function scrollToReg(){document.getElementById('reg-card').scrollIntoView({behav
 function scrollToOffers(){document.getElementById('offers-list').scrollIntoView({behavior:'smooth'})}
 
 (function(){
-  var BP=900,DELTA=6,lastY=0,tick=false,bar=null;
+  var BP=900,DELTA=6,lastY=window.scrollY,tick=false,bar=null,holdTimer=null;
   function onScroll(){
     if(window.innerWidth>BP)return;
     if(!bar)bar=document.querySelector('.tabs-bar-outer');
     var y=window.scrollY;
-    if(y>lastY+DELTA)bar.classList.add('tabs-hidden');
-    else if(lastY>y+DELTA)bar.classList.remove('tabs-hidden');
+    if(y>lastY+DELTA){
+      if(!holdTimer)bar.classList.add('tabs-hidden');
+    } else if(lastY>y+DELTA){
+      bar.classList.remove('tabs-hidden');
+      clearTimeout(holdTimer);
+      holdTimer=setTimeout(function(){holdTimer=null;},700);
+    }
     lastY=y;
   }
   window.addEventListener('scroll',function(){if(!tick){requestAnimationFrame(function(){onScroll();tick=false;});tick=true;}},{passive:true});
-  window.addEventListener('resize',function(){if(window.innerWidth>BP&&bar)bar.classList.remove('tabs-hidden');});
+  window.addEventListener('resize',function(){if(window.innerWidth>BP&&bar){bar.classList.remove('tabs-hidden');clearTimeout(holdTimer);holdTimer=null;}});
 })();
 
 function toast(msg,type='info'){
