@@ -500,6 +500,56 @@ input,select,textarea{font-family:'Inter',sans-serif}
 .qa-btn-icon{font-size:18px;margin-bottom:6px;display:block}
 .qa-btn-label{font-weight:500}
 
+/* ── DOCS BIBLIOTHÈQUE ── */
+.docs-bo-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:20px 24px;margin-bottom:20px;
+}
+.docs-bo-label{
+  font-size:10px;font-weight:700;letter-spacing:2px;
+  color:var(--gami-orange);text-transform:uppercase;margin-bottom:8px;
+}
+.docs-bo-bar h2{font-size:18px;font-weight:700;color:var(--text)}
+.docs-bo-desc{font-size:12px;color:var(--text2);max-width:280px;text-align:right;line-height:1.6;margin-right:14px}
+.docs-bo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.doc-card-bo{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);
+  padding:22px 20px;display:flex;flex-direction:column;gap:14px;
+  transition:.25s;position:relative;overflow:hidden;
+}
+.doc-card-bo::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--blue)}
+.doc-card-bo:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.doc-card-bo.soon{opacity:.55}
+.doc-card-bo.soon::before{background:var(--text3)}
+.doc-bo-top{display:flex;align-items:center;gap:14px}
+.doc-icon-bo{
+  width:48px;height:48px;border-radius:12px;background:var(--blue-dim);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.doc-icon-bo svg{width:22px;height:22px;fill:none;stroke:var(--blue);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.doc-card-bo.soon .doc-icon-bo{background:var(--bg3)}
+.doc-card-bo.soon .doc-icon-bo svg{stroke:var(--text3)}
+.doc-meta-bo h4{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+.doc-meta-bo span{font-size:11px;color:var(--text3)}
+.doc-desc-bo{font-size:12px;color:var(--text2);line-height:1.65;flex:1}
+.doc-footer-bo{display:flex;align-items:center;justify-content:space-between;margin-top:2px;flex-wrap:wrap;gap:8px}
+.doc-badge-bo{
+  font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--gami-orange);background:var(--orange-dim);padding:3px 9px;border-radius:20px;
+}
+.doc-dl-bo{
+  display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+  color:var(--blue);background:var(--blue-dim);border:none;border-radius:8px;
+  padding:7px 13px;cursor:pointer;text-decoration:none;transition:.2s;font-family:'Inter',sans-serif;
+}
+.doc-dl-bo:hover{background:var(--blue);color:#fff}
+.doc-dl-bo svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.doc-soon-bo{font-size:11px;font-weight:600;color:var(--text3);background:var(--bg3);border-radius:8px;padding:7px 13px}
+.doc-manage-bo{display:flex;gap:6px;align-items:center}
+@media(max-width:900px){.docs-bo-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.docs-bo-grid{grid-template-columns:1fr}.docs-bo-bar{flex-direction:column;align-items:flex-start;gap:12px}.docs-bo-desc{text-align:left}}
+
 /* ══════════════════════════════════════════════
    OVERLAY / MODAL
 ══════════════════════════════════════════════ */
@@ -907,6 +957,53 @@ input,select,textarea{font-family:'Inter',sans-serif}
   .quick-grid{grid-template-columns:1fr}
   .tb-title{font-size:14px}
 }
+
+/* ═══════ GALERIE BACK-OFFICE ═══════ */
+.gbo-tabs{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;width:fit-content}
+.gbo-tab{padding:7px 18px;border-radius:5px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px;border:none;background:none}
+.gbo-tab:hover{color:var(--text)}
+.gbo-tab.active{background:var(--bg4);color:var(--text)}
+.gbo-sec{display:none}
+.gbo-sec.active{display:block}
+.gbo-photo-grid{columns:3;column-gap:12px}
+.gbo-vid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gbo-card{break-inside:avoid;margin-bottom:12px;border-radius:var(--radius-lg);overflow:hidden;background:var(--bg2);border:1px solid var(--border);transition:.2s;position:relative}
+.gbo-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+.gbo-card-img{position:relative;overflow:hidden}
+.gbo-card-img img{width:100%;display:block;transition:transform .35s ease}
+.gbo-vid-thumb{aspect-ratio:16/9;overflow:hidden;position:relative}
+.gbo-vid-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease,filter .3s}
+.gbo-card:hover .gbo-card-img img,.gbo-card:hover .gbo-vid-thumb img{transform:scale(1.04)}
+.gbo-card-body{padding:11px 14px 13px}
+.gbo-card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.3}
+.gbo-card-desc{font-size:11px;color:var(--text2);line-height:1.5}
+.gbo-badge{position:absolute;top:8px;left:8px;font-size:9px;font-weight:700;letter-spacing:.5px;padding:2px 9px;border-radius:50px;text-transform:uppercase;z-index:3}
+.gbo-badge.gmm{background:rgba(27,79,138,.85);color:#fff}
+.gbo-badge.semm{background:rgba(232,134,26,.85);color:#fff}
+.gbo-badge.sems{background:rgba(26,128,96,.85);color:#fff}
+.gbo-badge.groupe{background:rgba(11,25,41,.82);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.gbo-card-actions{position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:.15s;z-index:4}
+.gbo-card:hover .gbo-card-actions{opacity:1}
+.gbo-act{width:28px;height:28px;border-radius:6px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.15s}
+.gbo-act.edit{background:rgba(79,142,247,.92);color:#fff}
+.gbo-act.edit:hover{background:var(--blue)}
+.gbo-act.del{background:rgba(231,76,60,.92);color:#fff}
+.gbo-act.del:hover{background:var(--red)}
+.vid-play-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;cursor:pointer}
+.vid-play-ov-btn{width:46px;height:46px;background:rgba(255,255,255,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;transition:.2s;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.gbo-card:hover .vid-play-ov-btn{background:var(--blue);color:#fff}
+.gbo-vid-dur{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.72);color:#fff;font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;z-index:3}
+/* Overlay lecteur vidéo */
+.gbo-vid-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center}
+.gbo-vid-overlay.open{display:flex}
+.gbo-vid-box{position:relative;width:min(860px,92vw)}
+.gbo-vid-frame{width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.gbo-vid-frame iframe{width:100%;height:100%;border:none}
+.gbo-vid-close{position:fixed;top:18px;right:22px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;z-index:10}
+.gbo-vid-close:hover{background:var(--red)}
+.gbo-vid-label{margin-top:14px;color:#fff;font-size:15px;font-weight:600}
+@media(max-width:1100px){.gbo-photo-grid{columns:2}.gbo-vid-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.gbo-photo-grid{columns:1}.gbo-vid-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -945,6 +1042,48 @@ input,select,textarea{font-family:'Inter',sans-serif}
   </div>
 </div>
 
+<div class="overlay" id="ov-news" onclick="if(event.target===this)closeOverlay('ov-news')">
+  <div class="modal" style="max-width:560px">
+    <button class="modal-close" onclick="closeOverlay('ov-news')">✕</button>
+    <h2 id="news-modal-title">Ajouter un article</h2>
+    <div class="modal-sub">Actualités GAMI — actualites.html</div>
+    <div class="form-grid2">
+      <div class="fg full"><label>Titre *</label><input id="news-title" placeholder="Ex : GAMI inaugure son nouveau siège…"/></div>
+      <div class="fg"><label>Catégorie *</label>
+        <select id="news-cat">
+          <option value="groupe">Groupe</option>
+          <option value="gmm">GMM</option>
+          <option value="semm">SEMM</option>
+          <option value="sems">SEMS</option>
+          <option value="transport">Transporteurs</option>
+        </select>
+      </div>
+      <div class="fg"><label>Date *</label><input id="news-date" placeholder="Ex : 15 Mars 2025"/></div>
+      <div class="fg full"><label>Extrait</label><textarea id="news-excerpt" rows="3" placeholder="Résumé court de l'article…" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);padding:8px 10px;font-size:13px;resize:vertical"></textarea></div>
+      <div class="fg full"><label>Image</label>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div id="news-img-preview" style="width:72px;height:72px;border-radius:8px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden">📰</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <input id="news-img-url" placeholder="URL de l'image (https://…)" oninput="previewNewsImg(this.value)" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;color:var(--text);outline:none"/>
+            <label style="display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:7px 12px;cursor:pointer;font-size:12px;color:var(--text2);text-transform:none;letter-spacing:0;font-weight:400;width:fit-content">
+              📎 Choisir un fichier local
+              <input type="file" accept="image/*" style="display:none" onchange="loadNewsImgFile(this)"/>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="fg"><label>Statut</label>
+        <select id="news-published">
+          <option value="1">🟢 Publié</option>
+          <option value="0">⏸ Brouillon</option>
+        </select>
+      </div>
+    </div>
+    <input type="hidden" id="news-edit-id" value=""/>
+    <button class="submit-btn" onclick="saveNews()">💾 Enregistrer l'article</button>
+  </div>
+</div>
+
 <div class="overlay" id="ov-product" onclick="if(event.target===this)closeOverlay('ov-product')">
   <div class="modal">
     <button class="modal-close" onclick="closeOverlay('ov-product')">✕</button>
@@ -962,9 +1101,57 @@ input,select,textarea{font-family:'Inter',sans-serif}
       <div class="fg"><label>Catégorie *</label><input id="prod-cat" placeholder="Ex : Meunerie, Eau minérale…"/></div>
       <div class="fg full"><label>Description</label><textarea id="prod-desc" rows="3" placeholder="Description du produit…" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);padding:8px 10px;font-size:13px;resize:vertical"></textarea></div>
       <div class="fg full"><label>Tags (séparés par des virgules)</label><input id="prod-tags" placeholder="Ex : Farine blanche, Semoule, Distribution nationale"/></div>
+      <div class="fg full"><label>Image du produit</label>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div id="prod-img-preview" style="width:72px;height:72px;border-radius:8px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden">📦</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <input id="prod-img-url" placeholder="URL de l'image (https://…)" oninput="previewProdImg(this.value)" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;color:var(--text);outline:none"/>
+            <label style="display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:7px 12px;cursor:pointer;font-size:12px;color:var(--text2);text-transform:none;letter-spacing:0;font-weight:400;width:fit-content">
+              📎 Choisir un fichier local
+              <input type="file" accept="image/*" style="display:none" onchange="loadProdImgFile(this)"/>
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
     <input type="hidden" id="prod-edit-id" value=""/>
     <button class="submit-btn" onclick="saveProd()">💾 Enregistrer le produit</button>
+  </div>
+</div>
+
+<div class="overlay" id="ov-job" onclick="if(event.target===this)closeOverlay('ov-job')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeOverlay('ov-job')">✕</button>
+    <h2 id="job-modal-title">Ajouter une offre d'emploi</h2>
+    <div class="modal-sub">Recrutement GAMI — GMM · SEMM · SEMS</div>
+    <div class="form-grid2">
+      <div class="fg full"><label>Intitulé du poste *</label><input id="job-title" placeholder="Ex : Ingénieur Maintenance Senior"/></div>
+      <div class="fg"><label>Filiale *</label>
+        <select id="job-filiale">
+          <option value="GMM">GMM — Grands Moulins du Mali</option>
+          <option value="SEMM">SEMM — Eaux Minérales du Mali</option>
+          <option value="SEMS">SEMS — Eaux Minérales du Sénégal</option>
+        </select>
+      </div>
+      <div class="fg"><label>Type de contrat *</label>
+        <select id="job-contract">
+          <option value="CDI">CDI</option>
+          <option value="CDD">CDD</option>
+          <option value="Stage">Stage</option>
+          <option value="Freelance">Freelance</option>
+        </select>
+      </div>
+      <div class="fg full"><label>Localisation *</label><input id="job-location" placeholder="Ex : Dakar, Bamako, Site minier…"/></div>
+      <div class="fg full"><label>Description du poste</label><textarea id="job-desc" rows="4" placeholder="Responsabilités, profil recherché, expérience requise…" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);padding:8px 10px;font-size:13px;resize:vertical"></textarea></div>
+      <div class="fg"><label>Statut</label>
+        <select id="job-active">
+          <option value="1">🟢 Actif</option>
+          <option value="0">⏸ Inactif</option>
+        </select>
+      </div>
+    </div>
+    <input type="hidden" id="job-edit-id" value=""/>
+    <button class="submit-btn" onclick="saveJob()">💾 Enregistrer l'offre</button>
   </div>
 </div>
 
@@ -974,6 +1161,36 @@ input,select,textarea{font-family:'Inter',sans-serif}
     <h2 id="cand-title">Dossier candidat</h2>
     <div class="modal-sub" id="cand-sub"></div>
     <div id="cand-body"></div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-doc" onclick="if(event.target===this)closeOverlay('ov-doc')">
+  <div class="modal" style="max-width:500px">
+    <button class="modal-close" onclick="closeOverlay('ov-doc')">✕</button>
+    <h2 id="doc-modal-title">Ajouter un document</h2>
+    <div class="modal-sub">Ressources GAMI — Documents à télécharger</div>
+    <div class="form-grid2">
+      <div class="fg full"><label>Titre *</label><input id="doc-title" placeholder="Ex : Plaquette GAMI 2023"/></div>
+      <div class="fg"><label>Catégorie *</label>
+        <select id="doc-badge">
+          <option value="Institutionnel">Institutionnel</option>
+          <option value="Rapport">Rapport</option>
+          <option value="Filiales">Filiales</option>
+          <option value="Autre">Autre</option>
+        </select>
+      </div>
+      <div class="fg"><label>Taille / Format</label><input id="doc-size" placeholder="Ex : PDF · 4.2 Mo"/></div>
+      <div class="fg full"><label>Description</label><textarea id="doc-desc" rows="3" placeholder="Description du document…" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);padding:8px 10px;font-size:13px;resize:vertical"></textarea></div>
+      <div class="fg full"><label>URL / Chemin du fichier</label><input id="doc-file" placeholder="Ex : documents/fichier.pdf"/></div>
+      <div class="fg"><label>Disponibilité</label>
+        <select id="doc-available">
+          <option value="1">✅ Disponible</option>
+          <option value="0">⏳ À venir</option>
+        </select>
+      </div>
+    </div>
+    <input type="hidden" id="doc-edit-id" value=""/>
+    <button class="submit-btn" onclick="saveDoc()">💾 Enregistrer le document</button>
   </div>
 </div>
 
@@ -987,6 +1204,56 @@ input,select,textarea{font-family:'Inter',sans-serif}
       <button class="submit-btn" style="background:var(--bg4);color:var(--text2)" onclick="closeOverlay('ov-confirm')">Annuler</button>
       <button class="submit-btn" id="conf-btn">Confirmer</button>
     </div>
+  </div>
+</div>
+
+<!-- LECTEUR VIDÉO GALERIE -->
+<div class="gbo-vid-overlay" id="gbo-vid-overlay" onclick="if(event.target===this)closeGboVideo()">
+  <button class="gbo-vid-close" onclick="closeGboVideo()">✕</button>
+  <div class="gbo-vid-box">
+    <div class="gbo-vid-frame" id="gbo-vid-frame"></div>
+    <div class="gbo-vid-label" id="gbo-vid-label"></div>
+  </div>
+</div>
+
+<!-- FORMULAIRE PHOTO / VIDÉO -->
+<div class="overlay" id="ov-media-form" onclick="if(event.target===this)closeOverlay('ov-media-form')">
+  <div class="modal" style="max-width:560px">
+    <button class="modal-close" onclick="closeOverlay('ov-media-form')">✕</button>
+    <h2 id="media-form-title">Ajouter une photo</h2>
+    <div class="modal-sub">Galerie GAMI — GMM · SEMM · SEMS</div>
+    <input type="hidden" id="media-form-type" value="photo"/>
+    <input type="hidden" id="media-form-id" value=""/>
+    <div class="form-grid2">
+      <div class="fg full"><label>Titre *</label><input id="mf-title" placeholder="Ex : DIAGO — Campagne 2024"/></div>
+      <div class="fg"><label>Filiale / Catégorie *</label>
+        <select id="mf-cat">
+          <option value="gmm">GMM</option>
+          <option value="semm">SEMM</option>
+          <option value="sems">SEMS</option>
+          <option value="groupe">Groupe</option>
+        </select>
+      </div>
+      <div class="fg full"><label>Description</label><textarea id="mf-desc" rows="2" placeholder="Légende affichée sous le média…" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);padding:8px 10px;font-size:13px;resize:vertical"></textarea></div>
+      <div class="fg full">
+        <label id="mf-src-label">URL de l'image *</label>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div id="mf-img-preview" style="width:72px;height:72px;border-radius:8px;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden">🖼️</div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <input id="mf-src" placeholder="https://…" oninput="previewMediaImg(this.value)" style="width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;color:var(--text);outline:none"/>
+            <label id="mf-file-row" style="display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:7px 12px;cursor:pointer;font-size:12px;color:var(--text2);width:fit-content">
+              📎 Choisir un fichier local
+              <input type="file" accept="image/*" style="display:none" onchange="loadMediaFile(this)"/>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="fg full" id="mf-embed-row" style="display:none">
+        <label>URL YouTube / embed vidéo</label>
+        <input id="mf-embed" placeholder="https://www.youtube.com/embed/…"/>
+      </div>
+    </div>
+    <button class="submit-btn" onclick="saveMedia()">💾 Enregistrer</button>
   </div>
 </div>
 
@@ -1007,7 +1274,7 @@ input,select,textarea{font-family:'Inter',sans-serif}
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-brand">
-      <img src="./images/logo_GAMI.png" alt="GAMI" style="height:38px;width:auto;object-fit:contain;flex-shrink:0"/>
+      <a href="index.html" title="Accueil"><img src="./images/logo_GAMI.png" alt="GAMI" style="height:38px;width:auto;object-fit:contain;flex-shrink:0"/></a>
     </div>
 
     <!-- Collapse toggle -->
@@ -1045,11 +1312,23 @@ input,select,textarea{font-family:'Inter',sans-serif}
         <span class="sbi-badge" id="badge-cand">4</span>
         <div class="sbi-tip">Candidatures</div>
       </div>
+      <div class="sbi" data-view="jobs" onclick="navClick(this,'jobs')">
+        <span class="sbi-icon">💼</span>
+        <span class="sbi-txt">Offres d'emploi</span>
+        <span class="sbi-badge blue" id="badge-jobs">4</span>
+        <div class="sbi-tip">Offres d'emploi</div>
+      </div>
       <div class="sbi" data-view="products" onclick="navClick(this,'products')">
         <span class="sbi-icon">📦</span>
         <span class="sbi-txt">Nos Produits</span>
         <span class="sbi-badge green" id="badge-prod">16</span>
         <div class="sbi-tip">Nos Produits</div>
+      </div>
+      <div class="sbi" data-view="news" onclick="navClick(this,'news')">
+        <span class="sbi-icon">📰</span>
+        <span class="sbi-txt">Actualités</span>
+        <span class="sbi-badge blue" id="badge-news">6</span>
+        <div class="sbi-tip">Actualités</div>
       </div>
 
       <!-- Collapsible: Work Management style -->
@@ -1354,6 +1633,38 @@ input,select,textarea{font-family:'Inter',sans-serif}
         </div>
       </div>
 
+      <!-- ═══════ OFFRES D'EMPLOI ═══════ -->
+      <div class="view" id="view-jobs">
+        <div class="page-header">
+          <h1>Offres d'emploi</h1>
+          <p>Gestion des postes ouverts affichés sur recrutement.html — GMM · SEMM · SEMS</p>
+        </div>
+        <div class="table-panel">
+          <div class="tp-header">
+            <span class="tp-title">Offres publiées (<span id="jobs-count">0</span>)</span>
+            <div class="tp-actions">
+              <div class="tp-search"><span>⌕</span><input placeholder="Rechercher un poste..." oninput="searchJobs(this.value)"/></div>
+              <button class="small-btn" onclick="exportReport('Excel')">↓ Excel</button>
+              <button class="small-btn primary" onclick="openAddJob()">+ Nouvelle offre</button>
+            </div>
+          </div>
+          <div class="filters-bar">
+            <button class="filter-chip active" onclick="filterJobs('all',this)">Tous</button>
+            <button class="filter-chip blue" onclick="filterJobs('GMM',this)">GMM</button>
+            <button class="filter-chip orange" onclick="filterJobs('SEMM',this)">SEMM</button>
+            <button class="filter-chip green" onclick="filterJobs('SEMS',this)">SEMS</button>
+            <button class="filter-chip" onclick="filterJobs('CDI',this)">CDI</button>
+            <button class="filter-chip" onclick="filterJobs('CDD',this)">CDD</button>
+            <button class="filter-chip" onclick="filterJobs('active',this)">🟢 Actifs</button>
+            <button class="filter-chip" onclick="filterJobs('inactive',this)">⏸ Inactifs</button>
+          </div>
+          <table class="dt">
+            <thead><tr><th>Intitulé du poste</th><th>Filiale</th><th>Contrat</th><th>Localisation</th><th>Description</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="jobs-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- ═══════ CONTENT ═══════ -->
       <div class="view" id="view-content">
         <div class="page-header"><h1>Contenu du site</h1><p>Gestion des pages institutionnelles GAMI</p></div>
@@ -1362,15 +1673,50 @@ input,select,textarea{font-family:'Inter',sans-serif}
 
       <!-- ═══════ MEDIA ═══════ -->
       <div class="view" id="view-media">
-        <div class="page-header"><h1>Médias & Galerie</h1><p>Bibliothèque de fichiers du site GAMI</p></div>
-        <div class="tp-header" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:14px 18px;margin-bottom:0">
-          <span class="tp-title">Bibliothèque</span>
-          <div class="tp-actions">
-            <button class="small-btn" onclick="toast('Upload de fichiers...','blue')">📎 Importer</button>
-            <button class="small-btn primary" onclick="toast('Nouveau dossier créé ✓','success')">+ Dossier</button>
+        <div class="page-header">
+          <h1>Médias & Galerie</h1>
+          <p>Gestion des photos et vidéos affichées sur galerie.html — GMM · SEMM · SEMS</p>
+        </div>
+
+        <!-- Barre onglets + boutons d'ajout -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap">
+          <div class="gbo-tabs">
+            <button class="gbo-tab active" id="gbo-tab-photos" onclick="switchGboTab('photos')">
+              🖼️ Photos <span class="tab-count" id="gbo-cnt-photos">0</span>
+            </button>
+            <button class="gbo-tab" id="gbo-tab-videos" onclick="switchGboTab('videos')">
+              🎥 Vidéos <span class="tab-count" id="gbo-cnt-videos">0</span>
+            </button>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="small-btn primary" onclick="openAddMedia('photo')">+ Photo</button>
+            <button class="small-btn primary" style="background:var(--purple);border-color:var(--purple)" onclick="openAddMedia('video')">+ Vidéo</button>
           </div>
         </div>
-        <div class="media-grid" id="media-grid" style="background:var(--bg2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius-lg) var(--radius-lg);padding:16px"></div>
+
+        <!-- ── SECTION PHOTOS ── -->
+        <div class="gbo-sec active" id="gbo-sec-photos">
+          <div class="filters-bar" style="padding:0 0 14px;border:none">
+            <button class="filter-chip active" onclick="filterGboMedia('photos','all',this)">Tous</button>
+            <button class="filter-chip blue" onclick="filterGboMedia('photos','gmm',this)">GMM</button>
+            <button class="filter-chip orange" onclick="filterGboMedia('photos','semm',this)">SEMM</button>
+            <button class="filter-chip green" onclick="filterGboMedia('photos','sems',this)">SEMS</button>
+            <button class="filter-chip" onclick="filterGboMedia('photos','groupe',this)">Groupe</button>
+          </div>
+          <div class="gbo-photo-grid" id="gbo-photo-grid"></div>
+        </div>
+
+        <!-- ── SECTION VIDÉOS ── -->
+        <div class="gbo-sec" id="gbo-sec-videos">
+          <div class="filters-bar" style="padding:0 0 14px;border:none">
+            <button class="filter-chip active" onclick="filterGboMedia('videos','all',this)">Tous</button>
+            <button class="filter-chip blue" onclick="filterGboMedia('videos','gmm',this)">GMM</button>
+            <button class="filter-chip orange" onclick="filterGboMedia('videos','semm',this)">SEMM</button>
+            <button class="filter-chip green" onclick="filterGboMedia('videos','sems',this)">SEMS</button>
+            <button class="filter-chip" onclick="filterGboMedia('videos','groupe',this)">Groupe</button>
+          </div>
+          <div class="gbo-vid-grid" id="gbo-video-grid"></div>
+        </div>
       </div>
 
       <!-- ═══════ USERS ═══════ -->
@@ -1386,17 +1732,58 @@ input,select,textarea{font-family:'Inter',sans-serif}
       <!-- ═══════ DOCS ═══════ -->
       <div class="view" id="view-docs">
         <div class="page-header"><h1>Documents</h1><p>Fichiers téléchargeables sur le site public</p></div>
-        <div class="tp-header" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:12px">
-          <span class="tp-title">Bibliothèque</span>
-          <button class="small-btn primary" onclick="toast('Upload document...','blue')">+ Ajouter</button>
+
+        <!-- Bannière Ressources -->
+        <div class="docs-bo-bar">
+          <div>
+            <div class="docs-bo-label">Ressources</div>
+            <h2>Documents à télécharger</h2>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <p class="docs-bo-desc">Gérez les fichiers PDF mis à disposition des visiteurs sur le site GAMI</p>
+            <button class="small-btn primary" onclick="openAddDoc()">+ Ajouter</button>
+          </div>
         </div>
-        <div id="docs-list"></div>
+
+        <!-- Grille dynamique -->
+        <div id="docs-cards-grid" class="docs-bo-grid"></div>
       </div>
 
       <!-- ═══════ SETTINGS ═══════ -->
       <div class="view" id="view-settings">
         <div class="page-header"><h1>Paramètres</h1><p>Configuration générale du back-office GAMI</p></div>
         <div id="settings-body"></div>
+      </div>
+
+      <!-- ═══════ ACTUALITÉS ═══════ -->
+      <div class="view" id="view-news">
+        <div class="page-header">
+          <h1>Actualités</h1>
+          <p>Gestion des articles publiés sur actualites.html</p>
+        </div>
+        <div class="table-panel">
+          <div class="tp-header">
+            <span class="tp-title">Articles (<span id="news-count">0</span>)</span>
+            <div class="tp-actions">
+              <div class="tp-search"><span>⌕</span><input placeholder="Rechercher un article..." oninput="searchNews(this.value)"/></div>
+              <button class="small-btn primary" onclick="openAddNews()">+ Ajouter un article</button>
+            </div>
+          </div>
+          <div class="filters-bar">
+            <button class="filter-chip active" onclick="filterNewsView('all',this)">Tous</button>
+            <button class="filter-chip" onclick="filterNewsView('groupe',this)">Groupe</button>
+            <button class="filter-chip blue" onclick="filterNewsView('gmm',this)">GMM</button>
+            <button class="filter-chip orange" onclick="filterNewsView('semm',this)">SEMM</button>
+            <button class="filter-chip green" onclick="filterNewsView('sems',this)">SEMS</button>
+            <button class="filter-chip" onclick="filterNewsView('transport',this)">Transporteurs</button>
+            <button class="filter-chip green" onclick="filterNewsView('published',this)">🟢 Publiés</button>
+            <button class="filter-chip gray" onclick="filterNewsView('draft',this)">⏸ Brouillons</button>
+          </div>
+          <table class="dt">
+            <thead><tr><th>Image</th><th>Titre</th><th>Catégorie</th><th>Date</th><th>Extrait</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="news-tbody"></tbody>
+          </table>
+        </div>
       </div>
 
       <!-- ═══════ NOS PRODUITS ═══════ -->
@@ -1420,7 +1807,7 @@ input,select,textarea{font-family:'Inter',sans-serif}
             <button class="filter-chip green" onclick="filterProd('SEMS',this)">SEMS</button>
           </div>
           <table class="dt">
-            <thead><tr><th>Produit</th><th>Filiale</th><th>Catégorie</th><th>Description</th><th>Tags</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Image</th><th>Produit</th><th>Filiale</th><th>Catégorie</th><th>Description</th><th>Tags</th><th>Actions</th></tr></thead>
             <tbody id="prod-tbody"></tbody>
           </table>
         </div>
@@ -1490,16 +1877,37 @@ const DB = {
     {icon:'🚛',color:'orange',title:'Transporteurs',sub:'Module offres + inscription',status:'Publié'},
     {icon:'📞',color:'blue',title:'Contact',sub:'Formulaire + carte + filiales',status:'Publié'},
   ],
-  mediaItems:[
-    {icon:'🖼️',name:'Logo GAMI',ext:'PNG'},
-    {icon:'📸',name:'Siège Dakar',ext:'JPG'},
-    {icon:'🖼️',name:'Site GMM Mali',ext:'JPG'},
-    {icon:'📸',name:'Équipe SEMM',ext:'JPG'},
-    {icon:'🎥',name:'Vidéo promo',ext:'MP4'},
-    {icon:'🖼️',name:'Bannière web',ext:'PNG'},
-    {icon:'📸',name:'Photo SEMS',ext:'JPG'},
-    {icon:'🖼️',name:'Logo GMM',ext:'SVG'},
-  ],
+  media:{
+    photos:[
+      {id:1,cat:'semm',title:'Rafraichissez-vous avec DIAGO',desc:"Publicité officielle pour l'eau minérale DIAGO — la boisson préférée des Maliens.",src:'https://gieami.net/wp-content/uploads/2019/03/A4-Sportif-1.jpg'},
+      {id:2,cat:'semm',title:'La gamme DIAGO',desc:"La gamme complète de produits DIAGO en emballage packshot — des bouteilles pour tous les besoins.",src:'https://gieami.net/wp-content/uploads/2019/03/A3-Packshot-1.jpg'},
+      {id:3,cat:'semm',title:'DIAGO — Moments précieux',desc:"Diago vous accompagne dans vos moments les plus précieux. Une eau pure et naturelle pour toutes les occasions.",src:'https://gieami.net/wp-content/uploads/2019/03/4x3-V6-1.jpg'},
+      {id:4,cat:'semm',title:'DIAGO — Nouvelle bouteille 0,5 L',desc:"La nouvelle bouteille format 0,5 L de DIAGO, pratique et rafraîchissante pour vos déplacements.",src:'https://gieami.net/wp-content/uploads/2019/03/40x60-05-2018-B-2-2.jpg'},
+      {id:5,cat:'semm',title:'DIAGO — Campagne publicitaire',desc:"Campagne publicitaire mettant en avant la qualité et la pureté de l'eau minérale des monts Mandingue.",src:'https://gieami.net/wp-content/uploads/2019/03/4x3-V5-1.jpg'},
+      {id:6,cat:'semm',title:'Remise tombola DIAGO',desc:"Cérémonie de remise des prix lors de la grande tombola DIAGO. Un événement festif pour les fidèles clients.",src:'https://gieami.net/wp-content/uploads/2019/03/2H2A5824.jpg'},
+      {id:7,cat:'semm',title:'Ami Fruité — SEMM',desc:"Ami Fruité, la boisson fruitée populaire de la SEMM. Saveurs naturelles et fraîcheur garantie.",src:'https://gieami.net/wp-content/uploads/2016/03/22788914_291605908005686_6699709294915781857_n.jpg'},
+      {id:8,cat:'semm',title:"Ami Fruité — Deviens une star !",desc:"Campagne Ami Fruité avec le slogan 'Deviens une star'. Une boisson colorée et pleine de vie.",src:'https://gieami.net/wp-content/uploads/2019/03/Gabarit4X3-VALIDE-2-1.jpg'},
+      {id:9,cat:'semm',title:'Ami Fruité — Gamme complète',desc:"La gamme complète Ami Fruité déclinée en plusieurs saveurs. Fabrication locale, qualité SEMM garantie.",src:'https://gieami.net/wp-content/uploads/2016/03/22688874_291606161338994_6041772655375534256_n.jpg'},
+      {id:10,cat:'semm',title:"Ami Fruité — Événement",desc:"Moment fort d'un événement Ami Fruité. La marque dynamique qui célèbre ses fidèles consommateurs.",src:'https://gieami.net/wp-content/uploads/2019/03/18766002_1770291509948022_150364229697821598_n-2.jpg'},
+      {id:11,cat:'gmm',title:'Formation Bunafama — GMM',desc:"Séance de formation Bunafama animée par les équipes GMM. Sensibilisation aux pratiques nutritionnelles.",src:'https://gieami.net/wp-content/uploads/2019/03/2H2A3472.jpg'},
+      {id:12,cat:'gmm',title:'Bunafama — Atelier terrain',desc:"Atelier de formation Bunafama sur le terrain. Les équipes GMM au plus près des communautés.",src:'https://gieami.net/wp-content/uploads/2019/03/2H2A3459.jpg'},
+      {id:13,cat:'gmm',title:'Bunafama — Participants',desc:"Les participants à la formation Bunafama. Une initiative GMM pour promouvoir les produits locaux.",src:'https://gieami.net/wp-content/uploads/2019/03/2H2A2360.jpg'},
+      {id:14,cat:'gmm',title:'Bunafama — Session de formation',desc:"Session de formation Bunafama avec les équipes GMM. Engagement pour la qualité et la proximité.",src:'https://gieami.net/wp-content/uploads/2019/03/2H2A3439.jpg'},
+      {id:15,cat:'gmm',title:'Usine Ami Tulu — GMM',desc:"Les installations de production Ami Tulu, produit emblématique des Grands Moulins du Mali à Koulikoro.",src:'https://gieami.net/wp-content/uploads/2019/10/usineamitulu1.jpg'},
+      {id:16,cat:'gmm',title:"Waraba — Cherche le lion en toi !",desc:"Waraba confiserie avec le slogan 'Cherche le lion en toi'. Un produit GMM populaire auprès des jeunes.",src:'https://gieami.net/wp-content/uploads/2019/03/Waraba-4x3-P1-2.jpg'},
+      {id:17,cat:'gmm',title:'Waraba — Confiserie GMM',desc:"La confiserie Waraba de GMM, avec son emballage distinctif et sa mascotte le lion.",src:'https://gieami.net/wp-content/uploads/2019/03/Waraba-4x3-P4-1.jpg'},
+      {id:18,cat:'groupe',title:'Vœux GAMI 2019',desc:"Le Groupe AMI — GAMI présente ses meilleurs vœux. Une nouvelle année sous le signe de la croissance.",src:'https://gieami.net/wp-content/uploads/2019/03/49474938_2100431830267320_5901204095980535808_n-2.png'},
+      {id:19,cat:'groupe',title:'Événement Groupe AMI — GAMI',desc:"Moment fort d'un événement officiel du Groupe AMI — GAMI. Rassemblement des équipes et partenaires.",src:'https://gieami.net/wp-content/uploads/2019/03/22221923_1827514660892373_1451385597294882943_n-2.jpg'},
+    ],
+    videos:[
+      {id:1,cat:'semm',title:"L'eau c'est la vie — La vie c'est DIAGO",desc:"Découvrez le spot publicitaire officiel de DIAGO. Une eau minérale naturelle puisée dans les monts Mandingue.",thumb:'https://img.youtube.com/vi/HQlUl0cd-d4/hqdefault.jpg',embed:'https://www.youtube.com/embed/HQlUl0cd-d4',duration:''},
+      {id:2,cat:'gmm',title:'Usine Ami Tulu — GMM Koulikoro',desc:"Plongez dans les coulisses de l'usine Ami Tulu des Grands Moulins du Mali.",thumb:'https://gieami.net/wp-content/uploads/2019/10/usineamitulu1.jpg',embed:'',duration:'À venir'},
+      {id:3,cat:'semm',title:'Tombola DIAGO — Cérémonie de remise',desc:"Retour en images sur la grande tombola DIAGO. Une cérémonie festive de remise des prix.",thumb:'https://gieami.net/wp-content/uploads/2019/03/2H2A5824.jpg',embed:'',duration:'À venir'},
+      {id:4,cat:'semm',title:"Ami Fruité — Deviens une star !",desc:"Le spot publicitaire Ami Fruité avec le slogan 'Deviens une star'.",thumb:'https://gieami.net/wp-content/uploads/2019/03/Gabarit4X3-VALIDE-2-1.jpg',embed:'',duration:'À venir'},
+      {id:5,cat:'gmm',title:'Formation Bunafama — GMM sur le terrain',desc:"Reportage sur la formation Bunafama menée par les équipes GMM.",thumb:'https://gieami.net/wp-content/uploads/2019/03/2H2A3472.jpg',embed:'',duration:'À venir'},
+      {id:6,cat:'gmm',title:"Waraba — Cherche le lion en toi !",desc:"Le spot publicitaire de la confiserie Waraba. Un produit GMM avec un message fort.",thumb:'https://gieami.net/wp-content/uploads/2019/03/Waraba-4x3-P1-2.jpg',embed:'',duration:'À venir'},
+    ],
+  },
   users:[
     {name:'Admin Principal',email:'admin@groupeami.sn',role:'Super Admin',last:'Maintenant',status:'active'},
     {name:'Responsable DSI',email:'dsi@groupeami.sn',role:'Admin DSI',last:'Hier 17h30',status:'active'},
@@ -1507,10 +1915,15 @@ const DB = {
     {name:'DRH Assistant',email:'drh@groupeami.sn',role:'RH Manager',last:'01 Avr',status:'inactive'},
   ],
   docs:[
-    {name:'Rapport annuel GAMI 2024.pdf',size:'4.2 MB',date:'15 Jan 2025',downloads:87,type:'pdf'},
-    {name:'Présentation groupe GAMI.pptx',size:'8.7 MB',date:'10 Mar 2025',downloads:43,type:'pptx'},
-    {name:'Conditions transporteurs.pdf',size:'1.1 MB',date:'01 Avr 2025',downloads:156,type:'pdf'},
-    {name:'Formulaire inscription.docx',size:'0.5 MB',date:'01 Avr 2025',downloads:234,type:'docx'},
+    {id:1,title:'Plaquette GAMI 2023',badge:'Institutionnel',desc:"Présentation complète du Groupe AMI — son histoire, ses filiales, ses valeurs et ses activités en Afrique de l'Ouest.",size:'PDF · 4.2 Mo',file:'documents/Plaquette gie ami 2023 5a.pdf',available:true},
+    {id:2,title:'Rapport Annuel 2024',badge:'Rapport',desc:"Bilan des activités, résultats financiers et perspectives stratégiques du groupe pour l'exercice 2024.",size:'PDF · À venir',file:'',available:false},
+    {id:3,title:'Fiches Filiales',badge:'Filiales',desc:"Fiche détaillée de chacune des filiales du groupe : GMM, SEMM et SEMS — capacités, activités et zones d'intervention.",size:'PDF · À venir',file:'',available:false},
+  ],
+  jobs:[
+    {id:1,title:'Ingénieur Maintenance Senior',filiale:'GMM',contract:'CDI',location:'Dakar / Site',desc:"Responsable de la maintenance préventive et curative des équipements industriels. Expérience de 5 ans minimum en milieu industriel ou minier.",active:true},
+    {id:2,title:'Technicien Équipements Miniers',filiale:'SEMM',contract:'CDI',location:'Mali',desc:"Entretien et réparation des équipements miniers sur site. Diplôme technique requis, expérience terrain souhaitée.",active:true},
+    {id:3,title:'Consultant Technique',filiale:'SEMS',contract:'CDD',location:'Dakar',desc:"Mission de conseil et d'audit technique pour les installations de SEMS. Profil expérimenté, maîtrise des outils de diagnostic.",active:true},
+    {id:4,title:'Chef de Chantier',filiale:'GMM',contract:'CDI',location:'Guinée',desc:"Supervision et coordination des équipes sur chantier BTP. 12 ans d'expérience minimum, mobilité en Afrique de l'Ouest.",active:true},
   ],
   products:[
     {id:1,name:'Farine GMM',filiale:'GMM',cat:'Meunerie',desc:'120 000 tonnes de farine par an. Farine blanche, complète, semoule. Distribution sur tout le territoire malien.',tags:['Farine blanche','Semoule','Distribution nationale']},
@@ -1530,6 +1943,14 @@ const DB = {
     {id:15,name:'Ami Fruité — Ananas Cocktail',filiale:'SEMM',cat:'Boisson aromatisée',desc:'Boisson ananas cocktail à base d\'eau Diago. Saveur tropicale désaltérante. Large gamme de parfums.',tags:['Ananas','Cocktail tropical','Multi-parfums']},
     {id:16,name:'Boisson Aromatisée SEMS — Fraise',filiale:'SEMS',cat:'Boisson',desc:'Boisson aromatisée fraise produite par SEMS — Eaux Minérales du Sénégal.',tags:['Fraise','SEMS','Sénégal']},
     {id:17,name:'Boisson Bissap SEMS',filiale:'SEMS',cat:'Boisson',desc:'Boisson aromatisée au bissap, saveur locale authentique, produite par SEMS au Sénégal.',tags:['Bissap','Authentique','Sénégal']},
+  ],
+  news:[
+    {id:1,cat:'transport',title:"Lancement de la plateforme digitale transporteurs GAMI pour l'Afrique de l'Ouest",excerpt:'La nouvelle plateforme permet aux transporteurs agréés de consulter les offres GAMI et de répondre en temps réel via WhatsApp.',date:'02 Février 2025',img:'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=700&q=80&fit=crop',published:true},
+    {id:2,cat:'gmm',title:'Séminaires de formation Bunafama — Déploiement de l\'aliment bétail GMM',excerpt:'Les GMM ont organisé des séminaires de formation pour les éleveurs maliens autour de Bunafama, leur aliment composé bétail/volaille/poisson produit à Koulikoro.',date:'18 Octobre 2019',img:'./images/Farine-GMM-2.jpg',published:true},
+    {id:3,cat:'semm',title:'Sampling Ami Fruité — Opérations de dégustation à travers Bamako',excerpt:'La SEMM a lancé une opération de sampling pour faire découvrir la gamme Ami Fruité dans les quartiers de Bamako, avec des résultats très positifs.',date:'18 Octobre 2019',img:'./images/Ami-13-2.jpg',published:true},
+    {id:4,cat:'transport',title:'GAM Transit renforce son parc de camions — Nouveaux véhicules pour l\'export Mali',excerpt:'Dans le cadre de son développement, GAM Transit prévoit de doubler son parc de camions pour renforcer sa capacité d\'exportation sur les corridors régionaux.',date:'2019',img:'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=700&q=80&fit=crop',published:true},
+    {id:5,cat:'groupe',title:'GAMI recrute 50 nouveaux techniciens dans le cadre de son plan d\'expansion 2025',excerpt:'Dans le cadre de sa stratégie de croissance, GAMI ouvre 50 postes de techniciens répartis sur ses 3 filiales.',date:'15 Novembre 2024',img:'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=700&q=80&fit=crop',published:true},
+    {id:6,cat:'gmm',title:'GMM remporte le prix "Best Industrie & Agro-industrie" au Forum Agro-industrie Afrique 2024',excerpt:'Distinction obtenue pour l\'excellence de nos interventions et notre approche innovante de la maintenance préventive.',date:'05 Octobre 2024',img:'./images/trophy.jpg',published:true},
   ],
 };
 
@@ -1558,6 +1979,8 @@ function renderAll(){
   renderSettings();
   renderCapacity();
   renderProducts();
+  renderJobOffers();
+  renderNews();
 }
 
 function setDate(){
@@ -1573,6 +1996,8 @@ function updateCounts(){
   document.getElementById('badge-trans').textContent=pending;
   document.getElementById('badge-cand').textContent=candPending;
   document.getElementById('badge-prod').textContent=DB.products.length;
+  document.getElementById('badge-jobs').textContent=DB.jobs.filter(j=>j.active).length;
+  document.getElementById('badge-news').textContent=DB.news.filter(n=>n.published).length;
   document.getElementById('tab-cand-count').textContent=candPending;
   document.getElementById('np-count').textContent=unread;
   document.getElementById('tb-notif-dot').style.display=unread>0?'block':'none';
@@ -1670,6 +2095,64 @@ function clearNotifs(){DB.notifications.forEach(n=>n.read=true);renderNotificati
 function toggleNotifPanel(){document.getElementById('notif-panel').classList.toggle('open')}
 
 // ═══════════════════════════════════════════════════
+//  TRANSPORTERS — DOCUMENTS
+// ═══════════════════════════════════════════════════
+const TRANS_DOC_TYPES=[
+  {key:'carteGrise', label:'Carte grise',    icon:'🚗', accept:'.pdf,.jpg,.jpeg,.png'},
+  {key:'assurance',  label:'Assurance',      icon:'🛡️', accept:'.pdf,.jpg,.jpeg,.png'},
+  {key:'rccm',       label:'Registre RCCM',  icon:'📋', accept:'.pdf,.doc,.docx,.jpg,.jpeg,.png'},
+];
+
+function renderTransDocRow(t,doc){
+  const file=t.docs&&t.docs[doc.key];
+  return `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--bg3);border-radius:8px;margin-bottom:6px;gap:8px">
+      <div style="display:flex;align-items:center;gap:9px;min-width:0">
+        <span style="font-size:16px;flex-shrink:0">${doc.icon}</span>
+        <div style="min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--text)">${doc.label}</div>
+          <div style="font-size:10px;color:${file?'var(--green)':'var(--text3)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px">${file?'✓ '+file.name:'Aucun fichier importé'}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0">
+        ${file?`<button class="act-btn success" onclick="downloadTransDoc(${t.id},'${doc.key}')" style="font-size:10px;padding:3px 9px">↓ Télécharger</button>`:''}
+        <label style="cursor:pointer;display:inline-flex">
+          <span class="act-btn ${file?'':'primary'}" style="font-size:10px;padding:3px 9px;pointer-events:none">${file?'🔄':'📎 Importer'}</span>
+          <input type="file" accept="${doc.accept}" style="display:none" onchange="uploadTransDoc(${t.id},'${doc.key}',this)"/>
+        </label>
+      </div>
+    </div>`;
+}
+
+function uploadTransDoc(transId,docKey,input){
+  if(!input.files||!input.files[0]) return;
+  const file=input.files[0];
+  if(file.size>10*1024*1024){toast('Fichier trop volumineux (max 10 Mo)','warning');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const t=DB.transporters.find(x=>x.id===transId);
+    if(!t.docs) t.docs={};
+    t.docs[docKey]={name:file.name,type:file.type,data:e.target.result};
+    toast(`📎 ${file.name} importé avec succès`,'success');
+    openTransDetail(transId);
+  };
+  reader.readAsDataURL(file);
+}
+
+function downloadTransDoc(transId,docKey){
+  const t=DB.transporters.find(x=>x.id===transId);
+  const doc=t&&t.docs&&t.docs[docKey];
+  if(!doc){toast('Aucun fichier disponible pour ce document','warning');return;}
+  const a=document.createElement('a');
+  a.href=doc.data;
+  a.download=doc.name;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  toast(`↓ Téléchargement : ${doc.name}`,'success');
+}
+
+// ═══════════════════════════════════════════════════
 //  TRANSPORTERS
 // ═══════════════════════════════════════════════════
 function sPill(status){
@@ -1743,11 +2226,7 @@ function openTransDetail(id){
     </div>
     <div class="dp-section">
       <div class="dp-section-title">Documents</div>
-      ${['Carte grise','Assurance','Registre RCCM'].map(d=>`
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg3);border-radius:6px;margin-bottom:6px">
-          <span style="font-size:12px">📄 ${d}</span>
-          <button class="act-btn success" onclick="toast('${d} vérifié ✓','success')" style="font-size:10px;padding:3px 8px">✓</button>
-        </div>`).join('')}
+      ${TRANS_DOC_TYPES.map(doc=>renderTransDocRow(t,doc)).join('')}
     </div>`;
   document.getElementById('dp-actions').innerHTML=`
     ${t.status==='pending'?`<button class="small-btn primary" style="flex:1;justify-content:center" onclick="verifyT(${t.id})">✓ Valider & Badge</button>`:''}
@@ -1961,13 +2440,211 @@ function renderContent(){
       <div class="ci-badge"><span class="pill green">${p.status}</span></div>
     </div>`).join('');
 }
+// ═══════════════════════════════════════════════════
+//  MÉDIAS & GALERIE
+// ═══════════════════════════════════════════════════
+let gboPhotoFilter='all';
+let gboVideoFilter='all';
+
+const gboBadgeHTML=cat=>{
+  const labels={gmm:'GMM',semm:'SEMM',sems:'SEMS',groupe:'Groupe'};
+  return `<span class="gbo-badge ${cat}">${labels[cat]||cat}</span>`;
+};
+
 function renderMedia(){
-  document.getElementById('media-grid').innerHTML=DB.mediaItems.map(m=>`
-    <div class="media-item" onclick="toast('Prévisualiser : ${m.name}')">
-      <div class="media-icon">${m.icon}</div>
-      <div class="media-name">${m.name}</div>
-      <div class="media-ext">${m.ext}</div>
+  updateGboCount();
+  renderGboPhotos(DB.media.photos);
+  renderGboVideos(DB.media.videos);
+}
+
+function updateGboCount(){
+  document.getElementById('gbo-cnt-photos').textContent=DB.media.photos.length;
+  document.getElementById('gbo-cnt-videos').textContent=DB.media.videos.length;
+}
+
+function renderGboPhotos(list){
+  document.getElementById('gbo-photo-grid').innerHTML=list.map(p=>`
+    <div class="gbo-card">
+      <div class="gbo-card-img">
+        ${gboBadgeHTML(p.cat)}
+        <img src="${p.src}" alt="${p.title}" loading="lazy" onerror="this.style.opacity='.3'"/>
+        <div class="gbo-card-actions">
+          <button class="gbo-act edit" onclick="editMedia('photo',${p.id})" title="Modifier">✏️</button>
+          <button class="gbo-act del" onclick="deleteMedia('photo',${p.id})" title="Supprimer">🗑</button>
+        </div>
+      </div>
+      <div class="gbo-card-body">
+        <div class="gbo-card-title">${p.title}</div>
+        <div class="gbo-card-desc">${p.desc}</div>
+      </div>
     </div>`).join('');
+}
+
+function renderGboVideos(list){
+  document.getElementById('gbo-video-grid').innerHTML=list.map(v=>`
+    <div class="gbo-card">
+      <div class="gbo-vid-thumb">
+        ${gboBadgeHTML(v.cat)}
+        <img src="${v.thumb}" alt="${v.title}" loading="lazy" onerror="this.style.opacity='.3'"/>
+        <div class="vid-play-ov" onclick="openGboVideo(${v.id})">
+          <div class="vid-play-ov-btn">▶</div>
+        </div>
+        ${v.duration?`<div class="gbo-vid-dur">${v.duration}</div>`:''}
+        <div class="gbo-card-actions">
+          <button class="gbo-act edit" onclick="editMedia('video',${v.id})" title="Modifier">✏️</button>
+          <button class="gbo-act del" onclick="deleteMedia('video',${v.id})" title="Supprimer">🗑</button>
+        </div>
+      </div>
+      <div class="gbo-card-body">
+        <div class="gbo-card-title">${v.title}</div>
+        <div class="gbo-card-desc">${v.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+function switchGboTab(tab){
+  ['photos','videos'].forEach(t=>{
+    document.getElementById('gbo-sec-'+t).classList.toggle('active',t===tab);
+    document.getElementById('gbo-tab-'+t).classList.toggle('active',t===tab);
+  });
+}
+
+function filterGboMedia(type,cat,btn){
+  if(type==='photos') gboPhotoFilter=cat;
+  else gboVideoFilter=cat;
+  document.querySelectorAll('#gbo-sec-'+type+' .filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(type==='photos') renderGboPhotos(cat==='all'?DB.media.photos:DB.media.photos.filter(p=>p.cat===cat));
+  else renderGboVideos(cat==='all'?DB.media.videos:DB.media.videos.filter(v=>v.cat===cat));
+}
+
+function openGboVideo(id){
+  const v=DB.media.videos.find(x=>x.id===id);
+  if(!v) return;
+  document.getElementById('gbo-vid-label').textContent=v.title;
+  document.getElementById('gbo-vid-frame').innerHTML=v.embed
+    ?`<iframe src="${v.embed}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen style="width:100%;height:100%;border:none"></iframe>`
+    :`<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text2);font-size:14px;font-family:Inter,sans-serif">Vidéo à venir</div>`;
+  document.getElementById('gbo-vid-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeGboVideo(){
+  document.getElementById('gbo-vid-overlay').classList.remove('open');
+  document.getElementById('gbo-vid-frame').innerHTML='';
+  document.body.style.overflow='';
+}
+
+function openAddMedia(type){
+  document.getElementById('media-form-type').value=type;
+  document.getElementById('media-form-id').value='';
+  document.getElementById('media-form-title').textContent=type==='photo'?'Ajouter une photo':'Ajouter une vidéo';
+  document.getElementById('mf-title').value='';
+  document.getElementById('mf-cat').value='semm';
+  document.getElementById('mf-desc').value='';
+  document.getElementById('mf-src').value='';
+  document.getElementById('mf-src').placeholder=type==='photo'?'URL de la photo (https://…)':'URL miniature / thumbnail (https://…)';
+  document.getElementById('mf-src-label').textContent=type==='photo'?'URL de la photo *':'Miniature (thumbnail) *';
+  document.getElementById('mf-embed-row').style.display=type==='video'?'block':'none';
+  document.getElementById('mf-file-row').style.display=type==='photo'?'inline-flex':'none';
+  if(type==='video') document.getElementById('mf-embed').value='';
+  document.getElementById('mf-img-preview').innerHTML='🖼️';
+  openOverlay('ov-media-form');
+}
+
+function editMedia(type,id){
+  const item=type==='photo'?DB.media.photos.find(x=>x.id===id):DB.media.videos.find(x=>x.id===id);
+  if(!item) return;
+  document.getElementById('media-form-type').value=type;
+  document.getElementById('media-form-id').value=id;
+  document.getElementById('media-form-title').textContent=type==='photo'?'Modifier la photo':'Modifier la vidéo';
+  document.getElementById('mf-title').value=item.title;
+  document.getElementById('mf-cat').value=item.cat;
+  document.getElementById('mf-desc').value=item.desc;
+  const imgSrc=item.src||item.thumb||'';
+  document.getElementById('mf-src').value=imgSrc;
+  document.getElementById('mf-src').placeholder=type==='photo'?'URL de la photo (https://…)':'URL miniature / thumbnail (https://…)';
+  document.getElementById('mf-src-label').textContent=type==='photo'?'URL de la photo *':'Miniature (thumbnail) *';
+  document.getElementById('mf-embed-row').style.display=type==='video'?'block':'none';
+  document.getElementById('mf-file-row').style.display=type==='photo'?'inline-flex':'none';
+  if(type==='video') document.getElementById('mf-embed').value=item.embed||'';
+  document.getElementById('mf-img-preview').innerHTML=imgSrc
+    ?`<img src="${imgSrc}" style="width:100%;height:100%;object-fit:cover"/>`:'🖼️';
+  openOverlay('ov-media-form');
+}
+
+function previewMediaImg(url){
+  const p=document.getElementById('mf-img-preview');
+  if(url) p.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='❌'"/>`;
+  else p.innerHTML='🖼️';
+}
+function loadMediaFile(input){
+  if(!input.files||!input.files[0]) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('mf-src').value=e.target.result;
+    previewMediaImg(e.target.result);
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function saveMedia(){
+  const type=document.getElementById('media-form-type').value;
+  const editId=parseInt(document.getElementById('media-form-id').value)||0;
+  const title=document.getElementById('mf-title').value.trim();
+  const cat=document.getElementById('mf-cat').value;
+  const desc=document.getElementById('mf-desc').value.trim();
+  const src=document.getElementById('mf-src').value.trim();
+  if(!title){toast('Le titre est obligatoire','warning');return;}
+  if(!src){toast("L'image / miniature est obligatoire",'warning');return;}
+  if(type==='photo'){
+    if(editId){
+      const p=DB.media.photos.find(x=>x.id===editId);
+      if(p) Object.assign(p,{title,cat,desc,src});
+      toast('Photo mise à jour ✓','success');
+    } else {
+      const newId=Math.max(0,...DB.media.photos.map(x=>x.id))+1;
+      DB.media.photos.push({id:newId,cat,title,desc,src});
+      toast('Photo ajoutée ✓','success');
+    }
+    closeOverlay('ov-media-form');
+    renderGboPhotos(gboPhotoFilter==='all'?DB.media.photos:DB.media.photos.filter(p=>p.cat===gboPhotoFilter));
+  } else {
+    const embed=document.getElementById('mf-embed').value.trim();
+    if(editId){
+      const v=DB.media.videos.find(x=>x.id===editId);
+      if(v) Object.assign(v,{title,cat,desc,thumb:src,embed});
+      toast('Vidéo mise à jour ✓','success');
+    } else {
+      const newId=Math.max(0,...DB.media.videos.map(x=>x.id))+1;
+      DB.media.videos.push({id:newId,cat,title,desc,thumb:src,embed,duration:embed?'':'À venir'});
+      toast('Vidéo ajoutée ✓','success');
+    }
+    closeOverlay('ov-media-form');
+    renderGboVideos(gboVideoFilter==='all'?DB.media.videos:DB.media.videos.filter(v=>v.cat===gboVideoFilter));
+  }
+  updateGboCount();
+}
+
+function deleteMedia(type,id){
+  const arr=type==='photo'?DB.media.photos:DB.media.videos;
+  const item=arr.find(x=>x.id===id);
+  if(!item) return;
+  confirmAction(
+    `Supprimer "${item.title}" ?`,
+    'Ce média sera retiré de la galerie du site.',
+    ()=>{
+      if(type==='photo'){
+        DB.media.photos=DB.media.photos.filter(x=>x.id!==id);
+        renderGboPhotos(gboPhotoFilter==='all'?DB.media.photos:DB.media.photos.filter(p=>p.cat===gboPhotoFilter));
+      } else {
+        DB.media.videos=DB.media.videos.filter(x=>x.id!==id);
+        renderGboVideos(gboVideoFilter==='all'?DB.media.videos:DB.media.videos.filter(v=>v.cat===gboVideoFilter));
+      }
+      closeOverlay('ov-confirm');
+      updateGboCount();
+      toast('Média supprimé','warning');
+    },'error'
+  );
 }
 function renderUsers(){
   document.getElementById('users-grid').innerHTML=DB.users.map(u=>`
@@ -1981,17 +2658,88 @@ function renderUsers(){
     </div>`).join('');
 }
 function renderDocs(){
-  const icons={pdf:'📕',pptx:'📊',docx:'📝'};
-  document.getElementById('docs-list').innerHTML=DB.docs.map(d=>`
-    <div class="doc-item" onclick="toast('Télécharger : ${d.name}','blue')">
-      <div class="doc-icon">${icons[d.type]||'📄'}</div>
-      <div>
-        <div class="doc-name">${d.name}</div>
-        <div class="doc-meta">${d.size} · Ajouté le ${d.date}</div>
+  const svgDoc=`<svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`;
+  const svgDl=`<svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+  document.getElementById('docs-cards-grid').innerHTML=DB.docs.map(d=>`
+    <div class="doc-card-bo${d.available?'':' soon'}">
+      <div class="doc-bo-top">
+        <div class="doc-icon-bo" style="stroke:${d.available?'var(--blue)':'var(--text3)'}">${svgDoc}</div>
+        <div class="doc-meta-bo">
+          <h4>${d.title}</h4>
+          <span>${d.size}</span>
+        </div>
       </div>
-      <div class="doc-dl">${d.downloads} téléch.</div>
-      <button class="act-btn danger" onclick="event.stopPropagation();toast('Document supprimé','warning')">Supprimer</button>
+      <p class="doc-desc-bo">${d.desc}</p>
+      <div class="doc-footer-bo">
+        <span class="doc-badge-bo">${d.badge}</span>
+        <div class="doc-manage-bo">
+          ${d.available && d.file
+            ? `<a href="${d.file}" class="doc-dl-bo" download>${svgDl} Télécharger</a>`
+            : `<span class="doc-soon-bo">À venir</span>`}
+          <button class="act-btn primary" onclick="editDoc(${d.id})">✏️</button>
+          <button class="act-btn danger" onclick="deleteDoc(${d.id})">🗑</button>
+        </div>
+      </div>
     </div>`).join('');
+}
+function openAddDoc(){
+  document.getElementById('doc-modal-title').textContent='Ajouter un document';
+  document.getElementById('doc-title').value='';
+  document.getElementById('doc-badge').value='Institutionnel';
+  document.getElementById('doc-size').value='';
+  document.getElementById('doc-desc').value='';
+  document.getElementById('doc-file').value='';
+  document.getElementById('doc-available').value='0';
+  document.getElementById('doc-edit-id').value='';
+  openOverlay('ov-doc');
+}
+function editDoc(id){
+  const d=DB.docs.find(x=>x.id===id);
+  if(!d) return;
+  document.getElementById('doc-modal-title').textContent='Modifier le document';
+  document.getElementById('doc-title').value=d.title;
+  document.getElementById('doc-badge').value=d.badge;
+  document.getElementById('doc-size').value=d.size;
+  document.getElementById('doc-desc').value=d.desc;
+  document.getElementById('doc-file').value=d.file;
+  document.getElementById('doc-available').value=d.available?'1':'0';
+  document.getElementById('doc-edit-id').value=id;
+  openOverlay('ov-doc');
+}
+function saveDoc(){
+  const title=document.getElementById('doc-title').value.trim();
+  const badge=document.getElementById('doc-badge').value;
+  const size=document.getElementById('doc-size').value.trim();
+  const desc=document.getElementById('doc-desc').value.trim();
+  const file=document.getElementById('doc-file').value.trim();
+  const available=document.getElementById('doc-available').value==='1';
+  const editId=parseInt(document.getElementById('doc-edit-id').value)||0;
+  if(!title){toast('Le titre est obligatoire','warning');return;}
+  if(editId){
+    const d=DB.docs.find(x=>x.id===editId);
+    if(d) Object.assign(d,{title,badge,size:size||'PDF',desc,file,available});
+    toast('Document mis à jour ✓','success');
+  } else {
+    const newId=Math.max(0,...DB.docs.map(x=>x.id))+1;
+    DB.docs.push({id:newId,title,badge,size:size||'PDF',desc,file,available});
+    toast('Document ajouté ✓','success');
+  }
+  closeOverlay('ov-doc');
+  renderDocs();
+}
+function deleteDoc(id){
+  const d=DB.docs.find(x=>x.id===id);
+  if(!d) return;
+  confirmAction(
+    'Supprimer "'+d.title+'" ?',
+    'Ce document sera retiré de la bibliothèque.',
+    ()=>{
+      DB.docs=DB.docs.filter(x=>x.id!==id);
+      closeOverlay('ov-confirm');
+      renderDocs();
+      toast('Document supprimé','warning');
+    },'error'
+  );
 }
 function renderSettings(){
   const sections=[
@@ -2056,6 +2804,124 @@ function renderCapacity(){
 }
 
 // ═══════════════════════════════════════════════════
+//  OFFRES D'EMPLOI
+// ═══════════════════════════════════════════════════
+let jobFilter='all';
+const filialeColorJob={GMM:'blue',SEMM:'orange',SEMS:'green'};
+
+function renderJobOffers(list){
+  const data=list||DB.jobs;
+  document.getElementById('jobs-count').textContent=data.length;
+  document.getElementById('jobs-tbody').innerHTML=data.map(j=>`
+    <tr>
+      <td><strong>${j.title}</strong></td>
+      <td><span class="pill ${filialeColorJob[j.filiale]||'blue'}">${j.filiale}</span></td>
+      <td><span style="font-size:11px;padding:3px 8px;border-radius:4px;font-weight:600;background:${j.contract==='CDI'?'var(--green-dim)':'var(--orange-dim)'};color:${j.contract==='CDI'?'var(--green)':'var(--orange)'}">${j.contract}</span></td>
+      <td>📍 ${j.location}</td>
+      <td style="max-width:260px;font-size:12px;color:var(--text2);white-space:normal">${j.desc||'—'}</td>
+      <td>${j.active?'<span class="pill green">🟢 Actif</span>':'<span class="pill gray">⏸ Inactif</span>'}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="small-btn" onclick="editJob(${j.id})">✏️ Modifier</button>
+          <button class="small-btn" style="background:var(--red-dim);color:var(--red)" onclick="deleteJob(${j.id})">🗑 Suppr.</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function searchJobs(v){
+  const q=v.toLowerCase();
+  renderJobOffers(DB.jobs.filter(j=>
+    j.title.toLowerCase().includes(q)||j.filiale.toLowerCase().includes(q)||
+    j.location.toLowerCase().includes(q)||(j.desc||'').toLowerCase().includes(q)
+  ));
+}
+
+function filterJobs(f,btn){
+  jobFilter=f;
+  document.querySelectorAll('#view-jobs .filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  let list;
+  if(f==='all') list=DB.jobs;
+  else if(f==='active') list=DB.jobs.filter(j=>j.active);
+  else if(f==='inactive') list=DB.jobs.filter(j=>!j.active);
+  else if(['GMM','SEMM','SEMS'].includes(f)) list=DB.jobs.filter(j=>j.filiale===f);
+  else list=DB.jobs.filter(j=>j.contract===f);
+  renderJobOffers(list);
+}
+
+function openAddJob(){
+  document.getElementById('job-modal-title').textContent="Ajouter une offre d'emploi";
+  document.getElementById('job-title').value='';
+  document.getElementById('job-filiale').value='GMM';
+  document.getElementById('job-contract').value='CDI';
+  document.getElementById('job-location').value='';
+  document.getElementById('job-desc').value='';
+  document.getElementById('job-active').value='1';
+  document.getElementById('job-edit-id').value='';
+  openOverlay('ov-job');
+}
+
+function editJob(id){
+  const j=DB.jobs.find(x=>x.id===id);
+  if(!j) return;
+  document.getElementById('job-modal-title').textContent="Modifier l'offre d'emploi";
+  document.getElementById('job-title').value=j.title;
+  document.getElementById('job-filiale').value=j.filiale;
+  document.getElementById('job-contract').value=j.contract;
+  document.getElementById('job-location').value=j.location;
+  document.getElementById('job-desc').value=j.desc||'';
+  document.getElementById('job-active').value=j.active?'1':'0';
+  document.getElementById('job-edit-id').value=id;
+  openOverlay('ov-job');
+}
+
+function saveJob(){
+  const title=document.getElementById('job-title').value.trim();
+  const filiale=document.getElementById('job-filiale').value;
+  const contract=document.getElementById('job-contract').value;
+  const location=document.getElementById('job-location').value.trim();
+  const desc=document.getElementById('job-desc').value.trim();
+  const active=document.getElementById('job-active').value==='1';
+  const editId=parseInt(document.getElementById('job-edit-id').value)||0;
+  if(!title){toast("L'intitulé du poste est obligatoire",'warning');return;}
+  if(!location){toast('La localisation est obligatoire','warning');return;}
+  if(editId){
+    const j=DB.jobs.find(x=>x.id===editId);
+    if(j) Object.assign(j,{title,filiale,contract,location,desc,active});
+    toast('Offre mise à jour ✓','success');
+  } else {
+    const newId=Math.max(0,...DB.jobs.map(x=>x.id))+1;
+    DB.jobs.push({id:newId,title,filiale,contract,location,desc,active});
+    toast("Offre d'emploi ajoutée ✓",'success');
+  }
+  closeOverlay('ov-job');
+  const currentList=jobFilter==='all'?DB.jobs:
+    jobFilter==='active'?DB.jobs.filter(j=>j.active):
+    jobFilter==='inactive'?DB.jobs.filter(j=>!j.active):
+    ['GMM','SEMM','SEMS'].includes(jobFilter)?DB.jobs.filter(j=>j.filiale===jobFilter):
+    DB.jobs.filter(j=>j.contract===jobFilter);
+  renderJobOffers(currentList);
+  document.getElementById('badge-jobs').textContent=DB.jobs.filter(j=>j.active).length;
+}
+
+function deleteJob(id){
+  const j=DB.jobs.find(x=>x.id===id);
+  if(!j) return;
+  confirmAction(
+    'Supprimer "'+j.title+'" ?',
+    'Cette offre sera retirée du site de recrutement.',
+    ()=>{
+      DB.jobs=DB.jobs.filter(x=>x.id!==id);
+      closeOverlay('ov-confirm');
+      renderJobOffers(jobFilter==='all'?DB.jobs:DB.jobs.filter(jj=>jj.filiale===jobFilter||jj.contract===jobFilter));
+      document.getElementById('badge-jobs').textContent=DB.jobs.filter(j=>j.active).length;
+      toast("Offre supprimée",'warning');
+    },'error'
+  );
+}
+
+// ═══════════════════════════════════════════════════
 //  NOS PRODUITS
 // ═══════════════════════════════════════════════════
 let prodFilter='all';
@@ -2065,10 +2931,14 @@ function renderProducts(list){
   const filialeColor={GMM:'blue',SEMM:'orange',SEMS:'green'};
   document.getElementById('prod-tbody').innerHTML=data.map(p=>`
     <tr>
+      <td style="width:56px">${p.img
+        ?`<img src="${p.img}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--border);display:block"/>`
+        :`<div style="width:44px;height:44px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px">📦</div>`
+      }</td>
       <td><strong>${p.name}</strong></td>
       <td><span class="pill ${filialeColor[p.filiale]||'blue'}">${p.filiale}</span></td>
       <td>${p.cat}</td>
-      <td style="max-width:260px;font-size:12px;color:var(--text2);white-space:normal">${p.desc}</td>
+      <td style="max-width:220px;font-size:12px;color:var(--text2);white-space:normal">${p.desc}</td>
       <td style="font-size:11px;color:var(--text3)">${(p.tags||[]).join(', ')}</td>
       <td>
         <div style="display:flex;gap:6px">
@@ -2091,6 +2961,21 @@ function filterProd(f,btn){
   btn.classList.add('active');
   renderProducts(f==='all'?DB.products:DB.products.filter(p=>p.filiale===f));
 }
+function previewProdImg(src){
+  const p=document.getElementById('prod-img-preview');
+  if(src){p.innerHTML=`<img src="${src}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='❌'"/>`;}
+  else{p.innerHTML='📦';}
+}
+function loadProdImgFile(input){
+  if(!input.files||!input.files[0]) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('prod-img-url').value=e.target.result;
+    previewProdImg(e.target.result);
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
 function openAddProd(){
   document.getElementById('prod-modal-title').textContent='Ajouter un produit';
   document.getElementById('prod-name').value='';
@@ -2098,6 +2983,8 @@ function openAddProd(){
   document.getElementById('prod-cat').value='';
   document.getElementById('prod-desc').value='';
   document.getElementById('prod-tags').value='';
+  document.getElementById('prod-img-url').value='';
+  document.getElementById('prod-img-preview').innerHTML='📦';
   document.getElementById('prod-edit-id').value='';
   openOverlay('ov-product');
 }
@@ -2110,6 +2997,8 @@ function editProd(id){
   document.getElementById('prod-cat').value=p.cat;
   document.getElementById('prod-desc').value=p.desc;
   document.getElementById('prod-tags').value=(p.tags||[]).join(', ');
+  document.getElementById('prod-img-url').value=p.img||'';
+  previewProdImg(p.img||'');
   document.getElementById('prod-edit-id').value=id;
   openOverlay('ov-product');
 }
@@ -2119,16 +3008,17 @@ function saveProd(){
   const cat=document.getElementById('prod-cat').value.trim();
   const desc=document.getElementById('prod-desc').value.trim();
   const tags=document.getElementById('prod-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const img=document.getElementById('prod-img-url').value.trim();
   const editId=parseInt(document.getElementById('prod-edit-id').value)||0;
   if(!name){toast('Le nom du produit est obligatoire','warning');return;}
   if(!cat){toast('La catégorie est obligatoire','warning');return;}
   if(editId){
     const p=DB.products.find(x=>x.id===editId);
-    if(p){Object.assign(p,{name,filiale,cat,desc,tags});}
+    if(p){Object.assign(p,{name,filiale,cat,desc,tags,img});}
     toast('Produit mis à jour ✓','success');
   } else {
     const newId=Math.max(0,...DB.products.map(x=>x.id))+1;
-    DB.products.push({id:newId,name,filiale,cat,desc,tags});
+    DB.products.push({id:newId,name,filiale,cat,desc,tags,img});
     document.getElementById('badge-prod').textContent=DB.products.length;
     toast('Produit ajouté ✓','success');
   }
@@ -2152,6 +3042,146 @@ function deleteProd(id){
       toast('Produit supprimé','warning');
     },'error'
   );
+}
+
+// ═══════════════════════════════════════════════════
+//  ACTUALITÉS
+// ═══════════════════════════════════════════════════
+const newsCatLabel={groupe:'Groupe',gmm:'GMM',semm:'SEMM',sems:'SEMS',transport:'Transporteurs'};
+const newsCatColor={groupe:'blue',gmm:'blue',semm:'orange',sems:'green',transport:'gray'};
+let newsFilter='all';
+
+function renderNews(list){
+  const data=list||DB.news;
+  document.getElementById('news-count').textContent=data.length;
+  document.getElementById('news-tbody').innerHTML=data.map(n=>`
+    <tr>
+      <td style="width:60px">${n.img
+        ?`<img src="${n.img}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;border:1px solid var(--border);display:block" onerror="this.style.opacity='.3'"/>`
+        :`<div style="width:50px;height:50px;background:var(--bg3);border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px">📰</div>`
+      }</td>
+      <td style="max-width:260px;white-space:normal"><strong>${n.title}</strong></td>
+      <td><span class="pill ${newsCatColor[n.cat]||'blue'}">${newsCatLabel[n.cat]||n.cat}</span></td>
+      <td style="white-space:nowrap">${n.date}</td>
+      <td style="max-width:200px;font-size:12px;color:var(--text2);white-space:normal">${n.excerpt||'—'}</td>
+      <td>${n.published?'<span class="pill green">🟢 Publié</span>':'<span class="pill gray">⏸ Brouillon</span>'}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="small-btn" onclick="editNews(${n.id})">✏️ Modifier</button>
+          <button class="small-btn" style="background:var(--red-dim);color:var(--red)" onclick="deleteNews(${n.id})">🗑 Suppr.</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function searchNews(v){
+  const q=v.toLowerCase();
+  renderNews(DB.news.filter(n=>
+    n.title.toLowerCase().includes(q)||
+    (newsCatLabel[n.cat]||'').toLowerCase().includes(q)||
+    (n.excerpt||'').toLowerCase().includes(q)
+  ));
+}
+
+function filterNewsView(f,btn){
+  newsFilter=f;
+  document.querySelectorAll('#view-news .filter-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  let list;
+  if(f==='all') list=DB.news;
+  else if(f==='published') list=DB.news.filter(n=>n.published);
+  else if(f==='draft') list=DB.news.filter(n=>!n.published);
+  else list=DB.news.filter(n=>n.cat===f);
+  renderNews(list);
+}
+
+function openAddNews(){
+  document.getElementById('news-modal-title').textContent='Ajouter un article';
+  document.getElementById('news-title').value='';
+  document.getElementById('news-cat').value='groupe';
+  document.getElementById('news-date').value='';
+  document.getElementById('news-excerpt').value='';
+  document.getElementById('news-img-url').value='';
+  document.getElementById('news-img-preview').innerHTML='📰';
+  document.getElementById('news-published').value='1';
+  document.getElementById('news-edit-id').value='';
+  openOverlay('ov-news');
+}
+
+function editNews(id){
+  const n=DB.news.find(x=>x.id===id);
+  if(!n) return;
+  document.getElementById('news-modal-title').textContent="Modifier l'article";
+  document.getElementById('news-title').value=n.title;
+  document.getElementById('news-cat').value=n.cat;
+  document.getElementById('news-date').value=n.date;
+  document.getElementById('news-excerpt').value=n.excerpt||'';
+  document.getElementById('news-img-url').value=n.img||'';
+  previewNewsImg(n.img||'');
+  document.getElementById('news-published').value=n.published?'1':'0';
+  document.getElementById('news-edit-id').value=id;
+  openOverlay('ov-news');
+}
+
+function saveNews(){
+  const title=document.getElementById('news-title').value.trim();
+  const cat=document.getElementById('news-cat').value;
+  const date=document.getElementById('news-date').value.trim();
+  const excerpt=document.getElementById('news-excerpt').value.trim();
+  const img=document.getElementById('news-img-url').value.trim();
+  const published=document.getElementById('news-published').value==='1';
+  const editId=parseInt(document.getElementById('news-edit-id').value)||0;
+  if(!title){toast('Le titre est obligatoire','warning');return;}
+  if(!date){toast('La date est obligatoire','warning');return;}
+  if(editId){
+    const n=DB.news.find(x=>x.id===editId);
+    if(n) Object.assign(n,{title,cat,date,excerpt,img,published});
+    toast('Article mis à jour ✓','success');
+  } else {
+    const newId=Math.max(0,...DB.news.map(x=>x.id))+1;
+    DB.news.push({id:newId,title,cat,date,excerpt,img,published});
+    toast('Article ajouté ✓','success');
+  }
+  closeOverlay('ov-news');
+  const currentList=newsFilter==='all'?DB.news:
+    newsFilter==='published'?DB.news.filter(n=>n.published):
+    newsFilter==='draft'?DB.news.filter(n=>!n.published):
+    DB.news.filter(n=>n.cat===newsFilter);
+  renderNews(currentList);
+  document.getElementById('badge-news').textContent=DB.news.filter(n=>n.published).length;
+}
+
+function deleteNews(id){
+  const n=DB.news.find(x=>x.id===id);
+  if(!n) return;
+  confirmAction(
+    'Supprimer "'+n.title.substring(0,40)+'…" ?',
+    'Cet article sera retiré de la page Actualités.',
+    ()=>{
+      DB.news=DB.news.filter(x=>x.id!==id);
+      closeOverlay('ov-confirm');
+      renderNews(newsFilter==='all'?DB.news:DB.news.filter(nn=>nn.cat===newsFilter||
+        (newsFilter==='published'&&nn.published)||(newsFilter==='draft'&&!nn.published)));
+      document.getElementById('badge-news').textContent=DB.news.filter(n=>n.published).length;
+      toast('Article supprimé','warning');
+    },'error'
+  );
+}
+
+function previewNewsImg(url){
+  const p=document.getElementById('news-img-preview');
+  if(url) p.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='❌'"/>`;
+  else p.innerHTML='📰';
+}
+
+function loadNewsImgFile(input){
+  if(!input.files||!input.files[0]) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById('news-img-url').value=e.target.result;
+    previewNewsImg(e.target.result);
+  };
+  reader.readAsDataURL(input.files[0]);
 }
 
 // ═══════════════════════════════════════════════════
@@ -2190,7 +3220,7 @@ function navClick(el,id){
   const titles={
     overview:'Tableau de bord',transporters:'Transporteurs',
     offers:'Offres transport',candidates:'Candidatures',
-    products:'Nos Produits',
+    jobs:"Offres d'emploi",products:'Nos Produits',news:'Actualités',
     content:'Contenu site',media:'Médias & Galerie',
     users:'Utilisateurs',docs:'Documents',settings:'Paramètres'
   };
@@ -2253,7 +3283,7 @@ function closeMobileSidebar(){
 function mobileSidebar(){toggleMobileSidebar()}
 
 // ESC key
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllOverlays();closeDetailPanel()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllOverlays();closeDetailPanel();closeGboVideo()}});
 // Click outside notif panel
 document.addEventListener('click',e=>{
   const panel=document.getElementById('notif-panel');
